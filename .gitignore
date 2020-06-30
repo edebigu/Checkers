@@ -1,0 +1,9 @@
+
+.classpath
+.project
+.settings/org.eclipse.core.resources.prefs
+*.prefs
+*.jar
+*.original
+target/
+*.class

@@ -15,10 +15,21 @@ let container = document.querySelector('#limiter');
 let checkers = document.querySelector('#checkers');
 let optionForm = document.querySelector('#optionForm');
 
-let player="";
+let containerBoard = document.querySelector('#gameBoard');
+let formCoordContainer = document.querySelector('#form_coord');
+
+let scoreBoard = [
+    document.querySelector('#p1Score'),
+    document.querySelector('#p2Score')
+];
+
+let player = {};
+let board;
+let numberOfCells;
 
 
 $(document).ready(function() {
+    containerBoard.style.display = "none";
 
 	$('form').on('click', '#btn-start', function(evento) {
 		startApp();
@@ -75,9 +86,10 @@ $(document).ready(function() {
 		createGame(session);
 		evento.preventDefault();
 	});
+	
+
 
 });
-
 
 
 
@@ -196,6 +208,7 @@ function createGame(session) {
 		contentType : "application/json",
 		dataType : 'json',
 		success : function(data) {
+		startGame();
 			console.log("SUCCESS : ", data)
 		},
 		error : function(e) {
@@ -427,3 +440,25 @@ function addInitialOptions() {
 	  
   }
 
+
+function startGame(){
+    optionForm.style.display = "none";
+    containerBoard.removeAttribute('style');
+	player = {};
+	board = new Board(scoreBoard);
+	board.addTable(containerBoard);
+	board.ready = true;
+	board.enableTurn();
+		board.onMark = cellId => {
+			this.addFormChooseCoordinates(cellId);
+			formCoordContainer.removeAttribute('style');
+			};
+
+
+}
+
+function addFormChooseCoordinates (cellId) {
+	console.log ("Dentro de addFormChooseCoordinates");
+	board.addForm(cellId,formCoordContainer);
+
+}

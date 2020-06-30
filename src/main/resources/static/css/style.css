@@ -1,0 +1,521 @@
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Lato Regular'), local('Lato-Regular'), url(Lato.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Quicksand'), local('Quicksand'), url(Quicksand.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+::selection {
+    background: transparent;
+}
+
+body {
+    background: #A5DAD2;
+    font-family: Quicksand, san-serif;
+}
+
+.bgWhite {
+    background: #F5F2F5;
+}
+
+.bgBlack {
+    background: #000000;
+}
+.bgGrey {
+    background:#516D66;
+}
+
+.colorWhite {
+    color: #F5F2F5 !important;
+}
+
+.bgDark {
+    background: #516D66;
+}
+
+.colorDark {
+    color: #516D66;
+}
+
+.bgRed {
+    background: #F286A0;
+}
+
+.tenue {
+	background-color: #efefef;
+}
+
+.opaca {
+	background-color: rgb(175, 174, 174);
+}
+.colorRed {
+    color: #F286A0 !important;
+}
+
+.gameBoard, .scoreBoard {
+    font-weight: 400;
+}
+
+.gameBoard {
+	width: 100%;
+    background: red ;
+	
+}
+
+
+.gameBoard td {
+    text-align: center;
+    color: #000000;
+    font-size: 2em;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.gameCell {
+    width: 50px;
+    height: 50px;
+}
+
+.gameCell:not(.marked):hover {
+    box-shadow: 0 0 42px #555;
+}
+
+.gameBoard td.gameCell.notActive:hover, .gameBoard td.gameCell.notActive:active {
+    box-shadow: none !important;
+    cursor: default;
+}
+
+.scoreBoard {
+    color: #516D66;
+    height: 100px;
+}
+
+.boardCol {
+    width: 5px;
+    cursor: default !important;
+}
+
+.boardRow {
+    height: 5px;
+    cursor: default !important;
+}
+
+.scoreBoard span.active {
+    border-bottom: 4px solid #F286A0;
+}
+
+  #form_container
+  {
+      background:#b2b2c5;
+      margin:0 auto;
+      text-align:left;
+      width:340px;
+  }
+  
+
+  form.appnitro
+{
+	margin:20px 20px 0;
+	padding:0 0 20px;
+}
+
+.form_description
+{
+	border-bottom:1px dotted #ccc;
+	clear:both;
+	display:inline-block;
+	margin:0 0 1em;
+}
+
+/**** Form Section ****/
+.appnitro
+{
+	font-family:Lucida Grande, Tahoma, Arial, Verdana, sans-serif;
+	font-size:small;
+}
+
+.appnitro li
+{
+	width:61%;
+}
+
+form ul
+{
+	font-size:100%;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	width:100%;
+}
+
+form li
+{
+	display:block;
+	margin:0;
+	padding:4px 5px 2px 9px;
+	position:relative;
+}
+
+form li:after
+{
+	clear:both;
+	content:".";
+	display:block;
+	height:0;
+	visibility:hidden;
+}
+
+.buttons:after
+{
+	clear:both;
+	content:".";
+	display:block;
+	height:0;
+	visibility:hidden;
+}
+
+.buttons
+{
+	clear:both;
+	display:block;
+	margin-top:10px;
+}
+
+* html form li
+{
+	height:1%;
+}
+
+* html .buttons
+{
+	height:1%;
+}
+
+* html form li div
+{
+	display:inline-block;
+}
+
+form li div
+{
+	color:#444;
+	margin:0 4px 0 0;
+	padding:0 0 8px;
+}
+
+form li span
+{
+	color:#444;
+	float:left;
+	margin:0 4px 0 0;
+	padding:0 0 8px;
+}
+
+form li div.left
+{
+	display:inline;
+	float:left;
+	width:48%;
+}
+
+form li div.right
+{
+	display:inline;
+	float:right;
+	width:48%;
+}
+
+form li div.left .medium
+{
+	width:100%;
+}
+
+form li div.right .medium
+{
+	width:100%;
+}
+
+.clear
+{
+	clear:both;
+}
+
+form li div label
+{
+	clear:both;
+	color:#444;
+	display:block;
+	font-size:9px;
+	line-height:9px;
+	margin:0;
+	padding-top:3px;
+}
+
+form li span label
+{
+	clear:both;
+	color:#444;
+	display:block;
+	font-size:9px;
+	line-height:9px;
+	margin:0;
+	padding-top:3px;
+}
+
+form li .datepicker
+{
+	cursor:pointer !important;
+	float:left;
+	height:16px;
+	margin:.1em 5px 0 0;
+	padding:0;
+	width:16px;
+}
+
+.form_description
+{
+	border-bottom:1px dotted #ccc;
+	clear:both;
+	display:inline-block;
+	margin:0 0 1em;
+}
+
+.form_description[class]
+{
+	display:block;
+}
+
+.form_description h2
+{
+	clear:left;
+	font-size:160%;
+	font-weight:400;
+	margin:0 0 3px;
+}
+
+.form_description p
+{
+	font-size:95%;
+	line-height:130%;
+	margin:0 0 12px;
+}
+
+form hr
+{
+	display:none;
+}
+
+form li.section_break
+{
+	border-top:1px dotted #ccc;
+	margin-top:9px;
+	padding-bottom:0;
+	padding-left:9px;
+	padding-top:13px;
+	width:97% !important;
+}
+
+form ul li.first
+{
+	border-top:none !important;
+	margin-top:0 !important;
+	padding-top:0 !important;
+}
+
+form .section_break h3
+{
+	font-size:110%;
+	font-weight:400;
+	line-height:130%;
+	margin:0 0 2px;
+}
+
+form .section_break p
+{
+	font-size:85%;
+
+	margin:0 0 10px;
+}
+
+
+/**** Buttons ****/
+input.button_text
+{
+	overflow:visible;
+	padding:0 7px;
+	width:auto;
+}
+
+.buttons input
+{
+	font-size:120%;
+	margin-right:5px;
+}
+
+/**** Buttons ****/
+input.button_text
+{
+	overflow:visible;
+	padding:0 7px;
+	width:auto;
+}
+
+.buttons input
+{
+	font-size:120%;
+	margin-right:5px;
+}
+
+/**** Inputs and Labels ****/
+label.description
+{
+	border:none;
+	color:#222;
+	display:block;
+	font-size:95%;
+	font-weight:700;
+	line-height:150%;
+	padding:0 0 1px;
+}
+
+span.symbol
+{
+	font-size:115%;
+	line-height:130%;
+}
+
+input.text
+{
+	
+	border-bottom:1px solid #ddd;
+	border-left:1px solid #c3c3c3;
+	border-right:1px solid #c3c3c3;
+	border-top:1px solid #7c7c7c;
+	color:#333;
+	font-size:100%;
+	margin:0;
+	padding:2px 0;
+}
+
+input.file
+{
+	color:#333;
+	font-size:100%;
+	margin:0;
+	padding:2px 0;
+}
+
+textarea.textarea
+{
+	
+	border-bottom:1px solid #ddd;
+	border-left:1px solid #c3c3c3;
+	border-right:1px solid #c3c3c3;
+	border-top:1px solid #7c7c7c;
+	color:#333;
+	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+	font-size:100%;
+	margin:0;
+	width:99%;
+}
+
+select.select
+{
+	color:#333;
+	font-size:100%;
+	margin:1px 0;
+	padding:1px 0 0;
+	border-bottom:1px solid #ddd;
+	border-left:1px solid #c3c3c3;
+	border-right:1px solid #c3c3c3;
+	border-top:1px solid #7c7c7c;
+}
+
+
+input.currency
+{
+	text-align:right;
+}
+
+input.checkbox
+{
+	display:block;
+	height:13px;
+	line-height:1.4em;
+	margin:6px 0 0 3px;
+	width:13px;
+}
+
+input.radio
+{
+	display:block;
+	height:13px;
+	line-height:1.4em;
+	margin:6px 0 0 3px;
+	width:13px;
+}
+
+label.choice
+{
+	color:#444;
+	display:block;
+	font-size:100%;
+	line-height:1.4em;
+	margin:-1.55em 0 0 25px;
+	padding:4px 0 5px;
+	width:90%;
+}
+
+select.select[class]
+{
+	margin:0;
+	padding:1px 0;
+}
+
+
+form li.highlighted
+{
+	background-color:#fff7c0;
+}
+
+form .guidelines
+{
+	background:#f5f5f5;
+	border:1px solid #e6e6e6;
+	color:#444;
+	font-size:80%;
+	left:100%;
+	line-height:130%;
+	margin:0 0 0 8px;
+	padding:8px 10px 9px;
+	position:absolute;
+	top:0;
+	visibility:hidden;
+	width:42%;
+	z-index:1000;
+}
+
+form .guidelines small
+{
+	font-size:105%;
+}
+
+form li.highlighted .guidelines
+{
+	visibility:visible;
+}
+
+form li:hover .guidelines
+{
+	visibility:visible;
+}
+  
