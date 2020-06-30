@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.ericsson.masterCraftmanship.tfm.businessControllers.LoginController;
+import es.ericsson.masterCraftmanship.tfm.businessControllers.RegisterController;
 import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.Error;
@@ -18,33 +18,32 @@ import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
-@RequestMapping(LoginResource.LOGIN)
-public class LoginResource {
+@RequestMapping(RegisterResource.REGISTER)
+public class RegisterResource {
 	
-	static final String LOGIN = "/login";
+	static final String REGISTER = "/register";
 
-	Logger logger = LogManager.getLogger(LoginResource.class);
+	Logger logger = LogManager.getLogger(RegisterResource.class);
 	
-	private LoginController loginController;
-
+	private RegisterController registerController;
+	
 	@Autowired
-	public LoginResource(LoginController loginController) {
-		this.loginController = loginController;
+	public RegisterResource(RegisterController registerController) {
+		this.registerController = registerController;
 	}
-
 	
 	@PostMapping
 	public ResponseEntity<ResponseJson> login(@RequestBody PlayerDto playerDto) {
 		logger.info("Recibido json" + playerDto.toString());
 		try {
 			playerDto.validate();
-			return ResponseEntity.ok(this.loginController.login(playerDto));
+			return ResponseEntity.ok(this.registerController.register(playerDto));
 		}
 		catch (BadRequestException e) {
-			ResponseJson resultLogin = new ResponseJson();
-			resultLogin.setMsg(Message.EMPTY_FIELD);
-			resultLogin.setError(Error.BAD_REQUEST);
-			return new ResponseEntity<ResponseJson>(resultLogin,HttpStatus.BAD_REQUEST);
+			ResponseJson resultRegister = new ResponseJson();
+			resultRegister.setMsg(Message.EMPTY_FIELD);
+			resultRegister.setError(Error.BAD_REQUEST);
+			return new ResponseEntity<ResponseJson>(resultRegister,HttpStatus.BAD_REQUEST);
 		}
 		
 	}

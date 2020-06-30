@@ -6,43 +6,47 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import es.ericsson.masterCraftmanship.tfm.apiRestControllers.LoginResource;
-import es.ericsson.masterCraftmanship.tfm.daos.UserDao;
-import es.ericsson.masterCraftmanship.tfm.dtos.UserDto;
-import es.ericsson.masterCraftmanship.tfm.views.LoginJson;
+import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
+import es.ericsson.masterCraftmanship.tfm.daos.SessionDao;
+import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
+import es.ericsson.masterCraftmanship.tfm.models.Game;
+import es.ericsson.masterCraftmanship.tfm.models.Player;
+import es.ericsson.masterCraftmanship.tfm.models.Session;
+import es.ericsson.masterCraftmanship.tfm.views.Error;
+import es.ericsson.masterCraftmanship.tfm.views.Message;
+import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
-//public class LoginController extends OperationController {
 @Controller
 public class LoginController {
 
-	private UserDao userDao;
-	Logger logger = LogManager.getLogger(LoginResource.class);
+	private PlayerDao playerDao;
+	private SessionDao sessionDao;
+	
+	Logger logger = LogManager.getLogger(LoginController.class);
 	
 	@Autowired
-	public LoginController (UserDao userDao) {
-		this.userDao = userDao;
+	public LoginController (PlayerDao playerDao, SessionDao sessionDao) {
+		this.playerDao = playerDao;
+		this.sessionDao = sessionDao;
 	}
-	
-	/*protected LoginController (Game game, State state) {
-		super (game, state);
-	}
-	
-    @Override
-    public void accept(OperationControllerVisitor operationControllerVisitor) {
-        operationControllerVisitor.visit(this);
-    }*/
-	
     
-    public LoginJson login (UserDto user) {
-    	LoginJson resultLogin = new LoginJson();
-    	UserDto userFound = userDao.findByUsername(user.getUsername());
-    	if (userFound != null && userFound.getPassword().equals(user.getPassword())) {
-			resultLogin.setMsg("User found");
+    public ResponseJson login (PlayerDto playerDto) {
+    	ResponseJson resultLogin = new ResponseJson();
+    	Player player = new Player (playerDto.getUsername(), playerDto.getPassword());
+    	Player userFound = this.playerDao.findByUsername(player.getUsername());
+    	if (userFound != null && userFound.getPassword().equals(player.getPassword())) {
+			resultLogin.setMsg(Message.LOGIN_SUCCESSFULL);
+			resultLogin.setError(Error.OK);
+			if (this.sessionDao.findByPlayer(userFound) == null) {
+				sessionDao.save(new Session (userFound, null));
+			}
+					
         } 
-	   else  {
-        	resultLogin.setMsg("User not found");
+	   else {
+        	resultLogin.setMsg(Message.LOGIN_UNSUCCESSFULL);
+        	resultLogin.setError(Error.NOT_FOUND);
         }
-    	resultLogin.setUsername(user.getUsername());
+    	resultLogin.setUsername(player.getUsername());
     	return resultLogin;
     }
 	

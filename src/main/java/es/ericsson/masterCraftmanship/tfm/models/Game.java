@@ -1,6 +1,13 @@
 package es.ericsson.masterCraftmanship.tfm.models;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "Game")
 public class Game {
+	
+	@Id
+	private String id;
 	private Board board;
 	private Turn turn;
 
@@ -41,6 +48,32 @@ public class Game {
 		if (this.turn.getColor() != Color.WHITE)
 			this.turn.change();
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public Turn getTurn() {
+		return turn;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public void setTurn(Turn turn) {
+		this.turn = turn;
+	}
+	
+	
 
 
 }
