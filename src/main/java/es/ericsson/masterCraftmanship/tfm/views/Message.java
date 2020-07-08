@@ -7,7 +7,7 @@ public enum Message {
 	REGISTER_SUCCESSFULL("Register success"), 
 	REGISTER_UNSUCCESSFULL("User exist"),
 	CREATE_GAME_SUCCESSFULL("Game created"),
-	CREATE_GAME_IMSUCCESSFULL("Game not created. Session user is no found"),
+	CREATE_GAME_UNSUCCESSFULL("Game not created. Session user is no found"),
 	EMPTY_FIELD("User and password must be espicified");
 	
 	

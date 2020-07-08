@@ -20,12 +20,13 @@ class Board {
         cellHead.classList.add('notActive');
         cellHead.setAttribute('marked', 'false');
         coordenada.appendChild(cellHead);
-        let letter = 'A';
+        let letter = 'a';
         let letterNum = letter.charCodeAt();
         for (let i = 1; i < 9; i++) {
             cellHead = document.createElement('td');
             cellHead.classList.add('gameCell');
             cellHead.classList.add('notActive');
+            cellHead.classList.add('headTable');
             cellHead.setAttribute('marked', 'false');
             cellHead.appendChild(document.createTextNode(String.fromCharCode(letterNum)));
             coordenada.appendChild(cellHead);
@@ -46,25 +47,26 @@ class Board {
         let cellHead = document.createElement('td');
         cellHead.classList.add('gameCell');
         cellHead.classList.add('notActive');
+        cellHead.classList.add('headTable');
         cellHead.setAttribute('marked', 'false');
         cellHead.appendChild(document.createTextNode(counter+1));
         r.appendChild(cellHead);
     }
 
     createPeon(color, cell) {
-        var peonColor;
+        let peonColor;
         if (color === 'blanco') {
             peonColor = '\u{026C0}';
+            cell.classList.add('peonBlanco');
         }
         else if (color === 'negro')
         {
             peonColor = '\u{026C2}'
+            cell.classList.add('peonNegro');
         }
 
-        let span = document.createElement('span');
-        span.setAttribute('style', 'font-size:35px;');
-        span.appendChild(document.createTextNode(peonColor));
-        cell.appendChild(span);
+        cell.appendChild(document.createTextNode(peonColor));
+
 
     }
 
@@ -91,13 +93,13 @@ class Board {
 
         for (let i = 0; i < 64; i++) {
             let newCell = cell.cloneNode(true);
-            newCell.setAttribute('id', 'cell-' + i);
+            newCell.setAttribute('id', i);
             this.cells.push(newCell);
         }
 
         this.createTableHeadRow(this.table);
         let counter = 0
-        let letter = 'A';
+        let letter = 'a';
 
         for (let r, i = 0; i < 64; i += 8) {
         	let letterNum = letter.charCodeAt();
@@ -107,8 +109,8 @@ class Board {
             
 
             for (let j = i; j < i + 8; j++) {
-            	this.cells[j].setAttribute('data-row', String.fromCharCode(letterNum));
-                this.cells[j].setAttribute('data-col', counter+1);
+            	this.cells[j].setAttribute('data-col', String.fromCharCode(letterNum));
+                this.cells[j].setAttribute('data-row', counter+1);
                 this.cells[j].setAttribute('data-y', counter);
                 this.cells[j].setAttribute('data-x', j);
                 if (counter % 2 == 0) {
@@ -118,11 +120,13 @@ class Board {
                     else {
                         this.cells[j].classList.add('opaca');
                         if (counter < 3){
-                            this.createPeon ('blanco',this.cells[j] );
+                            this.createPeon ('negro',this.cells[j] );
+                            this.cells[j].setAttribute('data-color', 'negro');
 
                         }
                         else if (counter >= 5) {
-                            this.createPeon ('negro',this.cells[j] );
+                            this.createPeon ('blanco',this.cells[j] );
+                            this.cells[j].setAttribute('data-color', 'blanco');
                         }
                     }
                     
@@ -131,10 +135,12 @@ class Board {
                     if (j % 2 == 0){
                         this.cells[j].classList.add('opaca');
                         if (counter < 3){
-                            this.createPeon ('blanco',this.cells[j] );
+                            this.createPeon ('negro',this.cells[j] );
+                            this.cells[j].setAttribute('data-color', 'negro');
                         }
                         else if (counter >= 5) {
-                            this.createPeon ('negro',this.cells[j] );
+                            this.createPeon ('blanco',this.cells[j] );
+                            this.cells[j].setAttribute('data-color', 'blanco');
                         }
                     }
                     else {
@@ -177,12 +183,18 @@ class Board {
         }
     }
 
-    enableTurn() {
-    console.log ("Turno habilitado");
+    enableTurn(playerName) {
         for (let cell of this.cells) {
             if (cell.getAttribute('marked') === 'false') {
+               if (playerName === this.players[0] && cell.getAttribute('data-color') === 'blanco') {
                 cell.classList.remove('notActive');
                 cell.setAttribute('active', 'true');
+               }
+               
+               else if (playerName === this.players[1] && cell.getAttribute('data-color') === 'negro') {
+            	   cell.classList.remove('notActive');
+                   cell.setAttribute('active', 'true');
+               }
             }
         }
     }
@@ -218,28 +230,18 @@ class Board {
         }
     }
 
-    doMark(cellId, label) {
-        let cell = this.cells[cellId];
-        cell.textContent = label;
-        cell.classList.add('notActive');
-        cell.setAttribute('marked', 'true');
+    doMark(cellId, newCellId, label) {
+        let cell = this.cells[cellId];;
+        let color = cell.getAttribute('data-color');
+        cell.removeAttribute('data-color');
+        cell.textContent = '';
+        let newCell = this.cells[newCellId];
+        console.log ("color " , color);
+        this.createPeon(color, newCell);
+        newCell.setAttribute('data-color', color);
 
     }
 
-    doPutShip(cellId, label, name) {
-    for(let i=0; i < cellId.length; i++){
-        let cell = this.cells[cellId[i]];
-        let imag = document.createElement('img');
-        imag.setAttribute('src', label);
-        imag.setAttribute('id', name);
-        imag.setAttribute('class', 'imageShip');
-        cell.appendChild(imag);
-        cell.classList.add('notActive');
-        cell.setAttribute('marked', 'true');
-        console.log("coordenadas " + cell.getAttribute('data-x') + " " + cell.getAttribute('data-y'));
-    }
-
-    }
 
     doWinner(winner, pos) {
 
@@ -273,9 +275,9 @@ class Board {
     }
     
     addForm(cellId, container){
+    	this.addSelectRow(container);
+    	this.addSelectColum(container);
     	this.setCoordenada(cellId, container);
-    	this.addSelectOrientation(container);
-    	this.addSelectDirection(container);
     	this.addButtonForm(container);	
     }
     
@@ -285,6 +287,7 @@ class Board {
     	label.setAttribute('class', 'description');
     	label.setAttribute('for', 'coordenadas');
     	label.appendChild(document.createTextNode('Coordenada'));
+    	label.style.display = "none";
     	
     	let input = document.createElement('input');
     	input.setAttribute('type', 'text');
@@ -297,27 +300,28 @@ class Board {
     	input.setAttribute('data-cellId', cellId);
     	input.setAttribute('aria-describedby', 'basic-addon');
     	input.setAttribute('disabled', true);
+    	input.style.display = "none";
     	
     	container.appendChild(label);
     	container.appendChild(input);
     	
     }
     
-     addSelectOrientation(container) {
+     addSelectColum(container) {
     	
-    	let orientacion = document.createElement('div');
+    	let newColum = document.createElement('div');
     	
     	let label = document.createElement('label');
     	label.setAttribute('class', 'description');
-    	label.setAttribute('for', 'orientation');
-    	label.appendChild(document.createTextNode('Orientation'));
+    	label.setAttribute('for', 'newColum');
+    	label.appendChild(document.createTextNode('Colum '));
     	
-    	orientacion.appendChild(label);
+    	newColum.appendChild(label);
     	
     	let select = document.createElement ('select');
     	select.setAttribute('class', 'element select medium');
-    	select.setAttribute('id', 'orientation');
-    	select.setAttribute('name', 'orientation');
+    	select.setAttribute('id', 'newColum');
+    	select.setAttribute('name', 'newColum');
     	
     	let option = document.createElement('option');
     	option.setAttribute('value', '');
@@ -326,42 +330,37 @@ class Board {
     	option.setAttribute('hiden', true);
     	option.appendChild(document.createTextNode('Choose one option'));
     	
-    	select.appendChild(option);
-    	
-    	option = document.createElement('option');
-    	option.setAttribute('value', 'Vertical');
-    	option.appendChild(document.createTextNode('Vertical'));
-    	
-    	select.appendChild(option);
-    	
-    	option = document.createElement('option');
-    	option.setAttribute('value', 'Horizontal');
-    	option.appendChild(document.createTextNode('Horizontal'));
-    	
-    	select.appendChild(option);
-    	
-    	orientacion.appendChild(select);
-    	
-    	container.appendChild (orientacion)
-    	
-    	
+        select.appendChild(option);
+        
+        let letter = 'a';
+        let letterNum = letter.charCodeAt();
+        for (let i = 1; i <= 8; i++) {
+            option = document.createElement('option');
+            option.setAttribute('value', String.fromCharCode(letterNum));
+            option.appendChild(document.createTextNode(String.fromCharCode(letterNum)));
+            select.appendChild(option);
+            letterNum++;
+        }
+
+        newColum.appendChild(select);
+    	container.appendChild (newColum);
     }
     
-    addSelectDirection(container) {
+    addSelectRow(container) {
     	
-    	let direction = document.createElement('div');
+    	let newRow = document.createElement('div');
     	
     	let label = document.createElement('label');
     	label.setAttribute('class', 'description');
-    	label.setAttribute('for', 'direction');
-    	label.appendChild(document.createTextNode('Direction'));
+    	label.setAttribute('for', 'newRow');
+    	label.appendChild(document.createTextNode('Row '));
     	
-    	direction.appendChild(label);
+    	newRow.appendChild(label);
     	
     	let select = document.createElement ('select');
     	select.setAttribute('class', 'element select medium');
-    	select.setAttribute('id', 'direction');
-    	select.setAttribute('name', 'direction');
+    	select.setAttribute('id', 'newRow');
+    	select.setAttribute('name', 'newRow');
     	
     	let option = document.createElement('option');
     	option.setAttribute('value', '');
@@ -370,41 +369,17 @@ class Board {
     	option.setAttribute('hiden', true);
     	option.appendChild(document.createTextNode('Choose one option'));
     	
-    	select.appendChild(option);
+        select.appendChild(option);
+        
+        for (let i = 1; i <= 8; i++) {
+            option = document.createElement('option');
+            option.setAttribute('value', i);
+            option.appendChild(document.createTextNode(i));
+            select.appendChild(option);
+        }
     	
-    	option = document.createElement('option');
-    	option.setAttribute('value', 'Norte');
-    	option.appendChild(document.createTextNode('Norte'));
-    	option.setAttribute('disabled', true);
-    	
-    	select.appendChild(option);
-    	
-    	option = document.createElement('option');
-    	option.setAttribute('value', 'Sur');
-    	option.appendChild(document.createTextNode('Sur'));
-    	option.setAttribute('disabled', true);
-    	
-    	select.appendChild(option);
-    	
-    	option = document.createElement('option');
-    	option.setAttribute('value', 'Este');
-    	option.appendChild(document.createTextNode('Este'));
-    	option.setAttribute('disabled', true);
-    	
-    	select.appendChild(option);
-    	
-    	option = document.createElement('option');
-    	option.setAttribute('value', 'Oeste');
-    	option.appendChild(document.createTextNode('Oeste'));
-    	option.setAttribute('disabled', true);
-    	
-    	select.appendChild(option);
-    	
-    	direction.appendChild(select);
-    	
-    	//select.setAttribute('disabled', true);
-    	
-    	container.appendChild (direction)
+        newRow.appendChild(select);
+    	container.appendChild (newRow);
     	
     }
     
@@ -428,8 +403,11 @@ class Board {
     }
 
     addPlayer(player) {
+    
+    	this.players.push(player);
+    	this.players.push("machine");
 
-        if (this.players.length < 2) {
+        /*if (this.players.length < 2) {
 
             if (this.players.length === 0 || this.players[0].id != player.id) {
 
@@ -438,14 +416,30 @@ class Board {
                 let score = this.scoreBoard[this.players.length - 1];
 
                 if (this.players.length === 1) {
-                    score.textContent = player.label + ' ' + player.name;
+                    //score.textContent = player.label + ' ' + player.name;
+                    score.textContent = player;
                 } else {
-                    score.textContent = player.name + ' ' + player.label;
+                   // score.textContent = player.name + ' ' + player.label;
+                    score.textContent = player;
                 }
 
                 score.setAttribute('playerId', player.id);
             }
-        }
+        }*/
+    }
+    
+    getCellId(dataRow, dataCol) {
+    	console.log ("dataRow " + dataRow);
+    	console.log ("dataCol" +  dataCol);
+    	  for (let cell of this.cells) {
+    		  console.log ("data-row " + cell.getAttribute('data-row'));
+    	    	console.log ("data-col" +  cell.getAttribute('data-col'));
+              if (cell.getAttribute('data-row') === dataRow && cell.getAttribute('data-col') === dataCol){
+            	console.log ("dentro del if con id " + cell.getAttribute('id'));
+              	return cell.getAttribute('id');
+              }
+          }
+    	
     }
 
     restart() {
@@ -464,8 +458,6 @@ class Board {
             cell.textContent = '';
         }
     }
-
-
 
 
 }

@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<div class="limiter">
+<div class="container-fluid">
     <div class="login-dark" id="checkers">
         <form id="optionForm">
          <h2 class="login100-form-title" id="title">Welcome</h2>
@@ -17,8 +17,19 @@
                 <button class="btn btn-primary btn-block" id="btn-start" type="submit">Start</button>
             </div> 
         </form>
-        <div class="game" id="gameBoard"></div>
+      
+       <div class="gameOptions" id="boardForm">
+					<div id="form_container">
+						<form id="form_coord" class="appnitro" method="post" action="">
+							<div class="form_description">
+								<h1 class="form_description cabecera">Choose coordenada destino</h1>
+							</div>
+						</form>
+					</div>
+		</div>
+		<div class="game" id="gameBoard"></div>
     </div>
+
     
    </div>
 </body>

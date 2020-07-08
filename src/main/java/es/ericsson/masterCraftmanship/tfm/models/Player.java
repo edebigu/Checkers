@@ -11,7 +11,8 @@ public class Player {
 	
 	private String username;
 	private String password;
-	
+	private Direction direction;
+
 	public Player() {
 		
 	}
@@ -24,6 +25,7 @@ public class Player {
 	public String getId() {
 		return id;
 	}
+
 
 	public String getUsername() {
 		return username;
@@ -41,11 +43,21 @@ public class Player {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + "]";
+		return "Player [id=" + id + ", username=" + username + ", password=" + password + "]";
 	}
+
+
 
 	
 	

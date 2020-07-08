@@ -12,7 +12,7 @@ public class Turn {
 	    this.color = this.getOppositeColor();
 	  }
 
-	  Color getColor() {
+	  public Color getColor() {
 	    return this.color;
 	  }
 

@@ -19,7 +19,7 @@
 }
 
 body {
-    background: #A5DAD2;
+    background: #6C9BF0;
     font-family: Quicksand, san-serif;
 }
 
@@ -51,11 +51,11 @@ body {
 }
 
 .tenue {
-	background-color: #efefef;
+	background-color: rgb(252, 249, 205);
 }
 
 .opaca {
-	background-color: rgb(175, 174, 174);
+	background-color:#bd9661;
 }
 .colorRed {
     color: #F286A0 !important;
@@ -67,18 +67,31 @@ body {
 
 .gameBoard {
 	width: 100%;
-    background: red ;
+    background:#702912 ;
 	
 }
 
-
 .gameBoard td {
     text-align: center;
-    color: #000000;
-    font-size: 2em;
     cursor: pointer;
     transition: all 0.5s;
 }
+
+.headTable{
+	color: white;
+	font-size: 15px;
+}
+
+.peonBlanco {
+	color: white;
+	font-size: 35px;
+}
+
+.peonNegro {
+	color:black;
+	font-size: 35px;
+}
+
 
 .gameCell {
     width: 50px;
@@ -113,7 +126,7 @@ body {
     border-bottom: 4px solid #F286A0;
 }
 
-  #form_container
+.form_container
   {
       background:#b2b2c5;
       margin:0 auto;
@@ -122,25 +135,41 @@ body {
   }
   
 
-  form.appnitro
+.form.appnitro
 {
 	margin:20px 20px 0;
 	padding:0 0 20px;
+	
 }
+
+
 
 .form_description
 {
-	border-bottom:1px dotted #ccc;
+	border-bottom:none;
 	clear:both;
 	display:inline-block;
 	margin:0 0 1em;
 }
 
+
 /**** Form Section ****/
-.appnitro
+.login-dark .appnitro
 {
 	font-family:Lucida Grande, Tahoma, Arial, Verdana, sans-serif;
 	font-size:small;
+	 max-width: 320px;
+    width: 90%;
+    background-color: #1e2833;
+    padding: 40px;
+    border-radius: 4px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    color: #fff;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+	
 }
 
 .appnitro li
@@ -148,7 +177,7 @@ body {
 	width:61%;
 }
 
-form ul
+.form ul
 {
 	font-size:100%;
 	list-style-type:none;
@@ -157,7 +186,7 @@ form ul
 	width:100%;
 }
 
-form li
+.form li
 {
 	display:block;
 	margin:0;
@@ -165,7 +194,7 @@ form li
 	position:relative;
 }
 
-form li:after
+.form li:after
 {
 	clear:both;
 	content:".";
@@ -190,29 +219,29 @@ form li:after
 	margin-top:10px;
 }
 
-* html form li
+.html form li
 {
 	height:1%;
 }
 
-* html .buttons
+.html .buttons
 {
 	height:1%;
 }
 
-* html form li div
+.html form li div
 {
 	display:inline-block;
 }
 
-form li div
+.form li div
 {
 	color:#444;
 	margin:0 4px 0 0;
 	padding:0 0 8px;
 }
 
-form li span
+.form li span
 {
 	color:#444;
 	float:left;
@@ -220,26 +249,26 @@ form li span
 	padding:0 0 8px;
 }
 
-form li div.left
+.form li div.left
 {
 	display:inline;
 	float:left;
 	width:48%;
 }
 
-form li div.right
+.form li div.right
 {
 	display:inline;
 	float:right;
 	width:48%;
 }
 
-form li div.left .medium
+.form li div.left .medium
 {
 	width:100%;
 }
 
-form li div.right .medium
+.form li div.right .medium
 {
 	width:100%;
 }
@@ -249,7 +278,7 @@ form li div.right .medium
 	clear:both;
 }
 
-form li div label
+.form li div label
 {
 	clear:both;
 	color:#444;
@@ -260,7 +289,7 @@ form li div label
 	padding-top:3px;
 }
 
-form li span label
+.form li span label
 {
 	clear:both;
 	color:#444;
@@ -271,7 +300,7 @@ form li span label
 	padding-top:3px;
 }
 
-form li .datepicker
+.form li .datepicker
 {
 	cursor:pointer !important;
 	float:left;
@@ -283,7 +312,7 @@ form li .datepicker
 
 .form_description
 {
-	border-bottom:1px dotted #ccc;
+	border-bottom:none;
 	clear:both;
 	display:inline-block;
 	margin:0 0 1em;
@@ -294,10 +323,10 @@ form li .datepicker
 	display:block;
 }
 
-.form_description h2
+.cabecera
 {
 	clear:left;
-	font-size:160%;
+	font-size: 20px;
 	font-weight:400;
 	margin:0 0 3px;
 }
@@ -309,12 +338,12 @@ form li .datepicker
 	margin:0 0 12px;
 }
 
-form hr
+.form hr
 {
 	display:none;
 }
 
-form li.section_break
+.form li.section_break
 {
 	border-top:1px dotted #ccc;
 	margin-top:9px;
@@ -324,14 +353,14 @@ form li.section_break
 	width:97% !important;
 }
 
-form ul li.first
+.form ul li.first
 {
 	border-top:none !important;
 	margin-top:0 !important;
 	padding-top:0 !important;
 }
 
-form .section_break h3
+.form .section_break h3
 {
 	font-size:110%;
 	font-weight:400;
@@ -339,16 +368,15 @@ form .section_break h3
 	margin:0 0 2px;
 }
 
-form .section_break p
+.form .section_break p
 {
 	font-size:85%;
 
 	margin:0 0 10px;
 }
 
-
 /**** Buttons ****/
-input.button_text
+.input.button_text
 {
 	overflow:visible;
 	padding:0 7px;
@@ -361,22 +389,13 @@ input.button_text
 	margin-right:5px;
 }
 
-/**** Buttons ****/
-input.button_text
-{
-	overflow:visible;
-	padding:0 7px;
-	width:auto;
+.btn {
+	padding: 7px 60px; 
 }
 
-.buttons input
-{
-	font-size:120%;
-	margin-right:5px;
-}
 
 /**** Inputs and Labels ****/
-label.description
+.label.description
 {
 	border:none;
 	color:#222;
@@ -387,13 +406,13 @@ label.description
 	padding:0 0 1px;
 }
 
-span.symbol
+.span.symbol
 {
 	font-size:115%;
 	line-height:130%;
 }
 
-input.text
+.input.text
 {
 	
 	border-bottom:1px solid #ddd;
@@ -406,7 +425,7 @@ input.text
 	padding:2px 0;
 }
 
-input.file
+.input.file
 {
 	color:#333;
 	font-size:100%;
@@ -414,7 +433,7 @@ input.file
 	padding:2px 0;
 }
 
-textarea.textarea
+.textarea.textarea
 {
 	
 	border-bottom:1px solid #ddd;
@@ -428,7 +447,7 @@ textarea.textarea
 	width:99%;
 }
 
-select.select
+.select.select
 {
 	color:#333;
 	font-size:100%;
@@ -441,12 +460,12 @@ select.select
 }
 
 
-input.currency
+.input.currency
 {
 	text-align:right;
 }
 
-input.checkbox
+.input.checkbox
 {
 	display:block;
 	height:13px;
@@ -455,7 +474,7 @@ input.checkbox
 	width:13px;
 }
 
-input.radio
+.input.radio
 {
 	display:block;
 	height:13px;
@@ -464,7 +483,7 @@ input.radio
 	width:13px;
 }
 
-label.choice
+.label.choice
 {
 	color:#444;
 	display:block;
@@ -475,19 +494,19 @@ label.choice
 	width:90%;
 }
 
-select.select[class]
+.select.select[class]
 {
 	margin:0;
 	padding:1px 0;
 }
 
 
-form li.highlighted
+.form li.highlighted
 {
 	background-color:#fff7c0;
 }
 
-form .guidelines
+.form .guidelines
 {
 	background:#f5f5f5;
 	border:1px solid #e6e6e6;
@@ -504,18 +523,22 @@ form .guidelines
 	z-index:1000;
 }
 
-form .guidelines small
+.form .guidelines small
 {
 	font-size:105%;
 }
 
-form li.highlighted .guidelines
+.form li.highlighted .guidelines
 {
 	visibility:visible;
 }
 
-form li:hover .guidelines
+.form li:hover .guidelines
 {
 	visibility:visible;
 }
+
+
+
+
   

@@ -16,7 +16,8 @@ let checkers = document.querySelector('#checkers');
 let optionForm = document.querySelector('#optionForm');
 
 let containerBoard = document.querySelector('#gameBoard');
-let formCoordContainer = document.querySelector('#form_coord');
+let containerForm = document.querySelector('#boardForm');
+let formCoordSelection = document.querySelector('#form_coord');
 
 let scoreBoard = [
     document.querySelector('#p1Score'),
@@ -24,12 +25,14 @@ let scoreBoard = [
 ];
 
 let player = {};
+let gameName;
 let board;
 let numberOfCells;
 
 
 $(document).ready(function() {
     containerBoard.style.display = "none";
+    containerForm.style.display = "none";
 
 	$('form').on('click', '#btn-start', function(evento) {
 		startApp();
@@ -85,6 +88,18 @@ $(document).ready(function() {
 		console.log("Json session " + JSON.stringify(session));
 		createGame(session);
 		evento.preventDefault();
+	});
+	
+	var contador = 0;
+	$('form').on('change','select',function() {
+		contador ++;
+		if (contador === 2){
+			$('button').prop("disabled", false);
+		}
+	});
+	
+	$('form').on('click','#enviar',function() {
+		console.log ("Ha pulsado enviar");
 	});
 	
 
@@ -208,8 +223,12 @@ function createGame(session) {
 		contentType : "application/json",
 		dataType : 'json',
 		success : function(data) {
-		startGame();
-			console.log("SUCCESS : ", data)
+		console.log("SUCCESS : ", data)
+		if ( data.error === json_result.CREATED ) {
+		   gameName = data.gameName;
+			startGame();
+			getTurn();
+		}
 		},
 		error : function(e) {
 			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
@@ -217,7 +236,25 @@ function createGame(session) {
 			console.log("ERROR : ", e);
 		}
 	})
+}
 
+function getTurn(){
+ $.ajax({
+		url : "http://localhost:8080/game/" + gameName + "/getTurn",
+		type : 'GET',
+		processData : false,
+		contentType : "application/json",
+		success : function(data) {
+			console.log("SUCCESS : ", data);
+			setTurn();
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+		}
+	})
+   
 }
 
 function removeChilds(container){
@@ -447,18 +484,20 @@ function startGame(){
 	player = {};
 	board = new Board(scoreBoard);
 	board.addTable(containerBoard);
-	board.ready = true;
-	board.enableTurn();
-		board.onMark = cellId => {
-			this.addFormChooseCoordinates(cellId);
-			formCoordContainer.removeAttribute('style');
-			};
+	board.addPlayer(player);
+	
+}
 
+function setTurn() {
+    board.ready = true;
+	board.enableTurn(player);
+		board.onMark = cellId => {
+			addFormChooseCoordinates(cellId);
+			};
 
 }
 
 function addFormChooseCoordinates (cellId) {
-	console.log ("Dentro de addFormChooseCoordinates");
-	board.addForm(cellId,formCoordContainer);
-
+	board.addForm(cellId,formCoordSelection);
+	containerForm.removeAttribute('style');	
 }

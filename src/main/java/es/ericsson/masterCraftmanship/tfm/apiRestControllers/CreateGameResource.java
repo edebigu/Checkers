@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ericsson.masterCraftmanship.tfm.businessControllers.CreateGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
+import es.ericsson.masterCraftmanship.tfm.views.CreateGameJson;
 import es.ericsson.masterCraftmanship.tfm.views.Error;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
@@ -22,6 +23,7 @@ import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 public class CreateGameResource {
 
 	static final String CREATE_GAME = "/createGame";
+	
 
 	Logger logger = LogManager.getLogger(CreateGameResource.class);
 	
@@ -33,7 +35,7 @@ public class CreateGameResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ResponseJson> createGame(@RequestBody SessionDto sessionDto) {
+	public ResponseEntity<CreateGameJson> createGame(@RequestBody SessionDto sessionDto) {
 		logger.info("Recibido create game" + sessionDto.toString());
 		try {
 			sessionDto.validate();
@@ -41,12 +43,14 @@ public class CreateGameResource {
 			
 		}
 		catch (BadRequestException e) {
-			ResponseJson resultCreateGame = new ResponseJson();
+			CreateGameJson resultCreateGame = new CreateGameJson();
 			resultCreateGame.setMsg(Message.EMPTY_FIELD);
 			resultCreateGame.setError(Error.BAD_REQUEST);
-			return new ResponseEntity<ResponseJson>(resultCreateGame,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<CreateGameJson>(resultCreateGame,HttpStatus.BAD_REQUEST);
 		
 		}
 		
 	}
+	
+
 }
