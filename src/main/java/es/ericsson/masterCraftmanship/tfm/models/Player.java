@@ -11,7 +11,7 @@ public class Player {
 	
 	private String username;
 	private String password;
-	private Direction direction;
+	private Color color;
 
 	public Player() {
 		
@@ -44,10 +44,14 @@ public class Player {
 		this.password = password;
 	}
 	
-	public void setDirection(Direction direction) {
-		this.direction = direction;
+	public Color getColor() {
+		return color;
 	}
-	
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}

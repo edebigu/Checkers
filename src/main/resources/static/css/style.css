@@ -82,12 +82,12 @@ body {
 	font-size: 15px;
 }
 
-.peonBlanco {
+.whitePawn {
 	color: white;
 	font-size: 35px;
 }
 
-.peonNegro {
+.blackPawn {
 	color:black;
 	font-size: 35px;
 }

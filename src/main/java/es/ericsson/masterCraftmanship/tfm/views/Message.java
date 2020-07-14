@@ -8,7 +8,9 @@ public enum Message {
 	REGISTER_UNSUCCESSFULL("User exist"),
 	CREATE_GAME_SUCCESSFULL("Game created"),
 	CREATE_GAME_UNSUCCESSFULL("Game not created. Session user is no found"),
-	EMPTY_FIELD("User and password must be espicified");
+	EMPTY_FIELD("User and password must be espicified"),
+	MOVE_SUCCESS("Movement success"),
+	MOVE_UNSUCCESSFULL("Movement not permit");
 	
 	
 	private String message;

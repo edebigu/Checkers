@@ -54,18 +54,18 @@ class Board {
     }
 
     createPeon(color, cell) {
-        let peonColor;
-        if (color === 'blanco') {
-            peonColor = '\u{026C0}';
-            cell.classList.add('peonBlanco');
+        let pawn;
+        if (color === 'WHITE') {
+            pawn = '\u{026C0}';
+            cell.classList.add('whitePawn');
         }
-        else if (color === 'negro')
+        else if (color === 'BLACK')
         {
-            peonColor = '\u{026C2}'
-            cell.classList.add('peonNegro');
+            pawn = '\u{026C2}'
+            cell.classList.add('blackPawn');
         }
 
-        cell.appendChild(document.createTextNode(peonColor));
+        cell.appendChild(document.createTextNode(pawn));
 
 
     }
@@ -100,17 +100,19 @@ class Board {
         this.createTableHeadRow(this.table);
         let counter = 0
         let letter = 'a';
+        
 
         for (let r, i = 0; i < 64; i += 8) {
         	let letterNum = letter.charCodeAt();
+        	let counterCol = 0;
 
             r = row.cloneNode(false);
             this.createTableHeadColum(r, counter);
             
 
             for (let j = i; j < i + 8; j++) {
-            	this.cells[j].setAttribute('data-col', String.fromCharCode(letterNum));
-                this.cells[j].setAttribute('data-row', counter+1);
+            	this.cells[j].setAttribute('data-col', counterCol);
+                this.cells[j].setAttribute('data-row', counter);
                 this.cells[j].setAttribute('data-y', counter);
                 this.cells[j].setAttribute('data-x', j);
                 if (counter % 2 == 0) {
@@ -119,29 +121,13 @@ class Board {
                     }
                     else {
                         this.cells[j].classList.add('opaca');
-                        if (counter < 3){
-                            this.createPeon ('negro',this.cells[j] );
-                            this.cells[j].setAttribute('data-color', 'negro');
-
-                        }
-                        else if (counter >= 5) {
-                            this.createPeon ('blanco',this.cells[j] );
-                            this.cells[j].setAttribute('data-color', 'blanco');
-                        }
                     }
                     
                 }
                 else {
                     if (j % 2 == 0){
                         this.cells[j].classList.add('opaca');
-                        if (counter < 3){
-                            this.createPeon ('negro',this.cells[j] );
-                            this.cells[j].setAttribute('data-color', 'negro');
-                        }
-                        else if (counter >= 5) {
-                            this.createPeon ('blanco',this.cells[j] );
-                            this.cells[j].setAttribute('data-color', 'blanco');
-                        }
+
                     }
                     else {
                         this.cells[j].classList.add('tenue');
@@ -149,7 +135,7 @@ class Board {
 
                 }
                 r.appendChild(this.cells[j]);
-                letterNum++;
+                counterCol++;
             }
             this.createTableHeadColum(r, counter);
 
@@ -186,12 +172,12 @@ class Board {
     enableTurn(playerName) {
         for (let cell of this.cells) {
             if (cell.getAttribute('marked') === 'false') {
-               if (playerName === this.players[0] && cell.getAttribute('data-color') === 'blanco') {
+               if (playerName === this.players[0] && cell.getAttribute('data-color') === "WHITE") {
                 cell.classList.remove('notActive');
                 cell.setAttribute('active', 'true');
                }
                
-               else if (playerName === this.players[1] && cell.getAttribute('data-color') === 'negro') {
+               else if (playerName === this.players[1] && cell.getAttribute('data-color') === "BLACK") {
             	   cell.classList.remove('notActive');
                    cell.setAttribute('active', 'true');
                }
@@ -240,6 +226,22 @@ class Board {
         this.createPeon(color, newCell);
         newCell.setAttribute('data-color', color);
 
+    }
+    
+    doUpdate(data){
+       for (let i = 0; i < data.length; i ++) {
+          if (data[i].color !== null && data[i].piece !== null) {
+             let row =  data[i].coordX;
+       		 let col =  data[i].coordY;
+       		 let cellId = this.getCellId(row, col);
+       		 let cell = this.cells[cellId];
+             //cell.removeAttribute('data-color');
+             cell.textContent = '';
+             //Hay que distinguir entre si es un peon o una dama
+             this.createPeon(data[i].color, cell);
+             cell.setAttribute('data-color', data[i].color);
+          }	
+       }
     }
 
 
@@ -297,6 +299,8 @@ class Board {
     	input.setAttribute('placeholder', cell.getAttribute('data-col') + cell.getAttribute('data-row'));
     	input.setAttribute('data-x', cell.getAttribute('data-x'));
     	input.setAttribute('data-y', cell.getAttribute('data-y'));
+    	input.setAttribute('data-col', cell.getAttribute('data-col'));
+    	input.setAttribute('data-row', cell.getAttribute('data-row'));
     	input.setAttribute('data-cellId', cellId);
     	input.setAttribute('aria-describedby', 'basic-addon');
     	input.setAttribute('disabled', true);
@@ -334,9 +338,9 @@ class Board {
         
         let letter = 'a';
         let letterNum = letter.charCodeAt();
-        for (let i = 1; i <= 8; i++) {
+        for (let i = 0; i < 8; i++) {
             option = document.createElement('option');
-            option.setAttribute('value', String.fromCharCode(letterNum));
+            option.setAttribute('value', i);
             option.appendChild(document.createTextNode(String.fromCharCode(letterNum)));
             select.appendChild(option);
             letterNum++;
@@ -371,10 +375,10 @@ class Board {
     	
         select.appendChild(option);
         
-        for (let i = 1; i <= 8; i++) {
+        for (let i = 0; i < 8; i++) {
             option = document.createElement('option');
             option.setAttribute('value', i);
-            option.appendChild(document.createTextNode(i));
+            option.appendChild(document.createTextNode(i+1));
             select.appendChild(option);
         }
     	
@@ -406,36 +410,11 @@ class Board {
     
     	this.players.push(player);
     	this.players.push("machine");
-
-        /*if (this.players.length < 2) {
-
-            if (this.players.length === 0 || this.players[0].id != player.id) {
-
-                this.players.push(player);
-
-                let score = this.scoreBoard[this.players.length - 1];
-
-                if (this.players.length === 1) {
-                    //score.textContent = player.label + ' ' + player.name;
-                    score.textContent = player;
-                } else {
-                   // score.textContent = player.name + ' ' + player.label;
-                    score.textContent = player;
-                }
-
-                score.setAttribute('playerId', player.id);
-            }
-        }*/
     }
     
     getCellId(dataRow, dataCol) {
-    	console.log ("dataRow " + dataRow);
-    	console.log ("dataCol" +  dataCol);
     	  for (let cell of this.cells) {
-    		  console.log ("data-row " + cell.getAttribute('data-row'));
-    	    	console.log ("data-col" +  cell.getAttribute('data-col'));
-              if (cell.getAttribute('data-row') === dataRow && cell.getAttribute('data-col') === dataCol){
-            	console.log ("dentro del if con id " + cell.getAttribute('id'));
+              if (cell.getAttribute('data-row') == dataRow && cell.getAttribute('data-col') == dataCol){
               	return cell.getAttribute('id');
               }
           }

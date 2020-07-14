@@ -33,5 +33,4 @@ public class CreateGameJson {
 		this.gameName = gameName;
 	}
 	
-
 }

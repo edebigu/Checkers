@@ -39,14 +39,13 @@ public class CreateGameController {
 	public CreateGameJson createGame (SessionDto sessionDto) {
 		CreateGameJson resultCreateGame = new CreateGameJson();
 		Player playerFound = playerDao.findByUsername(sessionDto.getUsername());
-		//Session sessionFound = sessionDao.findByPlayer(playerFound);
 		Session sessionFound = sessionDao.findAll().get(0);
 		if (sessionFound != null) {
 			Game game = new Game();
 			game.setId(this.gameName);
+			game.addPlayer(playerFound);
 			Game gameSaved = gameDao.save(game);
 			sessionFound.setGame(gameSaved);
-			playerFound.setDirection(Direction.UP);
 			playerDao.save(playerFound);
 			sessionFound.setPlayer(playerFound);
 		    sessionDao.save(sessionFound);

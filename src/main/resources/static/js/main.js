@@ -1,5 +1,4 @@
 const json_result = {
-
 	OK : '200 OK',
 	CREATED : '201 CREATED',
 	NO_CONTENT : '204 NO CONTENT',
@@ -24,7 +23,7 @@ let scoreBoard = [
     document.querySelector('#p2Score')
 ];
 
-let player = {};
+let player;
 let gameName;
 let board;
 let numberOfCells;
@@ -99,11 +98,11 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click','#enviar',function() {
-		console.log ("Ha pulsado enviar");
+	    var cellIdNueva = board.getCellId($('#newRow').prop('value'), $('#newColum').prop('value'));
+		var movement = { originRow: $('#coordenadas').attr('data-row'), originCol: $('#coordenadas').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value')};
+		console.log ("Movement json: " + JSON.stringify(movement));
+		sendMove(movement);
 	});
-	
-
-
 });
 
 
@@ -225,15 +224,18 @@ function createGame(session) {
 		success : function(data) {
 		console.log("SUCCESS : ", data)
 		if ( data.error === json_result.CREATED ) {
-		   gameName = data.gameName;
+		    gameName = data.gameName;
 			startGame();
+			getBoard();
 			getTurn();
+
 		}
 		},
 		error : function(e) {
 			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
 			$('#checkers').html(json);
 			console.log("ERROR : ", e);
+			console.log("textError: " + e.responseText);
 		}
 	})
 }
@@ -253,8 +255,45 @@ function getTurn(){
 			$('#checkers').html(json);
 			console.log("ERROR : ", e);
 		}
+	}) 
+}
+
+function getBoard(){
+ $.ajax({
+		url : "http://localhost:8080/game/" + gameName + "/getStatus",
+		type : 'GET',
+		processData : false,
+		contentType : "application/json",
+		success : function(data) {
+			console.log("SUCCESS : ", data);
+			updateBoard(data);
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+		}
+	}) 
+}
+
+function sendMove(movement){
+    console.log ("player " +  player);
+	$.ajax({
+		url : "http://localhost:8080/game/" + gameName + "/move/" + player,
+		type : 'POST',
+		data : JSON.stringify(movement),
+		processData : false,
+		contentType : "application/json",
+		dataType : 'json',
+		success : function(data) {
+		console.log("SUCCESS : ", data)
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+		}
 	})
-   
 }
 
 function removeChilds(container){
@@ -481,7 +520,7 @@ function addInitialOptions() {
 function startGame(){
     optionForm.style.display = "none";
     containerBoard.removeAttribute('style');
-	player = {};
+	//player = "";
 	board = new Board(scoreBoard);
 	board.addTable(containerBoard);
 	board.addPlayer(player);
@@ -494,10 +533,13 @@ function setTurn() {
 		board.onMark = cellId => {
 			addFormChooseCoordinates(cellId);
 			};
-
 }
 
 function addFormChooseCoordinates (cellId) {
 	board.addForm(cellId,formCoordSelection);
 	containerForm.removeAttribute('style');	
+}
+
+function updateBoard(data) {
+   board.doUpdate(data);
 }
