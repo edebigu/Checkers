@@ -73,6 +73,10 @@ public class PlayGameController {
 		if (error != null) {
 			moveResult.setError(error.toString());
 		}
+		else {
+			gameDao.save(game);
+		}
+		
 		return moveResult;
 	}
 }

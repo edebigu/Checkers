@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import es.ericsson.masterCraftmanship.tfm.businessControllers.PlayGameController;
+
 
 @Document(collection = "Game")
 public class Game {
@@ -84,8 +86,11 @@ public class Game {
 			}
 		} while (pair < coordinates.length - 1 && error == null);
 		error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
-		if (error == null)
+		if (error == null) {
 			this.turn.change();
+			//llamamos a la funciona que hacer el movimiento de la maquina
+		    doMoveMachine();
+		}
 		else
 			this.unMovesUntilPair(removedCoordinates, pair, coordinates);
 		return error;
@@ -156,6 +161,70 @@ public class Game {
 		return null;
 	}
 	
+	public boolean isBlocked() {
+		for (Coordinate coordinate : this.getCoordinatesWithActualColor())
+			if (!this.isBlocked(coordinate))
+				return false;
+		return true;
+	}
+
+	private List<Coordinate> getCoordinatesWithActualColor() {
+		List<Coordinate> coordinates = new ArrayList<Coordinate>();
+		for (int i = 0; i < this.getDimension(); i++) {
+			for (int j = 0; j < this.getDimension(); j++) {
+				Coordinate coordinate = new Coordinate(i, j);
+				Piece piece = this.getPiece(coordinate);
+				if (piece != null && piece.getColor() == this.getTurnColor())
+					coordinates.add(coordinate);
+			}
+		}
+		return coordinates;
+	}
+
+	private boolean isBlocked(Coordinate coordinate) {
+		for (int i = 1; i <= 2; i++)
+			for (Coordinate target : coordinate.getDiagonalCoordinates(i))
+				if (this.isCorrectPairMove(0, coordinate, target) == null)
+					return false;
+		return true;
+	}
+	
+	private void doMoveMachine () {
+		List<Coordinate> listUnblocked = new ArrayList();
+		for (Coordinate coordinate : this.getCoordinatesWithActualColor()) {
+			if (!this.isBlocked(coordinate)) {
+				listUnblocked.add(coordinate);
+			}
+		}
+		int position = (int) (Math.random() * listUnblocked.size());
+		Coordinate origin = listUnblocked.get(position);
+		List<Coordinate> listTarget = new ArrayList();
+		for (int i = 1; i <= 2; i++) {
+			for (Coordinate target : origin.getDiagonalCoordinates(i)) {
+				if (this.isCorrectPairMove(0, origin, target) == null) {
+					listTarget.add(target);
+				}
+			}
+		}
+		position = (int) (Math.random() * listTarget.size());
+		Coordinate target = listTarget.get(position);
+		List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
+		Coordinate[] coordinates = {origin, target};
+		int pair = 0;
+		Error error;
+		do {
+			error = this.isCorrectPairMove(pair, coordinates);
+			if (error == null) {
+				this.pairMove(removedCoordinates, pair, coordinates);
+				pair++;
+			}
+		} while (pair < coordinates.length - 1 && error == null);
+		
+		 LogManager.getLogger(Game.class).info("El error devuelto de la machine es " + error);
+		 this.turn.change();
+		
+	}
+	
 
 	private Color getOppositeTurnColor() {
 		return this.turn.getOppositeColor();
@@ -191,6 +260,10 @@ public class Game {
 
 	public void setTurn(Turn turn) {
 		this.turn = turn;
+	}
+	
+	public Color getTurnColor() {
+		return this.turn.getColor();
 	}
 	
 	

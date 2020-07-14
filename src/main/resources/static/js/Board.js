@@ -230,13 +230,16 @@ class Board {
     
     doUpdate(data){
        for (let i = 0; i < data.length; i ++) {
-          if (data[i].color !== null && data[i].piece !== null) {
              let row =  data[i].coordX;
        		 let col =  data[i].coordY;
        		 let cellId = this.getCellId(row, col);
        		 let cell = this.cells[cellId];
+       		 cell.removeAttribute('data-color');
+          	cell.textContent = '';
+          if (data[i].color !== null && data[i].piece !== null) {
+
              //cell.removeAttribute('data-color');
-             cell.textContent = '';
+             //cell.textContent = '';
              //Hay que distinguir entre si es un peon o una dama
              this.createPeon(data[i].color, cell);
              cell.setAttribute('data-color', data[i].color);

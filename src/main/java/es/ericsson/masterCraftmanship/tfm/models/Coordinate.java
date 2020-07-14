@@ -50,6 +50,16 @@ public class Coordinate {
         }
         return coordinates;
     }
+    
+    List<Coordinate> getDiagonalCoordinates(int level) {
+        List<Coordinate> diagonalCoordinates = new ArrayList<Coordinate>();
+        for (Direction direction : Direction.values()) {
+            Coordinate diagonalCoordinate = this.plus(direction.getDistanceCoordinate(level));
+            if (diagonalCoordinate != null && diagonalCoordinate.isWithIn())
+                diagonalCoordinates.add(diagonalCoordinate);
+        }
+        return diagonalCoordinates;
+    }
 
     private Coordinate extract(Coordinate coordinate) {
         return new Coordinate(this.row - coordinate.row, this.column - coordinate.column);
@@ -57,6 +67,11 @@ public class Coordinate {
     
     private Coordinate plus(Coordinate coordinate) {
         return new Coordinate(this.row + coordinate.row, this.column + coordinate.column);
+    }
+    
+    private boolean isWithIn() {
+        return Coordinate.LOWER_LIMIT <= row && row <= Coordinate.UPPER_LIMIT && Coordinate.LOWER_LIMIT <= column
+                && column <= Coordinate.UPPER_LIMIT;
     }
     
     int getDiagonalDistance(Coordinate coordinate) {

@@ -11,7 +11,7 @@ public class MoveJson {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getResult() {
+	public String getError() {
 		return error;
 	}
 	public void setError(String error) {

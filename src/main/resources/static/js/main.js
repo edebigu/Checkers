@@ -226,8 +226,7 @@ function createGame(session) {
 		if ( data.error === json_result.CREATED ) {
 		    gameName = data.gameName;
 			startGame();
-			getBoard();
-			getTurn();
+			setTimeout(getTurn(), 300);
 
 		}
 		},
@@ -286,7 +285,12 @@ function sendMove(movement){
 		contentType : "application/json",
 		dataType : 'json',
 		success : function(data) {
-		console.log("SUCCESS : ", data)
+		     console.log("SUCCESS : ", data);
+		     if (data.error === null){
+		        console.log ("Se ha hecho bien el movimiento");
+		       getBoard();
+		     }
+		    
 		},
 		error : function(e) {
 			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
@@ -524,6 +528,7 @@ function startGame(){
 	board = new Board(scoreBoard);
 	board.addTable(containerBoard);
 	board.addPlayer(player);
+	getBoard();
 	
 }
 
