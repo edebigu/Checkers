@@ -57,16 +57,28 @@ class Board {
         let pawn;
         if (color === 'WHITE') {
             pawn = '\u{026C0}';
-            cell.classList.add('whitePawn');
+            cell.classList.add('whitePiece');
         }
         else if (color === 'BLACK')
         {
             pawn = '\u{026C2}'
-            cell.classList.add('blackPawn');
+            cell.classList.add('blackPiece');
         }
 
         cell.appendChild(document.createTextNode(pawn));
-
+    }
+    
+        createQueen(color, cell) {
+        let queen;
+        if (color === 'WHITE') {
+            queen = '\u{026C1}';
+            cell.classList.add('whitePiece');
+        }
+        else if (color === 'BLACK')
+        {
+            queen = '\u{026C3}'
+            cell.classList.add('blackPiece');
+        }
 
     }
 
@@ -184,6 +196,7 @@ class Board {
             }
         }
     }
+    
 
     highlightCells(positions) {
 
@@ -235,13 +248,16 @@ class Board {
        		 let cellId = this.getCellId(row, col);
        		 let cell = this.cells[cellId];
        		 cell.removeAttribute('data-color');
+       		 cell.classList.remove('whitePiece');
+       		 cell.classList.remove('blackPiece');
           	cell.textContent = '';
           if (data[i].color !== null && data[i].piece !== null) {
-
-             //cell.removeAttribute('data-color');
-             //cell.textContent = '';
-             //Hay que distinguir entre si es un peon o una dama
-             this.createPeon(data[i].color, cell);
+          	if ( data[i].piece ==  data[i].piece.toLowerCase()){
+           		 this.createPeon(data[i].color, cell);
+        	} 
+        	else {
+        		 this.createQueen(data[i].color, cell);
+        	}
              cell.setAttribute('data-color', data[i].color);
           }	
        }
@@ -279,21 +295,23 @@ class Board {
         }
     }
     
-    addForm(cellId, container){
+    /*addForm(cellId, container){
     	this.addSelectRow(container);
     	this.addSelectColum(container);
     	this.setCoordenada(cellId, container);
     	this.addButtonForm(container);	
+    }*/
+    
+     addForm(container){
+    	this.addSelectRow(container);
+    	this.addSelectColum(container);
+    	//this.setCoordenada(container);
+    	this.addCoordenada(container);
+    	this.addButtonForm(container);	
     }
     
-    setCoordenada(cellId, container) {
+    setCoordenada(cellId,container) {
     	let cell = this.cells[cellId];
-    	let label = document.createElement('label');
-    	label.setAttribute('class', 'description');
-    	label.setAttribute('for', 'coordenadas');
-    	label.appendChild(document.createTextNode('Coordenada'));
-    	label.style.display = "none";
-    	
     	let input = document.createElement('input');
     	input.setAttribute('type', 'text');
     	input.setAttribute('name', 'coordenadas');
@@ -308,8 +326,25 @@ class Board {
     	input.setAttribute('aria-describedby', 'basic-addon');
     	input.setAttribute('disabled', true);
     	input.style.display = "none";
-    	
-    	container.appendChild(label);
+    	container.appendChild(input);
+    }
+    
+     addCoordenada(container) {
+    	//let cell = this.cells[cellId];
+    	let input = document.createElement('input');
+    	input.setAttribute('type', 'text');
+    	input.setAttribute('name', 'coordenadas');
+    	input.setAttribute('class', 'form-control');
+    	input.setAttribute('id', 'coordenadas');
+    	//input.setAttribute('placeholder', cell.getAttribute('data-col') + cell.getAttribute('data-row'));
+    	//input.setAttribute('data-x', cell.getAttribute('data-x'));
+    	//input.setAttribute('data-y', cell.getAttribute('data-y'));
+    	//input.setAttribute('data-col', cell.getAttribute('data-col'));
+    	//input.setAttribute('data-row', cell.getAttribute('data-row'));
+    	//input.setAttribute('data-cellId', cellId);
+    	input.setAttribute('aria-describedby', 'basic-addon');
+    	input.setAttribute('disabled', true);
+    	input.style.display = "none";
     	container.appendChild(input);
     	
     }

@@ -82,12 +82,12 @@ body {
 	font-size: 15px;
 }
 
-.whitePawn {
+.whitePiece {
 	color: white;
 	font-size: 35px;
 }
 
-.blackPawn {
+.blackPiece {
 	color:black;
 	font-size: 35px;
 }

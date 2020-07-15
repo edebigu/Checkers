@@ -98,10 +98,12 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click','#enviar',function() {
-	    var cellIdNueva = board.getCellId($('#newRow').prop('value'), $('#newColum').prop('value'));
+	    containerForm.style.display = "none";
+		board.disableAll();
+	    //var cellIdNueva = board.getCellId($('#newRow').prop('value'), $('#newColum').prop('value'));
 		var movement = { originRow: $('#coordenadas').attr('data-row'), originCol: $('#coordenadas').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value')};
-		console.log ("Movement json: " + JSON.stringify(movement));
 		sendMove(movement);
+		formCoordSelection.reset();
 	});
 });
 
@@ -226,8 +228,6 @@ function createGame(session) {
 		if ( data.error === json_result.CREATED ) {
 		    gameName = data.gameName;
 			startGame();
-			setTimeout(getTurn(), 300);
-
 		}
 		},
 		error : function(e) {
@@ -247,14 +247,15 @@ function getTurn(){
 		contentType : "application/json",
 		success : function(data) {
 			console.log("SUCCESS : ", data);
-			setTurn();
 		},
 		error : function(e) {
 			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
 			$('#checkers').html(json);
 			console.log("ERROR : ", e);
 		}
-	}) 
+	}).done(function( data ) {
+		 setTurn();
+	});
 }
 
 function getBoard(){
@@ -273,6 +274,9 @@ function getBoard(){
 			console.log("ERROR : ", e);
 		}
 	}) 
+	.done(function( data ) {
+		 getTurn();
+	});
 }
 
 function sendMove(movement){
@@ -287,8 +291,8 @@ function sendMove(movement){
 		success : function(data) {
 		     console.log("SUCCESS : ", data);
 		     if (data.error === null){
-		        console.log ("Se ha hecho bien el movimiento");
 		       getBoard();
+		       alert("Turn for " + player + ". Select piece to move");
 		     }
 		    
 		},
@@ -298,6 +302,8 @@ function sendMove(movement){
 			console.log("ERROR : ", e);
 		}
 	})
+	
+	
 }
 
 function removeChilds(container){
@@ -524,10 +530,10 @@ function addInitialOptions() {
 function startGame(){
     optionForm.style.display = "none";
     containerBoard.removeAttribute('style');
-	//player = "";
 	board = new Board(scoreBoard);
 	board.addTable(containerBoard);
 	board.addPlayer(player);
+	board.addForm(formCoordSelection);
 	getBoard();
 	
 }
@@ -535,14 +541,25 @@ function startGame(){
 function setTurn() {
     board.ready = true;
 	board.enableTurn(player);
-		board.onMark = cellId => {
-			addFormChooseCoordinates(cellId);
-			};
+	//board.addForm(formCoordSelection);
+	board.onMark = cellId => {
+	  addFormChooseCoordinates(cellId);
+	};
 }
 
 function addFormChooseCoordinates (cellId) {
-	board.addForm(cellId,formCoordSelection);
+	//board.addForm(cellId,formCoordSelection);
+	removeSelectCoord();
+	board.setCoordenada(cellId, formCoordSelection);
 	containerForm.removeAttribute('style');	
+}
+
+function removeSelectCoord () {
+    let parentCoord = document.getElementById('form_coord');
+    console.log ("form_coord " + form_coord);
+	let childCoord = document.getElementById('coordenadas');
+	console.log ("childCoord " + childCoord);
+	parentCoord.removeChild(childCoord);
 }
 
 function updateBoard(data) {
