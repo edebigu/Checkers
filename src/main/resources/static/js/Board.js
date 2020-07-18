@@ -181,42 +181,11 @@ class Board {
         for (let cell of this.cells) {
             cell.classList.remove('notActive');
             cell.setAttribute('marked', 'false');
-        }
-    }
-
-    enableTurn(playerName) {
-        for (let cell of this.cells) {
-            if (cell.getAttribute('marked') === 'false') {
-               if (playerName === this.players[0] && cell.getAttribute('data-color') === "WHITE") {
-                cell.classList.remove('notActive');
-                cell.setAttribute('active', 'true');
-               }
-               
-               else if (playerName === this.players[1] && cell.getAttribute('data-color') === "BLACK") {
-            	   cell.classList.remove('notActive');
-                   cell.setAttribute('active', 'true');
-               }
-            }
+            cell.setAttribute('active', 'true');
         }
     }
     
 
-    highlightCells(positions) {
-
-        for (let i of positions) {
-            this.cells[i].classList.add('colorRed');
-        }
-
-        for (let cell of this.cells) {
-            cell.setAttribute('marked', 'true');
-        }
-    }
-
-    lowlightCells() {
-        for (let cell of this.cells) {
-            cell.classList.add('colorWhite');
-        }
-    }
 
     onMark(cellId) { 
         
@@ -254,23 +223,6 @@ class Board {
           }	
        }
     }
-
-
-    doWinner(winner, pos) {
-
-        let looser;
-        if (winner === this.players[0].name) {
-            looser = this.players[1].name;
-        } else {
-            looser = this.players[0].name;
-        }
-
-        alert(winner + " wins! " + looser + " looses.");
-
-        this.disableAll();
-        this.highlightCells(pos);
-    }
-
 
     
      addForm(container){

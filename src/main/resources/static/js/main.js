@@ -104,7 +104,8 @@ $(document).ready(function() {
 	$('form').on('click','#cancel',function() {
 		 containerForm.style.display = "none";
 		 formCoordSelection.reset();
-		 board.enableTurn(player);
+		 //board.enableTurn(player);
+		 board.enableAll();
 	});
 });
 
@@ -550,7 +551,8 @@ function startGame(){
 
 function setTurn() {
     board.ready = true;
-	board.enableTurn(player);
+	//board.enableTurn(player);
+	board.enableAll();
 	board.onMark = cellId => {
 	  addFormChooseCoordinates(cellId);
 	};
