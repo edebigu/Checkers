@@ -61,6 +61,11 @@ $(document).ready(function() {
 		 evento.preventDefault();
 	});
 	
+	$('form').on('click', '#btn_cancelLogin', function(evento) {
+		addInitialOptions();
+		evento.preventDefault();
+	});
+	
 	$('form').on('click', '#btn_submitRegister', function(evento) {
 		var username = $("#username").val().trim();
 		var password1 = $("#pwd").val().trim();
@@ -73,10 +78,14 @@ $(document).ready(function() {
 			registerUser(user);
 			
 		}
+		else {
+			alert ("Passwords are differents");
+			optionForm.reset();
+		}
 		evento.preventDefault();
 	});
 	
-	$('form').on('click', '#btn_submitCancel', function(evento) {
+	$('form').on('click', '#btn_cancelRegister', function(evento) {
 		addInitialOptions();
 		evento.preventDefault();
 	});
@@ -182,6 +191,7 @@ function loginUser(user) {
 				dataType : 'json',
 				success : function(data) {
 					alert(data.msg);
+					optionForm.reset();
 					console.log("SUCCESS : ", data.error + ": " + data.msg);
 					if ( data.error === json_result.OK ){
 						addUserLogin(data.username);
@@ -209,6 +219,7 @@ function registerUser(user) {
 				success : function(data) {
 					console.log("SUCCESS : ", data.error + ": " + data.msg);
 					alert(data.msg);
+					optionForm.reset();
 					if ( data.error === json_result.CREATED ){
 						addInitialOptions();
 						
@@ -366,53 +377,63 @@ function addInitialOptions() {
  
   function addLoginForm() { 
 	  
-  let title = document.getElementById("title");
-  title.textContent = "Login Form";
-		
-  let options = document.getElementById('options');
-
-
-  let userName = document.createElement('div');
-  userName.classList.add('form-group');
-  
-  let inputUserName = document.createElement('input'); 
-  inputUserName.classList.add('form-control');
-  inputUserName.setAttribute('type', 'text'); 
-  inputUserName.setAttribute('id','username'); 
-  inputUserName.setAttribute('name', 'username');
-  inputUserName.setAttribute('placeholder', 'User name');
-  userName.appendChild(inputUserName);
-  
-  let password = document.createElement('div');
-  password.classList.add('form-group');
-  
-  let inputPassword = document.createElement('input');
-  inputPassword.classList.add('form-control');
-  inputPassword.setAttribute('type', 'password');
-  inputPassword.setAttribute('id', 'pwd'); 
-  inputPassword.setAttribute('name','pwd'); 
-  inputPassword.setAttribute('placeholder', 'Password');
-  password.appendChild(inputPassword);
-  
-  let submit = document.createElement ('div');
-  submit.classList.add('form-group');
-  
-  let buttonSubmit= document.createElement('button');
-  buttonSubmit.setAttribute('type', 'submit');
-  buttonSubmit.classList.add('btn');
-  buttonSubmit.classList.add('btn-primary');
-  buttonSubmit.classList.add('btn-block');
-  buttonSubmit.setAttribute('id', 'btn_submitLogin');
-  buttonSubmit.setAttribute('name', 'btn_submitLogin');
-  buttonSubmit.appendChild(document.createTextNode('Submit'));
-  submit.appendChild(buttonSubmit);
-  
-  removeChilds(options);
-
-  options.appendChild(userName);
-  options.appendChild(password);
-  options.appendChild(submit);
-  optionForm.appendChild(options);
+	  let title = document.getElementById("title");
+	  title.textContent = "Login Form";
+			
+	  let options = document.getElementById('options');
+	
+	
+	  let userName = document.createElement('div');
+	  userName.classList.add('form-group');
+	  
+	  let inputUserName = document.createElement('input'); 
+	  inputUserName.classList.add('form-control');
+	  inputUserName.setAttribute('type', 'text'); 
+	  inputUserName.setAttribute('id','username'); 
+	  inputUserName.setAttribute('name', 'username');
+	  inputUserName.setAttribute('placeholder', 'User name');
+	  userName.appendChild(inputUserName);
+	  
+	  let password = document.createElement('div');
+	  password.classList.add('form-group');
+	  
+	  let inputPassword = document.createElement('input');
+	  inputPassword.classList.add('form-control');
+	  inputPassword.setAttribute('type', 'password');
+	  inputPassword.setAttribute('id', 'pwd'); 
+	  inputPassword.setAttribute('name','pwd'); 
+	  inputPassword.setAttribute('placeholder', 'Password');
+	  password.appendChild(inputPassword);
+	  
+	  let submit = document.createElement ('div');
+	  submit.classList.add('form-group');
+	  
+	  let buttonSubmit= document.createElement('button');
+	  buttonSubmit.setAttribute('type', 'submit');
+	  buttonSubmit.classList.add('btn');
+	  buttonSubmit.classList.add('btn-primary');
+	  buttonSubmit.classList.add('btn-block');
+	  buttonSubmit.setAttribute('id', 'btn_submitLogin');
+	  buttonSubmit.setAttribute('name', 'btn_submitLogin');
+	  buttonSubmit.appendChild(document.createTextNode('Submit'));
+	  submit.appendChild(buttonSubmit);
+	  
+	  let buttonCancelLogint= document.createElement('button');
+	  buttonCancelLogint.setAttribute('type', 'submit');
+	  buttonCancelLogint.classList.add('btn');
+	  buttonCancelLogint.classList.add('btn-primary');
+	  buttonCancelLogint.classList.add('btn-block');
+	  buttonCancelLogint.setAttribute('id', 'btn_cancelLogin');
+	  buttonCancelLogint.setAttribute('name', 'btn_cancelLogin');
+	  buttonCancelLogint.appendChild(document.createTextNode('Cancel'));
+	  submit.appendChild(buttonCancelLogint);
+	  
+	  removeChilds(options);
+	
+	  options.appendChild(userName);
+	  options.appendChild(password);
+	  options.appendChild(submit);
+	  optionForm.appendChild(options);
   
  }
   
@@ -475,8 +496,8 @@ function addInitialOptions() {
 	  buttonCancel.classList.add('btn');
 	  buttonCancel.classList.add('btn-primary');
 	  buttonCancel.classList.add('btn-block');
-	  buttonCancel.setAttribute('id', 'btn_submitCancel');
-	  buttonCancel.setAttribute('name', 'btn_submitCancel');
+	  buttonCancel.setAttribute('id', 'btn_cancelRegister');
+	  buttonCancel.setAttribute('name', 'btn_registerCancel');
 	  buttonCancel.appendChild(document.createTextNode('Cancel'));
 	  submit.appendChild(buttonCancel);
 	  
