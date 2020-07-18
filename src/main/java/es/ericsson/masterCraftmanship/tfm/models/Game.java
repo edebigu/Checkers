@@ -88,11 +88,11 @@ public class Game {
 		error = this.isCorrectGlobalMove(error, removedCoordinates, coordinates);
 		if (error == null) {
 			this.turn.change();
-			//llamamos a la funciona que hacer el movimiento de la maquina
-		    doMoveMachine();
+		    error = doMoveMachine();
 		}
-		else
+		else {
 			this.unMovesUntilPair(removedCoordinates, pair, coordinates);
+		}
 		return error;
 	}
 	
@@ -189,40 +189,52 @@ public class Game {
 		return true;
 	}
 	
-	private void doMoveMachine () {
+	private Error doMoveMachine () {
+		Error error = null;
+		Coordinate origin = getAllowedOrigin();
+		if (origin != null) {
+			Coordinate target = getAllowedTarget(origin);
+			List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
+			Coordinate[] coordinates = {origin, target};
+			int pair = 0;
+			do {
+				error = this.isCorrectPairMove(pair, coordinates);
+				if (error == null) {
+					this.pairMove(removedCoordinates, pair, coordinates);
+					pair++;
+				}
+			} while (pair < coordinates.length - 1 && error == null);
+			this.turn.change();
+		}
+		return error;
+		
+	}
+	
+	private Coordinate getAllowedOrigin() {
 		List<Coordinate> listUnblocked = new ArrayList();
+		Coordinate allowedOrigin = null;
 		for (Coordinate coordinate : this.getCoordinatesWithActualColor()) {
 			if (!this.isBlocked(coordinate)) {
 				listUnblocked.add(coordinate);
 			}
 		}
-		int position = (int) (Math.random() * listUnblocked.size());
-		Coordinate origin = listUnblocked.get(position);
-		List<Coordinate> listTarget = new ArrayList();
+		
+		if (listUnblocked.size() > 0) {
+			allowedOrigin = listUnblocked.get( (int) (Math.random() * listUnblocked.size()));
+		}
+		return allowedOrigin;
+	}
+	
+	private Coordinate getAllowedTarget(Coordinate origin) {
+		List<Coordinate> targets = new ArrayList();
 		for (int i = 1; i <= 2; i++) {
 			for (Coordinate target : origin.getDiagonalCoordinates(i)) {
 				if (this.isCorrectPairMove(0, origin, target) == null) {
-					listTarget.add(target);
+					targets.add(target);
 				}
 			}
 		}
-		position = (int) (Math.random() * listTarget.size());
-		Coordinate target = listTarget.get(position);
-		List<Coordinate> removedCoordinates = new ArrayList<Coordinate>();
-		Coordinate[] coordinates = {origin, target};
-		int pair = 0;
-		Error error;
-		do {
-			error = this.isCorrectPairMove(pair, coordinates);
-			if (error == null) {
-				this.pairMove(removedCoordinates, pair, coordinates);
-				pair++;
-			}
-		} while (pair < coordinates.length - 1 && error == null);
-		
-		 LogManager.getLogger(Game.class).info("El error devuelto de la machine es " + error);
-		 this.turn.change();
-		
+		return  targets.get((int) (Math.random() * targets.size()));
 	}
 	
 

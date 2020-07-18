@@ -4,6 +4,7 @@ public class MoveJson {
 	
 	private String username;
 	private String error;
+	private String message;
 
 	public String getUsername() {
 		return username;
@@ -16,6 +17,12 @@ public class MoveJson {
 	}
 	public void setError(String error) {
 		this.error = error;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

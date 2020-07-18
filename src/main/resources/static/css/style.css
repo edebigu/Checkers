@@ -58,7 +58,7 @@ body {
 	background-color:#bd9661;
 }
 .colorRed {
-    color: #F286A0 !important;
+    color: #ff0000!important;
 }
 
 .gameBoard, .scoreBoard {
@@ -107,9 +107,10 @@ body {
     cursor: default;
 }
 
-.scoreBoard {
+.user {
     color: #516D66;
     height: 100px;
+    color: #ff0000;
 }
 
 .boardCol {

@@ -52,8 +52,11 @@ class Board {
         cellHead.appendChild(document.createTextNode(counter+1));
         r.appendChild(cellHead);
     }
+    
+    
+    
 
-    createPeon(color, cell) {
+    createPawn(color, cell) {
         let pawn;
         if (color === 'WHITE') {
             pawn = '\u{026C0}';
@@ -76,10 +79,10 @@ class Board {
         }
         else if (color === 'BLACK')
         {
-            queen = '\u{026C3}'
+            queen = '\u{026C3}';
             cell.classList.add('blackPiece');
         }
-
+		cell.appendChild(document.createTextNode(queen));
     }
 
 
@@ -216,7 +219,7 @@ class Board {
     }
 
     onMark(cellId) { 
-        console.log ("He llamado a onMark");
+        
     }
 
     markEvent(event) {
@@ -229,17 +232,6 @@ class Board {
         }
     }
 
-    doMark(cellId, newCellId, label) {
-        let cell = this.cells[cellId];;
-        let color = cell.getAttribute('data-color');
-        cell.removeAttribute('data-color');
-        cell.textContent = '';
-        let newCell = this.cells[newCellId];
-        console.log ("color " , color);
-        this.createPeon(color, newCell);
-        newCell.setAttribute('data-color', color);
-
-    }
     
     doUpdate(data){
        for (let i = 0; i < data.length; i ++) {
@@ -253,7 +245,7 @@ class Board {
           	cell.textContent = '';
           if (data[i].color !== null && data[i].piece !== null) {
           	if ( data[i].piece ==  data[i].piece.toLowerCase()){
-           		 this.createPeon(data[i].color, cell);
+           		 this.createPawn(data[i].color, cell);
         	} 
         	else {
         		 this.createQueen(data[i].color, cell);
@@ -279,69 +271,31 @@ class Board {
         this.highlightCells(pos);
     }
 
-    doDraw() {
-        alert("Draw!");
-        this.lowlightCells();
-    }
 
-    highlightScoreboard(playerId) {
-
-        for (let board of this.scoreBoard) {
-            board.classList.remove('active');
-
-            if (board.getAttribute('playerId') == playerId) {
-                board.classList.add('active');
-            }
-        }
-    }
-    
-    /*addForm(cellId, container){
-    	this.addSelectRow(container);
-    	this.addSelectColum(container);
-    	this.setCoordenada(cellId, container);
-    	this.addButtonForm(container);	
-    }*/
     
      addForm(container){
     	this.addSelectRow(container);
     	this.addSelectColum(container);
-    	//this.setCoordenada(container);
     	this.addCoordenada(container);
-    	this.addButtonForm(container);	
+    	this.addButtonsForm(container);	
     }
     
     setCoordenada(cellId,container) {
     	let cell = this.cells[cellId];
-    	let input = document.createElement('input');
-    	input.setAttribute('type', 'text');
-    	input.setAttribute('name', 'coordenadas');
-    	input.setAttribute('class', 'form-control');
-    	input.setAttribute('id', 'coordenadas');
-    	input.setAttribute('placeholder', cell.getAttribute('data-col') + cell.getAttribute('data-row'));
-    	input.setAttribute('data-x', cell.getAttribute('data-x'));
-    	input.setAttribute('data-y', cell.getAttribute('data-y'));
-    	input.setAttribute('data-col', cell.getAttribute('data-col'));
-    	input.setAttribute('data-row', cell.getAttribute('data-row'));
-    	input.setAttribute('data-cellId', cellId);
-    	input.setAttribute('aria-describedby', 'basic-addon');
-    	input.setAttribute('disabled', true);
-    	input.style.display = "none";
-    	container.appendChild(input);
+    	container.setAttribute('placeholder', cell.getAttribute('data-col') + cell.getAttribute('data-row'));
+    	container.setAttribute('data-x', cell.getAttribute('data-x'));
+    	container.setAttribute('data-y', cell.getAttribute('data-y'));
+    	container.setAttribute('data-col', cell.getAttribute('data-col'));
+    	container.setAttribute('data-row', cell.getAttribute('data-row'));
+    	container.setAttribute('data-cellId', cellId);
     }
     
      addCoordenada(container) {
-    	//let cell = this.cells[cellId];
     	let input = document.createElement('input');
     	input.setAttribute('type', 'text');
-    	input.setAttribute('name', 'coordenadas');
+    	input.setAttribute('name', 'selectedCoord');
     	input.setAttribute('class', 'form-control');
-    	input.setAttribute('id', 'coordenadas');
-    	//input.setAttribute('placeholder', cell.getAttribute('data-col') + cell.getAttribute('data-row'));
-    	//input.setAttribute('data-x', cell.getAttribute('data-x'));
-    	//input.setAttribute('data-y', cell.getAttribute('data-y'));
-    	//input.setAttribute('data-col', cell.getAttribute('data-col'));
-    	//input.setAttribute('data-row', cell.getAttribute('data-row'));
-    	//input.setAttribute('data-cellId', cellId);
+    	input.setAttribute('id', 'selectedCoord');
     	input.setAttribute('aria-describedby', 'basic-addon');
     	input.setAttribute('disabled', true);
     	input.style.display = "none";
@@ -425,23 +379,31 @@ class Board {
     	
     }
     
-    addButtonForm(container) {
+    addButtonsForm(container) {
     	let divButton = document.createElement('div');
     	divButton.setAttribute('class', 'input-group');
     	
     	let button =  document.createElement('button');
     	button.setAttribute('type', 'button');
     	button.setAttribute('value', 'submit');
-    	button.setAttribute('value', 'enviar');
+    	button.setAttribute('value', 'send');
     	button.setAttribute('class', 'btn btn-primary btn-md d-block mx-auto');
-    	button.setAttribute('id', 'enviar');
+    	button.setAttribute('id', 'send');
     	button.setAttribute('disabled', true);
     	button.appendChild(document.createTextNode('Submit'));
     	
+    	let cancelButton =  document.createElement('button');
+    	cancelButton.setAttribute('type', 'button');
+    	cancelButton.setAttribute('value', 'submit');
+    	cancelButton.setAttribute('value', 'cancel');
+    	cancelButton.setAttribute('class', 'btn btn-primary btn-md d-block mx-auto');
+    	cancelButton.setAttribute('id', 'cancel');
+    	cancelButton.appendChild(document.createTextNode('Cancel'));
+    	
     	divButton.appendChild(button);
+    	divButton.appendChild(cancelButton);
     	
     	container.appendChild(divButton);
-    	
     }
 
     addPlayer(player) {
@@ -459,22 +421,6 @@ class Board {
     	
     }
 
-    restart() {
-
-        for (let cell of this.cells) {
-
-            cell.classList.remove('colorRed');
-            cell.classList.add('notActive');
-
-            cell.classList.remove('colorWhite');
-            cell.classList.remove('colorRed');
-
-            cell.setAttribute('marked', 'false');
-            cell.setAttribute('active', 'false');
-
-            cell.textContent = '';
-        }
-    }
 
 
 }

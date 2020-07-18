@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import es.ericsson.masterCraftmanship.tfm.daos.GameDao;
 import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
 import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
+import es.ericsson.masterCraftmanship.tfm.models.Color;
 import es.ericsson.masterCraftmanship.tfm.models.Coordinate;
 import es.ericsson.masterCraftmanship.tfm.models.Error;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
@@ -22,30 +23,30 @@ import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
 
 @Controller
 public class PlayGameController {
-	
+
 	private PlayerDao playerDao;
 	private GameDao gameDao;
-	
+
 	Logger logger = LogManager.getLogger(PlayGameController.class);
-	
+
 	@Autowired
-	public PlayGameController (GameDao gameDao, PlayerDao playerDao) {
+	public PlayGameController(GameDao gameDao, PlayerDao playerDao) {
 		this.gameDao = gameDao;
 		this.playerDao = playerDao;
 	}
-	
-	public TurnJson getTurn (String gameId) {
+
+	public TurnJson getTurn(String gameId) {
 		TurnJson resultTurn = new TurnJson();
 		Game game = gameDao.findById(gameId).get();
 		resultTurn.setColor(game.getTurn().getColor().name());
 		return resultTurn;
-		
+
 	}
-	
-	public List<SquareJson> getStatus (String gameId) {
+
+	public List<SquareJson> getStatus(String gameId) {
 		Game game = gameDao.findById(gameId).get();
-        List<SquareJson> listSquare = new ArrayList<SquareJson>();
-		Piece[][] pieces= game.getBoard().getPieces();
+		List<SquareJson> listSquare = new ArrayList<SquareJson>();
+		Piece[][] pieces = game.getBoard().getPieces();
 		for (int i = 0; i < Coordinate.getDimension(); i++) {
 			for (int j = 0; j < Coordinate.getDimension(); j++) {
 				SquareJson square = new SquareJson();
@@ -57,26 +58,36 @@ public class PlayGameController {
 				}
 				listSquare.add(square);
 			}
-        }
+		}
 		return listSquare;
 	}
-	
-	public MoveJson move (String gameId, String playerName, MoveDto movement) {
+
+	public MoveJson move(String gameId, String playerName, MoveDto movement) {
 		MoveJson moveResult = new MoveJson();
 		Game game = gameDao.findById(gameId).get();
 		Player player = playerDao.findByUsername(playerName);
-		Coordinate coordOrigin = new Coordinate (Integer.parseInt(movement.getOriginRow()), Integer.parseInt(movement.getOriginCol()));
-		Coordinate coordTarget = new Coordinate (Integer.parseInt(movement.getTargetRow()), Integer.parseInt(movement.getTargetCol()));
-		Coordinate[] coordinates = {coordOrigin, coordTarget};
+		Coordinate coordOrigin = new Coordinate(Integer.parseInt(movement.getOriginRow()),
+				Integer.parseInt(movement.getOriginCol()));
+		Coordinate coordTarget = new Coordinate(Integer.parseInt(movement.getTargetRow()),
+				Integer.parseInt(movement.getTargetCol()));
+		Coordinate[] coordinates = { coordOrigin, coordTarget };
 		Error error = game.move(coordinates);
 		moveResult.setUsername(player.getUsername());
 		if (error != null) {
 			moveResult.setError(error.toString());
-		}
-		else {
+		} else {
+			if (error == null && game.isBlocked()) {
+				if (game.getTurn().getColor() == Color.WHITE) {
+					moveResult.setError(Error.LOST_MESSAGE.toString());
+
+				} else {
+					moveResult.setError(Error.LOST_MESSAGE_MACHINE.toString());
+					moveResult.setUsername("machine");
+				}
+			}
 			gameDao.save(game);
 		}
-		
+
 		return moveResult;
 	}
 }

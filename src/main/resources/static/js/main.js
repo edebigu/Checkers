@@ -56,9 +56,7 @@ $(document).ready(function() {
 					username : username,
 					password : password
 			}
-			console.log("json user " + JSON.stringify(user));
-			loginUser(user);
-		   
+			loginUser(user);  
 		}
 		 evento.preventDefault();
 	});
@@ -72,7 +70,6 @@ $(document).ready(function() {
 					username : username,
 					password : password1
 			}
-			console.log("Json register " + JSON.stringify(user));
 			registerUser(user);
 			
 		}
@@ -84,7 +81,6 @@ $(document).ready(function() {
 				username : player,
 				gameName : ""
 		}
-		console.log("Json session " + JSON.stringify(session));
 		createGame(session);
 		evento.preventDefault();
 	});
@@ -97,13 +93,18 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('form').on('click','#enviar',function() {
+	$('form').on('click','#send',function() {
 	    containerForm.style.display = "none";
 		board.disableAll();
-	    //var cellIdNueva = board.getCellId($('#newRow').prop('value'), $('#newColum').prop('value'));
-		var movement = { originRow: $('#coordenadas').attr('data-row'), originCol: $('#coordenadas').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value')};
+		var movement = { originRow: $('#selectedCoord').attr('data-row'), originCol: $('#selectedCoord').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value')};
 		sendMove(movement);
 		formCoordSelection.reset();
+	});
+	
+	$('form').on('click','#cancel',function() {
+		 containerForm.style.display = "none";
+		 formCoordSelection.reset();
+		 board.enableTurn(player);
 	});
 });
 
@@ -280,7 +281,6 @@ function getBoard(){
 }
 
 function sendMove(movement){
-    console.log ("player " +  player);
 	$.ajax({
 		url : "http://localhost:8080/game/" + gameName + "/move/" + player,
 		type : 'POST',
@@ -293,6 +293,16 @@ function sendMove(movement){
 		     if (data.error === null){
 		       getBoard();
 		       alert("Turn for " + player + ". Select piece to move");
+		     }
+		     else {
+		       if (data.error === "LOST_MESSAGE" || data.error === "LOST_MESSAGE_MACHINE"){
+		       	 alert ("Player " + data.username + " lost!!");
+		       }
+		       else {
+		         alert ("Error: movement not allowed");
+		         formCoordSelection.reset();
+		         setTurn();
+		       }
 		     }
 		    
 		},
@@ -511,7 +521,7 @@ function addInitialOptions() {
 	  let player = document.createElement('div');
 	  player.classList.add('col-sm-3');
 	  player.classList.add('col-sm-offset-3');
-	  player.classList.add('scoreBoard');
+	  player.classList.add('user');
 	  
 	  let h1 =  document.createElement('h1');
 	  
@@ -541,25 +551,16 @@ function startGame(){
 function setTurn() {
     board.ready = true;
 	board.enableTurn(player);
-	//board.addForm(formCoordSelection);
 	board.onMark = cellId => {
 	  addFormChooseCoordinates(cellId);
 	};
 }
 
 function addFormChooseCoordinates (cellId) {
-	//board.addForm(cellId,formCoordSelection);
-	removeSelectCoord();
-	board.setCoordenada(cellId, formCoordSelection);
+	let parentCoord = document.getElementById('form_coord');
+	let childCoord = document.getElementById('selectedCoord');
+	board.setCoordenada(cellId, childCoord);
 	containerForm.removeAttribute('style');	
-}
-
-function removeSelectCoord () {
-    let parentCoord = document.getElementById('form_coord');
-    console.log ("form_coord " + form_coord);
-	let childCoord = document.getElementById('coordenadas');
-	console.log ("childCoord " + childCoord);
-	parentCoord.removeChild(childCoord);
 }
 
 function updateBoard(data) {
