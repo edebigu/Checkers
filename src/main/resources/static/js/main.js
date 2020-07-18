@@ -76,6 +76,11 @@ $(document).ready(function() {
 		evento.preventDefault();
 	});
 	
+	$('form').on('click', '#btn_submitCancel', function(evento) {
+		addInitialOptions();
+		evento.preventDefault();
+	});
+	
 	$('form').on('click', '#btn_createGame', function(evento) {
 		var session = {
 				username : player,
@@ -464,6 +469,16 @@ function addInitialOptions() {
 	  buttonSubmit.setAttribute('name', 'btn_submitRegister');
 	  buttonSubmit.appendChild(document.createTextNode('Submit'));
 	  submit.appendChild(buttonSubmit);
+	  
+	  let buttonCancel= document.createElement('button');
+	  buttonCancel.setAttribute('type', 'submit');
+	  buttonCancel.classList.add('btn');
+	  buttonCancel.classList.add('btn-primary');
+	  buttonCancel.classList.add('btn-block');
+	  buttonCancel.setAttribute('id', 'btn_submitCancel');
+	  buttonCancel.setAttribute('name', 'btn_submitCancel');
+	  buttonCancel.appendChild(document.createTextNode('Cancel'));
+	  submit.appendChild(buttonCancel);
 	  
 	  removeChilds(options);
 
