@@ -26,7 +26,7 @@ let scoreBoard = [
 ];
 
 let player;
-let gameName;
+let gameName = "";
 let board;
 let numberOfCells;
 
@@ -101,6 +101,20 @@ $(document).ready(function() {
 		evento.preventDefault();
 	});
 	
+	$('form').on('click', '#btn_logout', function(evento) {
+		if (!confirm("Do you really want to quit the game?")){
+    	    event.preventDefault();
+    	}else {
+    			var session = {
+				username : player,
+				gameName : gameName
+			}
+    		startLogout(session);
+    		evento.preventDefault();
+    	}
+		
+	});
+	
 	var contador = 0;
 	$('form').on('change','select',function() {
 		contador ++;
@@ -124,7 +138,6 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click','#move',function() {
-	     console.log ("He pulsado move");
 		 optionsGame.style.display = "none";
 		 getTurn();
 		 
@@ -241,20 +254,19 @@ function registerUser(user) {
 			})
 }
 
-function createGame(session) {
+function startLogout(session) {
 	$.ajax({
-		url : "http://localhost:8080/createGame",
+		url : "http://localhost:8080/logout",
 		type : 'POST',
 		data : JSON.stringify(session),
 		processData : false,
 		contentType : "application/json",
 		dataType : 'json',
 		success : function(data) {
-		console.log("SUCCESS : ", data)
-		if ( data.error === json_result.CREATED ) {
-		    gameName = data.gameName;
-			startGame();
-		}
+		console.log("SUCCESS : ", data);
+		    gameName = "";
+		    player = "";
+
 		},
 		error : function(e) {
 			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
@@ -262,7 +274,10 @@ function createGame(session) {
 			console.log("ERROR : ", e);
 			console.log("textError: " + e.responseText);
 		}
-	})
+	}).done(function( data ) {
+		 addInitialOptions();
+		 removeUserLogin();
+	});
 }
 
 function getTurn(){
@@ -338,7 +353,30 @@ function sendMove(movement){
 		}
 	})
 	
-	
+}
+
+function createGame(session) {
+	$.ajax({
+		url : "http://localhost:8080/createGame",
+		type : 'POST',
+		data : JSON.stringify(session),
+		processData : false,
+		contentType : "application/json",
+		dataType : 'json',
+		success : function(data) {
+		console.log("SUCCESS : ", data)
+		if ( data.error === json_result.CREATED ) {
+		    gameName = data.gameName;
+			startGame();
+		}
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+			console.log("textError: " + e.responseText);
+		}
+	})
 }
 
 function removeChilds(container){
@@ -545,10 +583,9 @@ function addInitialOptions() {
   function addUserLogin(playerName){
 	  
 	  let player = document.createElement('div');
-	  player.classList.add('col-sm-3');
-	  player.classList.add('col-sm-offset-3');
-	  player.classList.add('user');
-	  
+	  player.setAttribute('id', 'playerContent');
+	  player.setAttribute('class', 'col-sm-3 col-sm-offset-3 user');
+
 	  let h1 =  document.createElement('h1');
 	  
 	  let span =  document.createElement('span');
@@ -560,6 +597,12 @@ function addInitialOptions() {
 	  
 	  checkers.insertBefore(player,optionForm);
 	  
+  }
+  
+  function removeUserLogin(){
+    let parent = document.getElementById('checkers');
+	let childPlayer = document.getElementById('playerContent');
+	parent.removeChild(childPlayer);
   }
 
 

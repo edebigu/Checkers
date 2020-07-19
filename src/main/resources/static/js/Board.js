@@ -397,6 +397,11 @@ class Board {
     	this.players.push("machine");
     }
     
+    removePlayer() {
+    	this.players.pop();
+    	this.players.pop();
+    }
+    
     getCellId(dataRow, dataCol) {
     	  for (let cell of this.cells) {
               if (cell.getAttribute('data-row') == dataRow && cell.getAttribute('data-col') == dataCol){

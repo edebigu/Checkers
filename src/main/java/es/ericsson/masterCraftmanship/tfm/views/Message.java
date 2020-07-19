@@ -10,7 +10,9 @@ public enum Message {
 	CREATE_GAME_UNSUCCESSFULL("Game not created. Session user is no found"),
 	EMPTY_FIELD("User and password must be espicified"),
 	MOVE_SUCCESS("Movement success"),
-	MOVE_UNSUCCESSFULL("Movement not permit");
+	MOVE_UNSUCCESSFULL("Movement not permit"),
+	LOGOUT_SUCCESS("Logout success"),
+	LOGOUT_UNSUCCESSFULL("Player is not logged");
 	
 	
 	private String message;

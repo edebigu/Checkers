@@ -9,14 +9,12 @@ import es.ericsson.masterCraftmanship.tfm.daos.GameDao;
 import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
 import es.ericsson.masterCraftmanship.tfm.daos.SessionDao;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
-import es.ericsson.masterCraftmanship.tfm.models.Direction;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
 import es.ericsson.masterCraftmanship.tfm.models.Session;
 import es.ericsson.masterCraftmanship.tfm.views.CreateGameJson;
 import es.ericsson.masterCraftmanship.tfm.views.Error;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
-import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @Controller
 public class CreateGameController {
