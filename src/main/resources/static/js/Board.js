@@ -223,6 +223,39 @@ class Board {
           }	
        }
     }
+    
+    addOptionsGame(container) {
+    	
+    	let divButton = document.createElement('div');
+    	divButton.setAttribute('class', 'form-group');
+    	
+    	let moveButton =  document.createElement('button');
+    	moveButton.setAttribute('class', 'btn btn-primary btn-block');
+    	moveButton.setAttribute('id', 'move');
+    	moveButton.setAttribute('name', 'move');
+    	moveButton.setAttribute('type', 'button');
+    	moveButton.appendChild(document.createTextNode('Move'));
+    	
+    	let saveGameButton =  document.createElement('button');
+    	saveGameButton.setAttribute('class', 'btn btn-primary btn-block');
+    	saveGameButton.setAttribute('id', 'saveGame');
+    	saveGameButton.setAttribute('name', 'saveGame');
+    	saveGameButton.setAttribute('type', 'button');
+    	saveGameButton.appendChild(document.createTextNode('Save Game'));
+    	
+    	let closeGameButton =  document.createElement('button');
+    	closeGameButton.setAttribute('class', 'btn btn-primary btn-block');
+    	closeGameButton.setAttribute('id', 'closeGame');
+    	closeGameButton.setAttribute('name', 'closeGame');
+    	closeGameButton.setAttribute('type', 'button');
+    	closeGameButton.appendChild(document.createTextNode('Close Game'));
+    	
+    	divButton.appendChild(moveButton);
+    	divButton.appendChild(saveGameButton);
+    	divButton.appendChild(closeGameButton);
+        container.appendChild(divButton);
+ 
+    }
 
     
      addForm(container){
@@ -337,7 +370,7 @@ class Board {
     	
     	let button =  document.createElement('button');
     	button.setAttribute('type', 'button');
-    	button.setAttribute('value', 'submit');
+    	//button.setAttribute('value', 'submit');
     	button.setAttribute('value', 'send');
     	button.setAttribute('class', 'btn btn-primary btn-md d-block mx-auto');
     	button.setAttribute('id', 'send');
@@ -346,7 +379,7 @@ class Board {
     	
     	let cancelButton =  document.createElement('button');
     	cancelButton.setAttribute('type', 'button');
-    	cancelButton.setAttribute('value', 'submit');
+    	//cancelButton.setAttribute('value', 'submit');
     	cancelButton.setAttribute('value', 'cancel');
     	cancelButton.setAttribute('class', 'btn btn-primary btn-md d-block mx-auto');
     	cancelButton.setAttribute('id', 'cancel');

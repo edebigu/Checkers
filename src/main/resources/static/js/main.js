@@ -16,6 +16,8 @@ let optionForm = document.querySelector('#optionForm');
 
 let containerBoard = document.querySelector('#gameBoard');
 let containerForm = document.querySelector('#boardForm');
+let formContainer = document.querySelector('#form_container');
+let optionsGame = document.querySelector('#optionsGame');
 let formCoordSelection = document.querySelector('#form_coord');
 
 let scoreBoard = [
@@ -108,7 +110,7 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click','#send',function() {
-	    containerForm.style.display = "none";
+	    formCoordSelection.style.display = "none";
 		board.disableAll();
 		var movement = { originRow: $('#selectedCoord').attr('data-row'), originCol: $('#selectedCoord').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value')};
 		sendMove(movement);
@@ -118,8 +120,14 @@ $(document).ready(function() {
 	$('form').on('click','#cancel',function() {
 		 containerForm.style.display = "none";
 		 formCoordSelection.reset();
-		 //board.enableTurn(player);
 		 board.enableAll();
+	});
+	
+	$('form').on('click','#move',function() {
+	     console.log ("He pulsado move");
+		 optionsGame.style.display = "none";
+		 getTurn();
+		 
 	});
 });
 
@@ -292,9 +300,9 @@ function getBoard(){
 			console.log("ERROR : ", e);
 		}
 	}) 
-	.done(function( data ) {
+	/*.done(function( data ) {
 		 getTurn();
-	});
+	});*/
 }
 
 function sendMove(movement){
@@ -309,7 +317,7 @@ function sendMove(movement){
 		     console.log("SUCCESS : ", data);
 		     if (data.error === null){
 		       getBoard();
-		       alert("Turn for " + player + ". Select piece to move");
+		       optionsGame.removeAttribute('style');
 		     }
 		     else {
 		       if (data.error === "LOST_MESSAGE" || data.error === "LOST_MESSAGE_MACHINE"){
@@ -347,18 +355,14 @@ function addInitialOptions() {
 	let options = document.getElementById('options');
 	
 	let buttonLogin = document.createElement('button');
-	buttonLogin.classList.add ('btn');
-	buttonLogin.classList.add ('btn-primary');
-	buttonLogin.classList.add ('btn-block');
+	buttonLogin.setAttribute('class', 'btn btn-primary btn-block');
 	buttonLogin.setAttribute('id', 'btn_login');
 	buttonLogin.setAttribute('name', 'btn_login');
 	buttonLogin.setAttribute('type', 'submit');
 	buttonLogin.appendChild(document.createTextNode('LOGIN'));
 	
 	let buttonRegister = document.createElement('button');
-	buttonRegister.classList.add ('btn');
-	buttonRegister.classList.add ('btn-primary');
-	buttonRegister.classList.add ('btn-block');
+	buttonRegister.setAttribute('class', 'btn btn-primary btn-block');
 	buttonRegister.setAttribute('id', 'btn_register');
 	buttonRegister.setAttribute('name', 'btn_register');
 	buttonRegister.setAttribute('type', 'submit');
@@ -366,7 +370,6 @@ function addInitialOptions() {
 	
 	removeChilds(options);
 
-	
 	options.appendChild(buttonLogin);
 	options.appendChild(buttonRegister);
 	optionForm.appendChild(options);
@@ -410,9 +413,7 @@ function addInitialOptions() {
 	  
 	  let buttonSubmit= document.createElement('button');
 	  buttonSubmit.setAttribute('type', 'submit');
-	  buttonSubmit.classList.add('btn');
-	  buttonSubmit.classList.add('btn-primary');
-	  buttonSubmit.classList.add('btn-block');
+	  buttonSubmit.setAttribute('class', 'btn btn-primary btn-block');
 	  buttonSubmit.setAttribute('id', 'btn_submitLogin');
 	  buttonSubmit.setAttribute('name', 'btn_submitLogin');
 	  buttonSubmit.appendChild(document.createTextNode('Submit'));
@@ -420,9 +421,7 @@ function addInitialOptions() {
 	  
 	  let buttonCancelLogint= document.createElement('button');
 	  buttonCancelLogint.setAttribute('type', 'submit');
-	  buttonCancelLogint.classList.add('btn');
-	  buttonCancelLogint.classList.add('btn-primary');
-	  buttonCancelLogint.classList.add('btn-block');
+	  buttonCancelLogint.setAttribute('class', 'btn btn-primary btn-block');
 	  buttonCancelLogint.setAttribute('id', 'btn_cancelLogin');
 	  buttonCancelLogint.setAttribute('name', 'btn_cancelLogin');
 	  buttonCancelLogint.appendChild(document.createTextNode('Cancel'));
@@ -483,9 +482,7 @@ function addInitialOptions() {
 	  
 	  let buttonSubmit= document.createElement('button');
 	  buttonSubmit.setAttribute('type', 'submit');
-	  buttonSubmit.classList.add('btn');
-	  buttonSubmit.classList.add('btn-primary');
-	  buttonSubmit.classList.add('btn-block');
+	  buttonSubmit.setAttribute('class', 'btn btn-primary btn-block');
 	  buttonSubmit.setAttribute('id', 'btn_submitRegister');
 	  buttonSubmit.setAttribute('name', 'btn_submitRegister');
 	  buttonSubmit.appendChild(document.createTextNode('Submit'));
@@ -493,9 +490,7 @@ function addInitialOptions() {
 	  
 	  let buttonCancel= document.createElement('button');
 	  buttonCancel.setAttribute('type', 'submit');
-	  buttonCancel.classList.add('btn');
-	  buttonCancel.classList.add('btn-primary');
-	  buttonCancel.classList.add('btn-block');
+	  buttonCancel.setAttribute('class', 'btn btn-primary btn-block');
 	  buttonCancel.setAttribute('id', 'btn_cancelRegister');
 	  buttonCancel.setAttribute('name', 'btn_registerCancel');
 	  buttonCancel.appendChild(document.createTextNode('Cancel'));
@@ -519,27 +514,21 @@ function addInitialOptions() {
 		let options = document.getElementById('options');
 		
 		let buttonCreateGame = document.createElement('button');
-		buttonCreateGame.classList.add ('btn');
-		buttonCreateGame.classList.add ('btn-primary');
-		buttonCreateGame.classList.add ('btn-block');
+		buttonCreateGame.setAttribute('class', 'btn btn-primary btn-block');
 		buttonCreateGame.setAttribute('id', 'btn_createGame');
 		buttonCreateGame.setAttribute('name', 'btn_createGame');
 		buttonCreateGame.setAttribute('type', 'submit');
 		buttonCreateGame.appendChild(document.createTextNode('Create Game'));
 		
 		let buttonOpenGame = document.createElement('button');
-		buttonOpenGame.classList.add ('btn');
-		buttonOpenGame.classList.add ('btn-primary');
-		buttonOpenGame.classList.add ('btn-block');
+		buttonOpenGame.setAttribute('class', 'btn btn-primary btn-block');
 		buttonOpenGame.setAttribute('id', 'btn_openGame');
 		buttonOpenGame.setAttribute('name', 'btn_openGame');
 		buttonOpenGame.setAttribute('type', 'submit');
 		buttonOpenGame.appendChild(document.createTextNode('Open Game'));
 		
 		let buttonLogout = document.createElement('button');
-		buttonLogout.classList.add ('btn');
-		buttonLogout.classList.add ('btn-primary');
-		buttonLogout.classList.add ('btn-block');
+		buttonLogout.setAttribute('class', 'btn btn-primary btn-block');
 		buttonLogout.setAttribute('id', 'btn_logout');
 		buttonLogout.setAttribute('name', 'btn_logout');
 		buttonLogout.setAttribute('type', 'submit');
@@ -575,11 +564,14 @@ function addInitialOptions() {
 
 
 function startGame(){
-    optionForm.style.display = "none";
+    containerForm.removeAttribute('style');
     containerBoard.removeAttribute('style');
+    formContainer.removeAttribute('style');
+    formCoordSelection.style.display = "none";
 	board = new Board(scoreBoard);
 	board.addTable(containerBoard);
 	board.addPlayer(player);
+	board.addOptionsGame(optionsGame);
 	board.addForm(formCoordSelection);
 	getBoard();
 	
@@ -587,7 +579,6 @@ function startGame(){
 
 function setTurn() {
     board.ready = true;
-	//board.enableTurn(player);
 	board.enableAll();
 	board.onMark = cellId => {
 	  addFormChooseCoordinates(cellId);
@@ -598,7 +589,7 @@ function addFormChooseCoordinates (cellId) {
 	let parentCoord = document.getElementById('form_coord');
 	let childCoord = document.getElementById('selectedCoord');
 	board.setCoordenada(cellId, childCoord);
-	containerForm.removeAttribute('style');	
+	formCoordSelection.removeAttribute('style');	
 }
 
 function updateBoard(data) {

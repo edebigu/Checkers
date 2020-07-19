@@ -57,6 +57,7 @@ body {
 .opaca {
 	background-color:#bd9661;
 }
+
 .colorRed {
     color: #ff0000!important;
 }
@@ -172,6 +173,26 @@ body {
     box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
 	
 }
+
+.login-dark .options
+{
+	font-family:Lucida Grande, Tahoma, Arial, Verdana, sans-serif;
+	font-size:small;
+	max-width: 320px;
+    width: 90%;
+    background-color: transparent;
+    padding: 40px;
+    border-radius: 4px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    color: #fff;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+	
+}
+
+
 
 .appnitro li
 {
