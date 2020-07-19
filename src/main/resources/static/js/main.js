@@ -142,6 +142,36 @@ $(document).ready(function() {
 		 getTurn();
 		 
 	});
+	
+	$('form').on('click','#saveGame',function() {
+		 optionsGame.style.display = "none";
+		 getGames();
+		 containerBoard.style.display = "none";
+		 optionForm.removeAttribute('style');
+		 
+	});
+	
+	$('form').on('click','#btn_submitSaveGame', function(evento) {
+	var nameToSave = $("#saveGameName").val().trim();
+	var gameToSave = {
+		username : player,
+		gameName : gameName,
+		newGameName: nameToSave,
+		overwrite: "false"
+	}
+		saveGame(gameToSave);
+		evento.preventDefault(); 
+	});
+	
+	$('form').on('click','#btn_cancelSaveGame',function(evento) {
+		 containerBoard.removeAttribute('style');
+	     optionForm.style.display = "none";
+		 optionsGame.removeAttribute('style');
+		 evento.preventDefault(); 
+	});
+	
+	
+	
 });
 
 
@@ -315,9 +345,25 @@ function getBoard(){
 			console.log("ERROR : ", e);
 		}
 	}) 
-	/*.done(function( data ) {
-		 getTurn();
-	});*/
+}
+
+function getGames(){
+	$.ajax({
+		url : "http://localhost:8080/game/getGames/" + player,
+		type : 'GET',
+		processData : false,
+		contentType : "application/json",
+		success : function(data) {
+			console.log("SUCCESS : ", data);
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+		}
+	}).done(function( data ) {
+		 addSaveGameView(data.listGame);
+	});
 }
 
 function sendMove(movement){
@@ -377,6 +423,41 @@ function createGame(session) {
 			console.log("textError: " + e.responseText);
 		}
 	})
+}
+
+function saveGame(gameToSave){
+	$.ajax({
+		url : "http://localhost:8080/saveGame",
+		type : 'POST',
+		data : JSON.stringify(gameToSave),
+		processData : false,
+		contentType : "application/json",
+		dataType : 'json',
+		success : function(data) {
+			console.log("SUCCESS : ", data)
+			if ( data.error === json_result.CREATED ){
+				gameName = gameToSave.newGameName;
+				containerBoard.removeAttribute('style');
+				optionForm.style.display = "none";
+		        optionsGame.removeAttribute('style');
+				
+			}
+			else if (data.error === json_result.CONFLICT)
+			{
+				if (confirm("Do you really want to overwrite the game?")) {
+					gameToSave.overwrite = "true";
+					saveGame(gameToSave);
+				}
+			}
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+			console.log("textError: " + e.responseText);
+		}
+	})
+
 }
 
 function removeChilds(container){
@@ -597,6 +678,61 @@ function addInitialOptions() {
 	  
 	  checkers.insertBefore(player,optionForm);
 	  
+  }
+  
+  function addSaveGameView(listGames){
+  	let options = document.getElementById('options');
+	removeChilds(options);
+  	
+  	for (let i = 0; i < listGames.length; i++) {
+  	  	let inputGroup = document.createElement('div');
+  		inputGroup.classList.add('input-group');
+  		let input = document.createElement('input');
+  		input.setAttribute('class', 'form-control');
+  		input.setAttribute('type', 'text');
+  		input.setAttribute('name', 'game'+i);
+  		input.setAttribute('id', 'game'+i);
+  		input.setAttribute('value', listGames[i]);
+  		input.setAttribute('disabled', true);
+  		inputGroup.appendChild(input);
+  		options.appendChild(inputGroup);
+  	}
+      let saveGameName = document.createElement('div');
+	  saveGameName.classList.add('form-group');
+  	  let inputName = document.createElement('input');
+	  inputName.classList.add('form-control');
+	  inputName.setAttribute('type', 'text');
+	  inputName.setAttribute('id', 'saveGameName'); 
+	  inputName.setAttribute('name','saveGameName'); 
+	  inputName.setAttribute('placeholder', 'Enter name');
+	  saveGameName.appendChild(inputName);
+	  
+	  let submit = document.createElement ('div');
+	  submit.classList.add('form-group');
+	  
+	  let buttonSendSaveGame= document.createElement('button');
+	  buttonSendSaveGame.setAttribute('type', 'submit');
+	  buttonSendSaveGame.setAttribute('class', 'btn btn-primary btn-block');
+	  buttonSendSaveGame.setAttribute('id', 'btn_submitSaveGame');
+	  buttonSendSaveGame.setAttribute('name', 'btn_submitSaveGame');
+	  buttonSendSaveGame.appendChild(document.createTextNode('Submit'));
+	  submit.appendChild(buttonSendSaveGame);
+	  
+	  let buttonCancel= document.createElement('button');
+	  buttonCancel.setAttribute('type', 'submit');
+	  buttonCancel.setAttribute('class', 'btn btn-primary btn-block');
+	  buttonCancel.setAttribute('id', 'btn_cancelSaveGame');
+	  buttonCancel.setAttribute('name', 'btn_cancelSaveGame');
+	  buttonCancel.appendChild(document.createTextNode('Cancel'));
+	  submit.appendChild(buttonCancel);
+	  
+
+  	 
+  	  options.appendChild(saveGameName);
+  	  options.appendChild(buttonSendSaveGame);
+  	  options.appendChild(buttonCancel);
+  	
+  	 
   }
   
   function removeUserLogin(){

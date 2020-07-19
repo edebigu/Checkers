@@ -8,6 +8,7 @@ public enum Error {
 		UNAUTHORIZED("401 UNAUTHORIZED"),
 		NOT_FOUND("404 NOT FOUND"),
 	    CONFLICT("409 CONFLICT");
+	    
 		
 		private String error;
 		

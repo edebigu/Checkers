@@ -31,7 +31,7 @@ public class CreateGameController {
 		this.gameDao = gameDao;
 		this.sessionDao = sessionDao;
 		this.playerDao = playerDao;
-		this.gameName = "activeGame";
+		this.gameName = "unsaveGame";
 	}
 	
 	public CreateGameJson createGame (SessionDto sessionDto) {

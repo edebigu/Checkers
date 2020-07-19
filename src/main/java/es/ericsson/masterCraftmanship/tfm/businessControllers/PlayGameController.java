@@ -17,6 +17,7 @@ import es.ericsson.masterCraftmanship.tfm.models.Error;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.models.Piece;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
+import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.MoveJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
 import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
@@ -89,5 +90,18 @@ public class PlayGameController {
 		}
 
 		return moveResult;
+	}
+	
+	public GameListJson getGames(String playerName) {
+		GameListJson result = new GameListJson();
+		Player player = playerDao.findByUsername(playerName);
+		result.setUsername(player.getUsername());
+		List<Game> listGame = gameDao.findByPlayer(player);
+		for (int i = 0; i<listGame.size(); i++) {
+			if (!listGame.get(i).getId().equals("unsaveGame")) {
+				result.setListGame(listGame.get(i).getId());
+			}
+		}
+		return result;
 	}
 }

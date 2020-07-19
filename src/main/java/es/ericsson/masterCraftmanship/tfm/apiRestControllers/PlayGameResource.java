@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.ericsson.masterCraftmanship.tfm.businessControllers.PlayGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
+import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.MoveJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
 import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
@@ -26,6 +27,7 @@ public class PlayGameResource {
 	static final String GET_TURN = "/getTurn";
 	static final String GET_STATUS = "/getStatus";
 	static final String MOVE= "/move";
+	static final String GET_GAMES= "/getGames";
 	
 	private PlayGameController playGameController;
 	
@@ -54,6 +56,12 @@ public class PlayGameResource {
 		logger.info("Recibido move");
 		return  ResponseEntity.ok(this.playGameController.move(gameId, player, movementDto));
 		
+	}
+	
+	@GetMapping(PlayGameResource.GET_GAMES + "/{player}")
+	public ResponseEntity<GameListJson> getGames (@PathVariable(name="player") String player) {
+		logger.info("Recibido get games");
+		return new ResponseEntity(this.playGameController.getGames(player), HttpStatus.OK);
 	}
 
 }

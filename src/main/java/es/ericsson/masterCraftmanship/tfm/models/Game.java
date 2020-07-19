@@ -19,7 +19,7 @@ public class Game {
 	private String id;
 	private Board board;
 	private Turn turn;
-	private List<Player> players;
+	private Player player;
 	
 	
 	
@@ -27,7 +27,6 @@ public class Game {
 	Game(Board board) {
 		this.turn = new Turn();
 		this.board = board;
-		this.players = new CopyOnWriteArrayList<>();
 	}
 
 	public Game() {
@@ -37,14 +36,9 @@ public class Game {
 	
 	public void addPlayer(Player player) {
 		player.setColor(this.getTurn().getColor());
-		players.add(player);
+		this.player = player;
 	}
 	
-	public void addMachinePlayer() {
-		Player playerMachine = new Player("machine", "machine");
-		playerMachine.setColor(this.getOppositeTurnColor());
-		players.add(playerMachine);
-	}
 	
 	public Color getColor(Coordinate coordinate) {
 		assert coordinate != null;
@@ -258,12 +252,12 @@ public class Game {
 		this.id = id;
 	}
 
-	public List<Player> getPlayers() {
-		return players;
+	public Player getPlayer() {
+		return player;
 	}
 
-	public void setPlayers(List<Player> players) {
-		this.players = players;
+	public void setPlayers(Player player) {
+		this.player = player;
 	}
 
 	public void setBoard(Board board) {
