@@ -132,7 +132,7 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click','#cancelCoord',function() {
-		 containerForm.style.display = "none";
+		 formCoordSelection.style.display = "none";
 		 formCoordSelection.reset();
 		 //board.enableAll();
 		 setTurn();
