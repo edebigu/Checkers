@@ -64,7 +64,7 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click', '#btn_cancelLogin', function(evento) {
-		addInitialOptions();
+		addCloseGameView();
 		evento.preventDefault();
 	});
 	
@@ -88,7 +88,7 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click', '#btn_cancelRegister', function(evento) {
-		addInitialOptions();
+		addCloseGameView();
 		evento.preventDefault();
 	});
 	
@@ -170,6 +170,13 @@ $(document).ready(function() {
 		 evento.preventDefault(); 
 	});
 	
+	$('form').on('click', '#btn_openGame', function(evento) {
+		
+		evento.preventDefault();
+	});
+	
+
+	
 	
 	
 });
@@ -183,7 +190,7 @@ function startApp() {
 		processData : false,
 		contentType : "application/json",
 		success : function(data) {
-			addInitialOptions();
+			addCloseGameView();
 			console.log("SUCCESS : ", data)
 		},
 		error : function(e) {
@@ -272,7 +279,7 @@ function registerUser(user) {
 					alert(data.msg);
 					optionForm.reset();
 					if ( data.error === json_result.CREATED ){
-						addInitialOptions();
+						addCloseGameView();
 						
 					}
 				},
@@ -305,7 +312,7 @@ function startLogout(session) {
 			console.log("textError: " + e.responseText);
 		}
 	}).done(function( data ) {
-		 addInitialOptions();
+		 addCloseGameView();
 		 removeUserLogin();
 	});
 }
@@ -383,6 +390,8 @@ function sendMove(movement){
 		     else {
 		       if (data.error === "LOST_MESSAGE" || data.error === "LOST_MESSAGE_MACHINE"){
 		       	 alert ("Player " + data.username + " lost!!");
+		       	 addCloseGameView();
+		       	containerBoard.style.display = "none";
 		       }
 		       else {
 		         alert ("Error: movement not allowed");
@@ -466,7 +475,7 @@ function removeChilds(container){
 	}
 }
 
-function addInitialOptions() {
+function addCloseGameView() {
 	
 	let title = document.getElementById("title");
 	title.textContent = "Choose one option";
@@ -707,8 +716,10 @@ function addInitialOptions() {
 	  inputName.setAttribute('placeholder', 'Enter name');
 	  saveGameName.appendChild(inputName);
 	  
-	  let submit = document.createElement ('div');
-	  submit.classList.add('form-group');
+	  options.appendChild(saveGameName);
+	  
+	  let btnGroup = document.createElement ('div');
+	  btnGroup.classList.add('form-group');
 	  
 	  let buttonSendSaveGame= document.createElement('button');
 	  buttonSendSaveGame.setAttribute('type', 'submit');
@@ -716,7 +727,7 @@ function addInitialOptions() {
 	  buttonSendSaveGame.setAttribute('id', 'btn_submitSaveGame');
 	  buttonSendSaveGame.setAttribute('name', 'btn_submitSaveGame');
 	  buttonSendSaveGame.appendChild(document.createTextNode('Submit'));
-	  submit.appendChild(buttonSendSaveGame);
+	  btnGroup.appendChild(buttonSendSaveGame);
 	  
 	  let buttonCancel= document.createElement('button');
 	  buttonCancel.setAttribute('type', 'submit');
@@ -724,13 +735,9 @@ function addInitialOptions() {
 	  buttonCancel.setAttribute('id', 'btn_cancelSaveGame');
 	  buttonCancel.setAttribute('name', 'btn_cancelSaveGame');
 	  buttonCancel.appendChild(document.createTextNode('Cancel'));
-	  submit.appendChild(buttonCancel);
+	  btnGroup.appendChild(buttonCancel);
 	  
-
-  	 
-  	  options.appendChild(saveGameName);
-  	  options.appendChild(buttonSendSaveGame);
-  	  options.appendChild(buttonCancel);
+  	  options.appendChild(btnGroup);
   	
   	 
   }
