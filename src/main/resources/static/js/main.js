@@ -64,7 +64,7 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click', '#btn_cancelLogin', function(evento) {
-		addCloseGameView();
+		addInitGameView();
 		evento.preventDefault();
 	});
 	
@@ -88,7 +88,7 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click', '#btn_cancelRegister', function(evento) {
-		addCloseGameView();
+		addInitGameView();
 		evento.preventDefault();
 	});
 	
@@ -131,10 +131,11 @@ $(document).ready(function() {
 		formCoordSelection.reset();
 	});
 	
-	$('form').on('click','#cancel',function() {
+	$('form').on('click','#cancelCoord',function() {
 		 containerForm.style.display = "none";
 		 formCoordSelection.reset();
-		 board.enableAll();
+		 //board.enableAll();
+		 setTurn();
 	});
 	
 	$('form').on('click','#move',function() {
@@ -145,14 +146,14 @@ $(document).ready(function() {
 	
 	$('form').on('click','#saveGame',function() {
 		 optionsGame.style.display = "none";
-		 getGames();
+		 getGames("Save");
 		 containerBoard.style.display = "none";
 		 optionForm.removeAttribute('style');
 		 
 	});
 	
 	$('form').on('click','#btn_submitSaveGame', function(evento) {
-	var nameToSave = $("#saveGameName").val().trim();
+	var nameToSave = $("#gameName").val().trim();
 	var gameToSave = {
 		username : player,
 		gameName : gameName,
@@ -171,8 +172,24 @@ $(document).ready(function() {
 	});
 	
 	$('form').on('click', '#btn_openGame', function(evento) {
-		
+		getGames("Open");
 		evento.preventDefault();
+	});
+	
+	$('form').on('click','#btn_submitOpenGame', function(evento) {
+		var nameToOpen = $("#gameName").val().trim();
+		var session = {
+			username : player,
+			gameName : nameToOpen
+		}
+		openGame(session);
+		evento.preventDefault(); 
+	});
+	
+	
+	$('form').on('click','#btn_cancelOpenGame',function(evento) {
+		 addCloseGameView();
+		 evento.preventDefault(); 
 	});
 	
 
@@ -190,7 +207,7 @@ function startApp() {
 		processData : false,
 		contentType : "application/json",
 		success : function(data) {
-			addCloseGameView();
+			addInitGameView();
 			console.log("SUCCESS : ", data)
 		},
 		error : function(e) {
@@ -253,7 +270,7 @@ function loginUser(user) {
 					console.log("SUCCESS : ", data.error + ": " + data.msg);
 					if ( data.error === json_result.OK ){
 						addUserLogin(data.username);
-						addCloseGameOptions();
+						addCloseGameView();
 						player=data.username;
 					}
 				},
@@ -279,7 +296,7 @@ function registerUser(user) {
 					alert(data.msg);
 					optionForm.reset();
 					if ( data.error === json_result.CREATED ){
-						addCloseGameView();
+						addInitGameView();
 						
 					}
 				},
@@ -312,7 +329,7 @@ function startLogout(session) {
 			console.log("textError: " + e.responseText);
 		}
 	}).done(function( data ) {
-		 addCloseGameView();
+		 addInitGameView();
 		 removeUserLogin();
 	});
 }
@@ -351,10 +368,10 @@ function getBoard(){
 			$('#checkers').html(json);
 			console.log("ERROR : ", e);
 		}
-	}) 
+	})
 }
 
-function getGames(){
+function getGames(typeView){
 	$.ajax({
 		url : "http://localhost:8080/game/getGames/" + player,
 		type : 'GET',
@@ -369,7 +386,7 @@ function getGames(){
 			console.log("ERROR : ", e);
 		}
 	}).done(function( data ) {
-		 addSaveGameView(data.listGame);
+		 addSaveGameView(data.listGame, typeView);
 	});
 }
 
@@ -469,13 +486,45 @@ function saveGame(gameToSave){
 
 }
 
+function openGame(session){
+	$.ajax({
+		url : "http://localhost:8080/openGame/",
+		type : 'POST',
+		data : JSON.stringify(session),
+		processData : false,
+		contentType : "application/json",
+		dataType : 'json',
+		success : function(data) {
+			console.log("SUCCESS : ", data)
+			if ( data.error === json_result.OK ){
+				gameName = session.gameName;
+				optionForm.style.display = "none";
+				startGame();
+				
+			}
+			else if (data.error === json_result.NOT_FOUND)
+			{
+				alert("Game not exist!!!!")
+				optionForm.reset();
+			}
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+			console.log("textError: " + e.responseText);
+		}
+	})
+
+}
+
 function removeChilds(container){
 	while (container.firstChild) {
 		container.removeChild(container.firstChild);
 	}
 }
 
-function addCloseGameView() {
+function addInitGameView() {
 	
 	let title = document.getElementById("title");
 	title.textContent = "Choose one option";
@@ -634,7 +683,7 @@ function addCloseGameView() {
 
 	 }
  
-  function addCloseGameOptions() {
+  function addCloseGameView() {
 		
 		let title = document.getElementById("title");
 		title.textContent = "Choose one option";
@@ -689,7 +738,7 @@ function addCloseGameView() {
 	  
   }
   
-  function addSaveGameView(listGames){
+  function addSaveGameView(listGames, typeView){
   	let options = document.getElementById('options');
 	removeChilds(options);
   	
@@ -706,34 +755,34 @@ function addCloseGameView() {
   		inputGroup.appendChild(input);
   		options.appendChild(inputGroup);
   	}
-      let saveGameName = document.createElement('div');
-	  saveGameName.classList.add('form-group');
+      let gameName = document.createElement('div');
+	  gameName.classList.add('form-group');
   	  let inputName = document.createElement('input');
 	  inputName.classList.add('form-control');
 	  inputName.setAttribute('type', 'text');
-	  inputName.setAttribute('id', 'saveGameName'); 
-	  inputName.setAttribute('name','saveGameName'); 
+	  inputName.setAttribute('id', 'gameName'); 
+	  inputName.setAttribute('name','gameName'); 
 	  inputName.setAttribute('placeholder', 'Enter name');
-	  saveGameName.appendChild(inputName);
+	  gameName.appendChild(inputName);
 	  
-	  options.appendChild(saveGameName);
+	  options.appendChild(gameName);
 	  
 	  let btnGroup = document.createElement ('div');
 	  btnGroup.classList.add('form-group');
 	  
-	  let buttonSendSaveGame= document.createElement('button');
-	  buttonSendSaveGame.setAttribute('type', 'submit');
-	  buttonSendSaveGame.setAttribute('class', 'btn btn-primary btn-block');
-	  buttonSendSaveGame.setAttribute('id', 'btn_submitSaveGame');
-	  buttonSendSaveGame.setAttribute('name', 'btn_submitSaveGame');
-	  buttonSendSaveGame.appendChild(document.createTextNode('Submit'));
-	  btnGroup.appendChild(buttonSendSaveGame);
+	  let buttonSend= document.createElement('button');
+	  buttonSend.setAttribute('type', 'submit');
+	  buttonSend.setAttribute('class', 'btn btn-primary btn-block');
+	  buttonSend.setAttribute('id', 'btn_submit'+ typeView + 'Game');
+	  buttonSend.setAttribute('name', 'btn_submit'+ typeView + 'Game');
+	  buttonSend.appendChild(document.createTextNode('Submit'));
+	  btnGroup.appendChild(buttonSend);
 	  
 	  let buttonCancel= document.createElement('button');
 	  buttonCancel.setAttribute('type', 'submit');
 	  buttonCancel.setAttribute('class', 'btn btn-primary btn-block');
-	  buttonCancel.setAttribute('id', 'btn_cancelSaveGame');
-	  buttonCancel.setAttribute('name', 'btn_cancelSaveGame');
+	  buttonCancel.setAttribute('id', 'btn_cancel'+ typeView + 'Game');
+	  buttonCancel.setAttribute('name', 'btn_cancel'+ typeView + 'Game');
 	  buttonCancel.appendChild(document.createTextNode('Cancel'));
 	  btnGroup.appendChild(buttonCancel);
 	  

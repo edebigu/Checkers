@@ -14,7 +14,9 @@ public enum Message {
 	LOGOUT_SUCCESS("Logout success"),
 	LOGOUT_UNSUCCESSFULL("Player is not logged"),
 	SAVE_GAME_SUCCESS("Game saved"),
-	SAVE_GAME_UNSUCCESS ("Game not saved");
+	SAVE_GAME_UNSUCCESS ("Game not saved"),
+	OPEN_GAME_SUCCESS("Game opened"),
+	OPEN_GAME_UNSUCCESS ("Game not exist");
 	
 	
 	private String message;

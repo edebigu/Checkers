@@ -380,9 +380,9 @@ class Board {
     	let cancelButton =  document.createElement('button');
     	cancelButton.setAttribute('type', 'button');
     	//cancelButton.setAttribute('value', 'submit');
-    	cancelButton.setAttribute('value', 'cancel');
+    	cancelButton.setAttribute('value', 'cancelCoord');
     	cancelButton.setAttribute('class', 'btn btn-primary btn-md d-block mx-auto');
-    	cancelButton.setAttribute('id', 'cancel');
+    	cancelButton.setAttribute('id', 'cancelCoord');
     	cancelButton.appendChild(document.createTextNode('Cancel'));
     	
     	divButton.appendChild(button);
