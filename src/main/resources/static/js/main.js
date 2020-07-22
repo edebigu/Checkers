@@ -192,6 +192,20 @@ $(document).ready(function() {
 		 evento.preventDefault(); 
 	});
 	
+	$('form').on('click','#closeGame',function() {
+	   if (confirm("Do you really want to exit the game?"))
+	   {
+			optionsGame.style.display = "none";
+		   	var session = {
+				username : player,
+			    gameName : gameName
+			}
+			console.log("session " + JSON.stringify(session));
+		   closeGame(session);
+		}
+		 
+	});
+	
 
 	
 	
@@ -518,6 +532,40 @@ function openGame(session){
 
 }
 
+function closeGame (session) {	
+	$.ajax({
+		url : "http://localhost:8080/closeGame/",
+		type : 'POST',
+		data : JSON.stringify(session),
+		processData : false,
+		contentType : "application/json",
+		dataType : 'json',
+		success : function(data) {
+			console.log("SUCCESS : ", data);
+			if (data.error === json_result.NOT_FOUND && !confirm("Do you want close game without saved?")){
+				 getGames("Save");
+			}
+			else {
+				addCloseGameView();
+				removeGame();
+			}
+		},
+		error : function(e) {
+			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
+			$('#checkers').html(json);
+			console.log("ERROR : ", e);
+			console.log("textError: " + e.responseText);
+		}
+	}).done(function( data ) {
+		containerBoard.style.display = "none";
+		optionForm.removeAttribute('style')
+	});
+	
+	;
+
+
+}
+
 function removeChilds(container){
 	while (container.firstChild) {
 		container.removeChild(container.firstChild);
@@ -802,14 +850,20 @@ function startGame(){
     containerForm.removeAttribute('style');
     containerBoard.removeAttribute('style');
     formContainer.removeAttribute('style');
+    optionsGame.removeAttribute('style');
     formCoordSelection.style.display = "none";
 	board = new Board(scoreBoard);
 	board.addTable(containerBoard);
 	board.addPlayer(player);
 	board.addOptionsGame(optionsGame);
 	board.addForm(formCoordSelection);
-	getBoard();
-	
+	getBoard();	
+}
+
+function removeGame() {
+	removeChilds(containerBoard);
+	removeChilds(optionsGame);
+	removeChilds(formCoordSelection);
 }
 
 function setTurn() {

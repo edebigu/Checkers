@@ -16,7 +16,9 @@ public enum Message {
 	SAVE_GAME_SUCCESS("Game saved"),
 	SAVE_GAME_UNSUCCESS ("Game not saved"),
 	OPEN_GAME_SUCCESS("Game opened"),
-	OPEN_GAME_UNSUCCESS ("Game not exist");
+	OPEN_GAME_UNSUCCESS ("Game not exist"),
+	CLOSE_GAME_SUCCESS("Game closed"),
+	CLOSE_GAME_UNSUCCESS ("Game not closed");
 	
 	
 	private String message;
