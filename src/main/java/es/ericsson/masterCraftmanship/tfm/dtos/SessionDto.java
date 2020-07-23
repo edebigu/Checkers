@@ -7,8 +7,7 @@ import es.ericsson.masterCraftmanship.tfm.models.Session;
 
 @EntityScan
 public class SessionDto {
-	
-	private String id;
+
 	private String username;
 	private String gameName;
 
@@ -26,9 +25,6 @@ public class SessionDto {
 		this.gameName = session.getGame().getId();
 	}
 
-	public String getId() {
-		return id;
-	}
 
 	public String getUsername() {
 		return username;
@@ -38,9 +34,6 @@ public class SessionDto {
 		return gameName;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -58,7 +51,7 @@ public class SessionDto {
 
 	@Override
 	public String toString() {
-		return "SessionDto [id=" + id + ", username=" + username + ", gameName=" + gameName + "]";
+		return "SessionDto [username=" + username + ", gameName=" + gameName + "]";
 	}
 	
 	

@@ -8,7 +8,6 @@ import es.ericsson.masterCraftmanship.tfm.models.Player;
 @EntityScan
 public class PlayerDto {
 	
-	private String id;
 	private String username;
 	private String password;
 	
@@ -22,7 +21,6 @@ public class PlayerDto {
 	}
 	
 	public PlayerDto(Player user) {
-		this.id = user.getId();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 	}
@@ -42,10 +40,7 @@ public class PlayerDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	public String getId() {
-		return this.id;
-	}
+
 	
 	public void validate() {
 		if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
