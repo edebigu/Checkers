@@ -1,5 +1,7 @@
 package es.ericsson.masterCraftmanship.tfm.businessControllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import es.ericsson.masterCraftmanship.tfm.daos.GameDao;
 import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
 import es.ericsson.masterCraftmanship.tfm.daos.SessionDao;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
+import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
 import es.ericsson.masterCraftmanship.tfm.models.Session;
 import es.ericsson.masterCraftmanship.tfm.views.Error;
@@ -20,22 +23,22 @@ public class OpenGameController {
 	
 	private GameDao gameDao;
 	private SessionDao sessionDao;
-	private PlayerDao playerDao;
 	
 	Logger logger = LogManager.getLogger(OpenGameController.class);
 	
 	@Autowired
-	public OpenGameController (GameDao gameDao, SessionDao sessionDao, PlayerDao playerDao) {
+	public OpenGameController (GameDao gameDao, SessionDao sessionDao) {
 		this.gameDao = gameDao;
 		this.sessionDao = sessionDao;
-		this.playerDao = playerDao;
 	}
 	
 	public ResponseJson openGame (SessionDto sessionDto) {
 		ResponseJson resultOpenGame = new ResponseJson();
-		Player playerFound = playerDao.findByUsername(sessionDto.getUsername());
-		Session sessionFound = sessionDao.findByPlayer(playerFound);
-		if (sessionFound != null &&  gameDao.findById(sessionDto.getGameName()).isPresent()) {
+		Session session = sessionDao.findByPlayer_username(sessionDto.getUsername());
+		List<Game> listGame = gameDao.findByPlayer_username(sessionDto.getUsername());
+		if (session != null &&  getGameByName(listGame, sessionDto.getGameName()) != -1) {
+			session.setGame(listGame.get(getGameByName(listGame, sessionDto.getGameName())));
+			sessionDao.save(session);
 			resultOpenGame.setMsg(Message.OPEN_GAME_SUCCESS);
 			resultOpenGame.setError(Error.OK);
 		}
@@ -43,9 +46,20 @@ public class OpenGameController {
 			resultOpenGame.setMsg(Message.OPEN_GAME_UNSUCCESS);
 			resultOpenGame.setError(Error.NOT_FOUND);
 		}
-		resultOpenGame.setUsername(playerFound.getUsername());
+		resultOpenGame.setUsername(sessionDto.getUsername());
 		return resultOpenGame;	
 		
+	}
+	
+	private int getGameByName (List<Game> listGame, String gameName) {
+		int index=-1;
+		for (int i=0; i<listGame.size(); i++) {
+			if (listGame.get(i).getName().equals(gameName)) {
+				index=i;
+			}
+		}
+		
+		return index;
 	}
 
 }

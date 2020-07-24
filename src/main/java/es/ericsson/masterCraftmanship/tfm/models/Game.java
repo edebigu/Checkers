@@ -17,6 +17,7 @@ public class Game {
 	
 	@Id
 	private String id;
+	private String name;
 	private Board board;
 	private Turn turn;
 	private Player player;
@@ -32,6 +33,7 @@ public class Game {
 	public Game() {
 		this(new Board());
 		this.reset();
+		this.name="unsavedGame";
 	}
 	
 	public void addPlayer(Player player) {
@@ -270,6 +272,18 @@ public class Game {
 	
 	public Color getTurnColor() {
 		return this.turn.getColor();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 	
 	

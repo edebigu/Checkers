@@ -95,7 +95,7 @@ $(document).ready(function() {
 	$('form').on('click', '#btn_createGame', function(evento) {
 		var session = {
 				username : player,
-				gameName : ""
+				gameName : gameName,
 		}
 		createGame(session);
 		evento.preventDefault();
@@ -146,19 +146,25 @@ $(document).ready(function() {
 	
 	$('form').on('click','#saveGame',function() {
 		 optionsGame.style.display = "none";
-		 getGames("Save");
-		 containerBoard.style.display = "none";
-		 optionForm.removeAttribute('style');
+		  var gameToSave = {
+		  username : player,
+		  gameName : gameName,
+		  overwrite: "false"
+	  }
+		saveGame(gameToSave);
+		 //getGames("Save");
+		 //containerBoard.style.display = "none";
+		 //optionForm.removeAttribute('style');
+		 
 		 
 	});
 	
 	$('form').on('click','#btn_submitSaveGame', function(evento) {
-	var nameToSave = $("#gameName").val().trim();
-	var gameToSave = {
-		username : player,
-		gameName : gameName,
-		newGameName: nameToSave,
-		overwrite: "false"
+	   var nameToSave = $("#gameName").val().trim();
+	   var gameToSave = {
+		  username : player,
+		  gameName : nameToSave,
+		  overwrite: "false"
 	}
 		saveGame(gameToSave);
 		evento.preventDefault(); 
@@ -452,8 +458,8 @@ function createGame(session) {
 		success : function(data) {
 		console.log("SUCCESS : ", data)
 		if ( data.error === json_result.CREATED ) {
-		    gameName = data.gameName;
-			startGame();
+		     gameName = data.gameName;
+			 startGame();
 		}
 		},
 		error : function(e) {
@@ -475,12 +481,13 @@ function saveGame(gameToSave){
 		dataType : 'json',
 		success : function(data) {
 			console.log("SUCCESS : ", data)
-			if ( data.error === json_result.CREATED ){
-				gameName = gameToSave.newGameName;
-				containerBoard.removeAttribute('style');
-				optionForm.style.display = "none";
-		        optionsGame.removeAttribute('style');
-				
+			if (data.error === json_result.OK){
+				optionsGame.removeAttribute('style');
+			}
+			else if  (data.error === json_result.NOT_FOUND) {
+				getGames("Save");
+		 		containerBoard.style.display = "none";
+		 		optionForm.removeAttribute('style');
 			}
 			else if (data.error === json_result.CONFLICT)
 			{
@@ -488,6 +495,13 @@ function saveGame(gameToSave){
 					gameToSave.overwrite = "true";
 					saveGame(gameToSave);
 				}
+			}
+			else {
+				gameName = gameToSave.gameName;
+				containerBoard.removeAttribute('style');
+				optionForm.style.display = "none";
+		        optionsGame.removeAttribute('style');
+				
 			}
 		},
 		error : function(e) {
@@ -516,7 +530,7 @@ function openGame(session){
 				startGame();
 				
 			}
-			else if (data.error === json_result.NOT_FOUND)
+			else
 			{
 				alert("Game not exist!!!!")
 				optionForm.reset();
@@ -542,8 +556,14 @@ function closeGame (session) {
 		dataType : 'json',
 		success : function(data) {
 			console.log("SUCCESS : ", data);
-			if (data.error === json_result.NOT_FOUND && !confirm("Do you want close game without saved?")){
+			if (data.error === json_result.NOT_FOUND){
+			 if (!confirm("Do you want close game without saved?")){
 				 getGames("Save");
+			  }
+			else {
+				session.gameName="";
+				closeGame(session);
+			 }
 			}
 			else {
 				addCloseGameView();

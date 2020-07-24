@@ -38,14 +38,14 @@ public class PlayGameController {
 
 	public TurnJson getTurn(String gameId) {
 		TurnJson resultTurn = new TurnJson();
-		Game game = gameDao.findById(gameId).get();
+		Game game = gameDao.findByName(gameId);
 		resultTurn.setColor(game.getTurn().getColor().name());
 		return resultTurn;
 
 	}
 
 	public List<SquareJson> getStatus(String gameId) {
-		Game game = gameDao.findById(gameId).get();
+		Game game = gameDao.findByName(gameId);
 		List<SquareJson> listSquare = new ArrayList<SquareJson>();
 		Piece[][] pieces = game.getBoard().getPieces();
 		for (int i = 0; i < Coordinate.getDimension(); i++) {
@@ -65,7 +65,7 @@ public class PlayGameController {
 
 	public MoveJson move(String gameId, String playerName, MoveDto movement) {
 		MoveJson moveResult = new MoveJson();
-		Game game = gameDao.findById(gameId).get();
+		Game game = gameDao.findByName(gameId);
 		Player player = playerDao.findByUsername(playerName);
 		Coordinate coordOrigin = new Coordinate(Integer.parseInt(movement.getOriginRow()),
 				Integer.parseInt(movement.getOriginCol()));
@@ -98,8 +98,8 @@ public class PlayGameController {
 		result.setUsername(player.getUsername());
 		List<Game> listGame = gameDao.findByPlayer(player);
 		for (int i = 0; i<listGame.size(); i++) {
-			if (!listGame.get(i).getId().equals("unsaveGame")) {
-				result.setListGame(listGame.get(i).getId());
+			if (!listGame.get(i).getName().equals("unsavedGame")) {
+				result.setListGame(listGame.get(i).getName());
 			}
 		}
 		return result;

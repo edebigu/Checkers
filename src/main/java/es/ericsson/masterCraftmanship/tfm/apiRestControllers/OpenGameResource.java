@@ -33,8 +33,8 @@ public class OpenGameResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ResponseJson> getTurn (@RequestBody SessionDto sessionDto) {
-		logger.info("Recibido create game" + sessionDto.toString());
+	public ResponseEntity<ResponseJson> openGame (@RequestBody SessionDto sessionDto) {
+		logger.info("Recibido open game" + sessionDto.toString());
 		try {
 			sessionDto.validate();
 			return  ResponseEntity.ok(this.openGameController.openGame(sessionDto));

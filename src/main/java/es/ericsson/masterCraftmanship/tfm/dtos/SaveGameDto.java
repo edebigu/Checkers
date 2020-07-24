@@ -9,17 +9,15 @@ public class SaveGameDto {
 	
 	private String username;
 	private String gameName;
-	private String newGameName;
 	private boolean overwrite;
 	
 	public SaveGameDto() {
 		
 	}
 
-	public SaveGameDto(String username, String gameName, String newGameName, Boolean overwrite) {
+	public SaveGameDto(String username, String gameName, Boolean overwrite) {
 		this.username = username;
 		this.gameName = gameName;
-		this.newGameName = newGameName;
 		this.overwrite = overwrite;
 	}
 
@@ -39,13 +37,6 @@ public class SaveGameDto {
 		this.gameName = gameName;
 	}
 
-	public String getNewGameName() {
-		return newGameName;
-	}
-
-	public void setNewGameName(String newGameName) {
-		this.newGameName = newGameName;
-	}
 	
 	public boolean isOverwrite() {
 		return overwrite;
@@ -56,7 +47,7 @@ public class SaveGameDto {
 	}
 
 	public void validate() {
-		if (username == null || gameName == null || newGameName == null) {
+		if (username == null || gameName == null ) {
 			throw new BadRequestException ("Incomplete SaveGameDto");
 		}
 	}

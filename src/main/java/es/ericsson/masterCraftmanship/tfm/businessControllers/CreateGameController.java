@@ -1,5 +1,7 @@
 package es.ericsson.masterCraftmanship.tfm.businessControllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,6 @@ public class CreateGameController {
 	private GameDao gameDao;
 	private SessionDao sessionDao;
 	private PlayerDao playerDao;
-	private String gameName;
 	
 	Logger logger = LogManager.getLogger(CreateGameController.class);
 	
@@ -31,25 +32,20 @@ public class CreateGameController {
 		this.gameDao = gameDao;
 		this.sessionDao = sessionDao;
 		this.playerDao = playerDao;
-		this.gameName = "unsaveGame";
 	}
 	
 	public CreateGameJson createGame (SessionDto sessionDto) {
 		CreateGameJson resultCreateGame = new CreateGameJson();
-		Player playerFound = playerDao.findByUsername(sessionDto.getUsername());
-		Session sessionFound = sessionDao.findAll().get(0);
+		Session sessionFound = sessionDao.findByPlayer_username(sessionDto.getUsername());
 		if (sessionFound != null) {
 			Game game = new Game();
-			game.setId(this.gameName);
-			game.addPlayer(playerFound);
+			game.addPlayer(playerDao.findByUsername(sessionDto.getUsername()));
 			Game gameSaved = gameDao.save(game);
 			sessionFound.setGame(gameSaved);
-			playerDao.save(playerFound);
-			sessionFound.setPlayer(playerFound);
 		    sessionDao.save(sessionFound);
 			resultCreateGame.setMsg(Message.CREATE_GAME_SUCCESSFULL);
 			resultCreateGame.setError(Error.CREATED);
-			resultCreateGame.setGameName(gameName);
+			resultCreateGame.setGameName(game.getName());
 		}
 		else {
 			resultCreateGame.setMsg(Message.CREATE_GAME_UNSUCCESSFULL);
