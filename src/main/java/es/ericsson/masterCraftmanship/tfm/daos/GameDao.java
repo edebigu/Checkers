@@ -15,5 +15,5 @@ public interface GameDao extends MongoRepository<Game, String>{
 	public List<Game> findByPlayer(Player player);
 	public Game findByName(String name);
 	public List<Game> findByPlayer_username(String username);
-	public void deleteByName(String name);
+	public void deleteByGameName(String gameName);
 }

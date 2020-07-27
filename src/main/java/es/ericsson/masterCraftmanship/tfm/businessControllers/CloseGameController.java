@@ -31,7 +31,6 @@ public class CloseGameController {
 	public ResponseJson closeGame (SessionDto sessionDto) {
 		ResponseJson result = new ResponseJson();
 		Session session = sessionDao.findByPlayer_username(sessionDto.getUsername());
-		List<Game> listGame = gameDao.findByPlayer_username(sessionDto.getUsername());
 		if (sessionDto .getGameName().equals("")) {
 			gameDao.delete(session.getGame());
 			session.setGame(null);

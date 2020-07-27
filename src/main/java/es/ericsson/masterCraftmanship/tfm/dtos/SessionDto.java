@@ -22,7 +22,7 @@ public class SessionDto {
 	
 	public SessionDto(Session session) {
 		this.username = session.getPlayer().getUsername();
-		this.gameName = session.getGame().getId();
+		this.gameName = session.getGame().getName();
 	}
 
 

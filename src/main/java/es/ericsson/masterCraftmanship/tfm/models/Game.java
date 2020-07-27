@@ -17,7 +17,7 @@ public class Game {
 	
 	@Id
 	private String id;
-	private String name;
+	private String gameName;
 	private Board board;
 	private Turn turn;
 	private Player player;
@@ -33,7 +33,7 @@ public class Game {
 	public Game() {
 		this(new Board());
 		this.reset();
-		this.name="unsavedGame";
+		this.gameName="unsavedGame";
 	}
 	
 	public void addPlayer(Player player) {
@@ -275,11 +275,11 @@ public class Game {
 	}
 
 	public String getName() {
-		return name;
+		return gameName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String gameName) {
+		this.gameName = gameName;
 	}
 
 	public void setPlayer(Player player) {

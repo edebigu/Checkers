@@ -43,7 +43,17 @@ public class SaveGameController {
 					response.setMsg(Message.SAVE_GAME_UNSUCCESS);
 					response.setError(Error.NOT_FOUND);
 				}
-				else if ((getGameByName(listGames, saveGameDto.getGameName()) == -1 || saveGameDto.isOverwrite()) && saveGameDto.getGameName() != "") {
+				else if (getGameByName(listGames, saveGameDto.getGameName()) == -1 && saveGameDto.getGameName() != "") {
+					response.setMsg(Message.SAVE_GAME_SUCCESS);
+					response.setError(Error.CREATED);
+					Game game = session.getGame();
+					gameDao.delete(game);
+					game.setName(saveGameDto.getGameName());
+					gameDao.save(game);
+					session.setGame(game);
+					sessionDao.save(session);
+				}
+				else if (saveGameDto.isOverwrite()) {
 					Game oldGame = listGames.get(getGameByName(listGames, saveGameDto.getGameName()));
 					response.setMsg(Message.SAVE_GAME_SUCCESS);
 					response.setError(Error.CREATED);

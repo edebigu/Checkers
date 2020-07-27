@@ -12,5 +12,6 @@ import es.ericsson.masterCraftmanship.tfm.models.Session;
 public interface SessionDao extends MongoRepository<Session, String> {
 	public Session findByPlayer(Player player);
 	public Session findByPlayer_username(String username);
+	public Session findByGame_gameName(String gameName);
 
 }

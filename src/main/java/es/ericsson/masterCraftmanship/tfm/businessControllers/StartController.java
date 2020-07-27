@@ -22,8 +22,7 @@ public class StartController {
 	
 	public void start() {
 		sessionDao.deleteAll();
-
-			gameDao.deleteByName("unsavedGame");
+         gameDao.deleteByGameName("unsavedGame");
 
 	}
 
