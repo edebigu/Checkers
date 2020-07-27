@@ -39,16 +39,16 @@ public class PlayGameResource {
 		this.playGameController = playGameController;
 	}
 	
-	@GetMapping("/{gameName}/" + PlayGameResource.GET_TURN)
-	public ResponseEntity<TurnJson> getTurn (@PathVariable(name="gameName") String gameName) {
+	@GetMapping("/{username}/" + PlayGameResource.GET_TURN)
+	public ResponseEntity<TurnJson> getTurn (@PathVariable(name="username") String username) {
 		logger.info("Recibido get turn");
-		return  ResponseEntity.ok(this.playGameController.getTurn(gameName));
+		return  ResponseEntity.ok(this.playGameController.getTurn(username));
 	}
 	
-	@GetMapping("/{gameName}/" + PlayGameResource.GET_STATUS)
-	public ResponseEntity<SquareJson> getStatus (@PathVariable(name="gameName") String gameName) {
+	@GetMapping("/{username}/" + PlayGameResource.GET_STATUS)
+	public ResponseEntity<SquareJson> getStatus (@PathVariable(name="username") String username) {
 		logger.info("Recibido get status");
-		return new ResponseEntity(this.playGameController.getStatus(gameName), HttpStatus.OK);
+		return new ResponseEntity(this.playGameController.getStatus(username), HttpStatus.OK);
 	}
 	
 	@PostMapping("/{id}/" + PlayGameResource.MOVE + "/{player}")

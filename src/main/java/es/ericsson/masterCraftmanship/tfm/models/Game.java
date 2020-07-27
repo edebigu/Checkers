@@ -36,6 +36,13 @@ public class Game {
 		this.gameName="unsavedGame";
 	}
 	
+	public Game(Game game) {
+		this.gameName = game.getName();
+		this.board = game.getBoard();
+		this.turn = game.getTurn();
+		this.player = game.getPlayer();
+	}
+	
 	public void addPlayer(Player player) {
 		player.setColor(this.getTurn().getColor());
 		this.player = player;

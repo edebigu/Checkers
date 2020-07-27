@@ -8,18 +8,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import es.ericsson.masterCraftmanship.tfm.daos.GameDao;
-import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
-import es.ericsson.masterCraftmanship.tfm.daos.SessionDao;
+import es.ericsson.masterCraftmanship.tfm.daos.GameDaoService;
+import es.ericsson.masterCraftmanship.tfm.daos.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
-import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.models.Color;
 import es.ericsson.masterCraftmanship.tfm.models.Coordinate;
 import es.ericsson.masterCraftmanship.tfm.models.Error;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.models.Piece;
-import es.ericsson.masterCraftmanship.tfm.models.Player;
-import es.ericsson.masterCraftmanship.tfm.models.Session;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.MoveJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
@@ -28,29 +24,27 @@ import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
 @Controller
 public class PlayGameController {
 
-	private PlayerDao playerDao;
-	private GameDao gameDao;
-	private SessionDao sessionDao;
+	private SessionDaoService sessionDaoService;
+	private GameDaoService gameDaoService;
 
 	Logger logger = LogManager.getLogger(PlayGameController.class);
 
 	@Autowired
-	public PlayGameController(GameDao gameDao, PlayerDao playerDao, SessionDao sessionDao) {
-		this.gameDao = gameDao;
-		this.playerDao = playerDao;
-		this.sessionDao = sessionDao;
+	public PlayGameController(SessionDaoService sessionDaoService, GameDaoService gameDaoService) {
+		this.sessionDaoService = sessionDaoService;
+		this.gameDaoService = gameDaoService;
 	}
 
-	public TurnJson getTurn(String gameName) {
+	public TurnJson getTurn(String username) {
 		TurnJson resultTurn = new TurnJson();
-		Game game = sessionDao.findByGame_gameName(gameName).getGame();
+		Game game = sessionDaoService.getSessionGame(username);
 		resultTurn.setColor(game.getTurnColor().name());
 		return resultTurn;
 
 	}
 
-	public List<SquareJson> getStatus(String gameName) {
-		Game game = sessionDao.findByGame_gameName(gameName).getGame();
+	public List<SquareJson> getStatus(String username) {
+		Game game = sessionDaoService.getSessionGame(username);
 		List<SquareJson> listSquare = new ArrayList<SquareJson>();
 		Piece[][] pieces = game.getBoard().getPieces();
 		for (int i = 0; i < Coordinate.getDimension(); i++) {
@@ -70,8 +64,8 @@ public class PlayGameController {
 
 	public MoveJson move(String gameId, String playerName, MoveDto movement) {
 		MoveJson moveResult = new MoveJson();
-		Session sessionFound = sessionDao.findByPlayer_username(playerName);
-		Game game = sessionFound.getGame();
+		//Session sessionFound = sessionDao.findByPlayer_username(playerName);
+		Game game = sessionDaoService.getSessionGame(playerName);
 		Coordinate coordOrigin = new Coordinate(Integer.parseInt(movement.getOriginRow()),
 				Integer.parseInt(movement.getOriginCol()));
 		Coordinate coordTarget = new Coordinate(Integer.parseInt(movement.getTargetRow()),
@@ -91,24 +85,23 @@ public class PlayGameController {
 					moveResult.setUsername("machine");
 				}
 			}
-			gameDao.save(game);
-			sessionFound.setGame(game);
-			sessionDao.save(sessionFound);
+			//gameDao.save(game);
+			sessionDaoService.saveSessionGame(playerName,game);
+			//sessionDao.save(sessionFound);
 		}
 
 		return moveResult;
 	}
 	
-	public GameListJson getGames(String playerName) {
+	public GameListJson getGames(String username) {
 		GameListJson result = new GameListJson();
-		Player player = playerDao.findByUsername(playerName);
-		result.setUsername(player.getUsername());
-		List<Game> listGame = gameDao.findByPlayer(player);
-		for (int i = 0; i<listGame.size(); i++) {
-			if (!listGame.get(i).getName().equals("unsavedGame")) {
-				result.setListGame(listGame.get(i).getName());
-			}
-		}
+		//Player player = playerDao.findByUsername(playerName);
+		result.setUsername(username);
+		//List<Game> listGame = gameDao.findByPlayer(player);
+		result.setListGame(gameDaoService.getGamesByPlayer(username));
+		/*for (Game game : gameDaoService.getGamesByPlayer(username)) {
+				result.setListGame(game.getName());
+		}*/
 		return result;
 	}
 }

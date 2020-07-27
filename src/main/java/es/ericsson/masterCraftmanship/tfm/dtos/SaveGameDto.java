@@ -51,6 +51,13 @@ public class SaveGameDto {
 			throw new BadRequestException ("Incomplete SaveGameDto");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "SaveGameDto [username=" + username + ", gameName=" + gameName + ", overwrite=" + overwrite + "]";
+	}
+	
+	
 	
 	
 

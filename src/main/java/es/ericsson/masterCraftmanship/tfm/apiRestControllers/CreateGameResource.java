@@ -46,6 +46,7 @@ public class CreateGameResource {
 			CreateGameJson resultCreateGame = new CreateGameJson();
 			resultCreateGame.setMsg(Message.EMPTY_FIELD);
 			resultCreateGame.setError(Error.BAD_REQUEST);
+			resultCreateGame.setUsername(sessionDto.getUsername());
 			return new ResponseEntity<CreateGameJson>(resultCreateGame,HttpStatus.BAD_REQUEST);
 		
 		}

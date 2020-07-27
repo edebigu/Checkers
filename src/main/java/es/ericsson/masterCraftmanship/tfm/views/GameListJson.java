@@ -3,6 +3,8 @@ package es.ericsson.masterCraftmanship.tfm.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.ericsson.masterCraftmanship.tfm.models.Game;
+
 public class GameListJson {
 	
 	String username;
@@ -17,8 +19,10 @@ public class GameListJson {
 	public List<String> getListGame() {
 		return listGame;
 	}
-	public void setListGame(String game) {
-		this.listGame.add(game);
+	public void setListGame(List<Game> listGame) {
+		for (Game game : listGame) {
+			this.listGame.add(game.getName());
+		}
 	}
 	
 	

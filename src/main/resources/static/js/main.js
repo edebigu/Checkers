@@ -95,7 +95,7 @@ $(document).ready(function() {
 	$('form').on('click', '#btn_createGame', function(evento) {
 		var session = {
 				username : player,
-				gameName : gameName,
+				gameName : "",
 		}
 		createGame(session);
 		evento.preventDefault();
@@ -356,7 +356,7 @@ function startLogout(session) {
 
 function getTurn(){
  $.ajax({
-		url : "http://localhost:8080/game/" + gameName + "/getTurn",
+		url : "http://localhost:8080/game/" + player + "/getTurn",
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -375,7 +375,7 @@ function getTurn(){
 
 function getBoard(){
  $.ajax({
-		url : "http://localhost:8080/game/" + gameName + "/getStatus",
+		url : "http://localhost:8080/game/" + player + "/getStatus",
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -458,7 +458,7 @@ function createGame(session) {
 		success : function(data) {
 		console.log("SUCCESS : ", data)
 		if ( data.error === json_result.CREATED ) {
-		     gameName = data.gameName;
+		     //gameName = data.gameName;
 			 startGame();
 		}
 		},
@@ -472,6 +472,7 @@ function createGame(session) {
 }
 
 function saveGame(gameToSave){
+	console.log ("gameToSave " + JSON.stringify(gameToSave));
 	$.ajax({
 		url : "http://localhost:8080/saveGame",
 		type : 'POST',
