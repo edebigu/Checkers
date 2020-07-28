@@ -49,6 +49,9 @@ body {
 .bgRed {
     background: #F286A0;
 }
+.colorBlue{
+	color: #0000ff;
+}
 
 .tenue {
 	background-color: rgb(252, 249, 205);

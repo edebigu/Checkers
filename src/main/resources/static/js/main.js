@@ -216,11 +216,17 @@ $(document).ready(function() {
 	
 });
 
+function error(url) {
+	var json = "<span class='login100-form-title p-b-21 colorBlue'>Can not get resource " + url + "</span>";
+	$('#checkers').html(json);
+}
+
 
 
 function startApp() {
+	var url = "http://localhost:8080/start";
 	$.ajax({
-		url : "http://localhost:8080/start",
+		url : url,
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -229,16 +235,15 @@ function startApp() {
 			console.log("SUCCESS : ", data)
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
+			error(url);
 		}
    })
 }
 
 function startLogin() {
+    var url = "http://localhost:8080/start/login";
 	$.ajax({
-		url : "http://localhost:8080/start/login",
+		url : url,
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -247,16 +252,15 @@ function startLogin() {
 			console.log("SUCCESS : ", data)
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
+			error(url);
 		}
 	})
 }
 
 function startRegister() {
+    var url =  "http://localhost:8080/start/register";
 	$.ajax({
-		url : "http://localhost:8080/start/register",
+		url : url,
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -265,18 +269,16 @@ function startRegister() {
 			console.log("SUCCESS : ", data)
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
+			error(url);
 		}
 	})
 
 }
 
 function loginUser(user) {
-	console.log("Login with user" + JSON.stringify(user));
+	var url="http://localhost:8080/login";
 	$.ajax({
-				url : "http://localhost:8080/login",
+				url : url,
 				type : 'POST',
 				data : JSON.stringify(user),
 				processData : false,
@@ -293,17 +295,15 @@ function loginUser(user) {
 					}
 				},
 				error : function(e) {
-					var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-					$('#checkers').html(json);
-					console.log("ERROR : ", e);
+					error(url);
 				}
 			})
 }
 
 function registerUser(user) {
-	console.log("Register with user" + JSON.stringify(user));
+	var url="http://localhost:8080/register";
 	$.ajax({
-			     url : "http://localhost:8080/register",
+			     url : url,
 				type : 'POST',
 				data : JSON.stringify(user),
 				processData : false,
@@ -319,16 +319,15 @@ function registerUser(user) {
 					}
 				},
 				error : function(e) {
-					var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-					$('#checkers').html(json);
-					console.log("ERROR : ", e);
+					error(url);
 				}
 			})
 }
 
 function startLogout(session) {
+	var url="http://localhost:8080/logout";
 	$.ajax({
-		url : "http://localhost:8080/logout",
+		url : url,
 		type : 'POST',
 		data : JSON.stringify(session),
 		processData : false,
@@ -340,11 +339,8 @@ function startLogout(session) {
 		    player = "";
 
 		},
-		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
-			console.log("textError: " + e.responseText);
+		error : function(url) {
+			error(e);
 		}
 	}).done(function( data ) {
 		 addInitGameView();
@@ -353,8 +349,9 @@ function startLogout(session) {
 }
 
 function getTurn(){
+var url="http://localhost:8080/game/" + player + "/getTurn";
  $.ajax({
-		url : "http://localhost:8080/game/" + player + "/getTurn",
+		url : url,
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -362,9 +359,7 @@ function getTurn(){
 			console.log("SUCCESS : ", data);
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
+			error(url);
 		}
 	}).done(function( data ) {
 		 setTurn();
@@ -372,8 +367,9 @@ function getTurn(){
 }
 
 function getBoard(){
+var url = "http://localhost:8080/game/" + player + "/getStatus";
  $.ajax({
-		url : "http://localhost:8080/game/" + player + "/getStatus",
+		url : url ,
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -382,16 +378,15 @@ function getBoard(){
 			updateBoard(data);
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
+			error(url);
 		}
 	})
 }
 
 function getGames(typeView){
+var url =  "http://localhost:8080/game/getGames/" + player
 	$.ajax({
-		url : "http://localhost:8080/game/getGames/" + player,
+		url :url,
 		type : 'GET',
 		processData : false,
 		contentType : "application/json",
@@ -399,9 +394,7 @@ function getGames(typeView){
 			console.log("SUCCESS : ", data);
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
+			error(url);
 		}
 	}).done(function( data ) {
 		 addSaveGameView(data.listGame, typeView);
@@ -409,8 +402,9 @@ function getGames(typeView){
 }
 
 function sendMove(movement){
+var url = "http://localhost:8080/game/move/" + player
 	$.ajax({
-		url : "http://localhost:8080/game/move/" + player,
+		url : url ,
 		type : 'POST',
 		data : JSON.stringify(movement),
 		processData : false,
@@ -437,17 +431,16 @@ function sendMove(movement){
 		    
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
+			error(url);
 		}
 	})
 	
 }
 
 function createGame(session) {
+var url =  "http://localhost:8080/createGame";
 	$.ajax({
-		url : "http://localhost:8080/createGame",
+		url : url,
 		type : 'POST',
 		data : JSON.stringify(session),
 		processData : false,
@@ -461,18 +454,15 @@ function createGame(session) {
 		}
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
-			console.log("textError: " + e.responseText);
+			error(url);
 		}
 	})
 }
 
 function saveGame(gameToSave){
-	console.log ("gameToSave " + JSON.stringify(gameToSave));
+	var url = "http://localhost:8080/saveGame";
 	$.ajax({
-		url : "http://localhost:8080/saveGame",
+		url : url,
 		type : 'POST',
 		data : JSON.stringify(gameToSave),
 		processData : false,
@@ -504,18 +494,16 @@ function saveGame(gameToSave){
 			}
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
-			console.log("textError: " + e.responseText);
+			error(url);
 		}
 	})
 
 }
 
 function openGame(session){
+var url = "http://localhost:8080/openGame/";
 	$.ajax({
-		url : "http://localhost:8080/openGame/",
+		url : url,
 		type : 'POST',
 		data : JSON.stringify(session),
 		processData : false,
@@ -536,18 +524,16 @@ function openGame(session){
 			}
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
-			console.log("textError: " + e.responseText);
+			error(url);
 		}
 	})
 
 }
 
 function closeGame (session) {	
+var url = "http://localhost:8080/closeGame/";
 	$.ajax({
-		url : "http://localhost:8080/closeGame/",
+		url : url,
 		type : 'POST',
 		data : JSON.stringify(session),
 		processData : false,
@@ -570,10 +556,7 @@ function closeGame (session) {
 			}
 		},
 		error : function(e) {
-			var json =  "<span class='login100-form-title p-b-21'>" + e.responseText + "</span>";
-			$('#checkers').html(json);
-			console.log("ERROR : ", e);
-			console.log("textError: " + e.responseText);
+			error(url);
 		}
 	}).done(function( data ) {
 		containerBoard.style.display = "none";

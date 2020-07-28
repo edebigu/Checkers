@@ -39,7 +39,7 @@ public class LoginController {
         	resultLogin.setMsg(Message.LOGIN_UNSUCCESSFULL);
         	resultLogin.setError(Error.NOT_FOUND);
         }
-    	resultLogin.setUsername(userFound.getUsername());
+    	resultLogin.setUsername(playerDto.getUsername());
     	return resultLogin;
     }
 	
