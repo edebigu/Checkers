@@ -38,10 +38,8 @@ public class CloseGameController {
 
 		}
 		else {
-			logger.info("else saved session");
 			
 			if (!operationGameDto.isCloseWithoutSave()) {
-				logger.info("salvando juego de session");
 				gameDaoService.saveGame(sessionGame, game.getName(), operationGameDto.getUsername(), true);
 			}
 			sessionDaoService.saveSessionGame(operationGameDto.getUsername(), null);

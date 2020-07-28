@@ -307,7 +307,6 @@ function getTurn() {
             setTurn();
         },
         doneCallback: function () {
-        	
         }
     };
     sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
@@ -344,7 +343,14 @@ function sendMove(movement) {
         successCallback: function (data) {
             if (data.error === "LOST_MESSAGE" || data.error === "LOST_MESSAGE_MACHINE") {
                 alert("Player " + data.username + " lost!!");
+                var session = {
+                    username: player,
+                    gameName: gameName,
+                    closeWithoutSave: "true"
+                }
+                closeGame(session);
                 addCloseGameView();
+                
                 containerBoard.style.display = "none";
             }
             else {
@@ -712,7 +718,6 @@ function removeGame() {
 function setTurn() {
     board.ready = true;
     board.enableAll();
-    alert("Click in piece to move!!");
     board.onMark = cellId => {
         addFormChooseCoordinates(cellId);
     };
