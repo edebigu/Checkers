@@ -8,14 +8,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import es.ericsson.masterCraftmanship.tfm.daos.GameDaoService;
-import es.ericsson.masterCraftmanship.tfm.daos.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
 import es.ericsson.masterCraftmanship.tfm.models.Color;
 import es.ericsson.masterCraftmanship.tfm.models.Coordinate;
 import es.ericsson.masterCraftmanship.tfm.models.Error;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.models.Piece;
+import es.ericsson.masterCraftmanship.tfm.services.GameDaoService;
+import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.MoveJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;

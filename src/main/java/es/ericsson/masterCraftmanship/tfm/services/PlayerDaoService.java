@@ -1,9 +1,10 @@
-package es.ericsson.masterCraftmanship.tfm.daos;
+package es.ericsson.masterCraftmanship.tfm.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
 
 @Service

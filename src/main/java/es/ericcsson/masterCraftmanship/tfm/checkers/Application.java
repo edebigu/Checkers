@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication(scanBasePackages = { "es.ericsson.masterCraftmanship.tfm.apiRestControllers",
 		"es.ericsson.masterCraftmanship.tfm.businessControllers", "es.ericsson.masterCraftmanship.tfm.models",
-		"es.ericsson.masterCraftmanship.tfm.daos", "es.ericsson.masterCraftmanship.tfm.dtos"},
+		"es.ericsson.masterCraftmanship.tfm.daos", "es.ericsson.masterCraftmanship.tfm.dtos", "es.ericsson.masterCraftmanship.tfm.services"},
         exclude = {ErrorMvcAutoConfiguration.class})
 @EntityScan("es.ericsson.masterCraftmanship.tfm.models")
 @EnableMongoRepositories("es.ericsson.masterCraftmanship.tfm.daos")
