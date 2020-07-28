@@ -221,57 +221,48 @@ function error(url) {
 	$('#checkers').html(json);
 }
 
+function sendGetAjax (apiURL, successCallback)
+{
+       $.ajax({
+            url: apiURL,
+            type: 'GET',
+            contentType : "application/json",
+            success: function (data) {
+            	console.log("SUCCESS : ", data);
+            	successCallback(data);
+            },
+            error: function(e) {
+				error(apiURL);
+			}
+        })
 
-
-function startApp() {
-	var url = "http://localhost:8080/start";
-	$.ajax({
-		url : url,
-		type : 'GET',
-		processData : false,
-		contentType : "application/json",
-		success : function(data) {
-			addInitGameView();
-			console.log("SUCCESS : ", data)
-		},
-		error : function(e) {
-			error(url);
-		}
-   })
+	
 }
 
+function startApp() {
+     var apiURL= "http://localhost:8080/start";
+                
+     sendGetAjax(apiURL, 
+     	function (data) {
+	       addInitGameView();
+      });    
+}
+
+
 function startLogin() {
-    var url = "http://localhost:8080/start/login";
-	$.ajax({
-		url : url,
-		type : 'GET',
-		processData : false,
-		contentType : "application/json",
-		success : function(data) {
+    var apiURL = "http://localhost:8080/start/login";
+	sendGetAjax(apiURL,
+		function(data) {
 			addLoginForm();
-			console.log("SUCCESS : ", data)
-		},
-		error : function(e) {
-			error(url);
-		}
-	})
+		});
 }
 
 function startRegister() {
-    var url =  "http://localhost:8080/start/register";
-	$.ajax({
-		url : url,
-		type : 'GET',
-		processData : false,
-		contentType : "application/json",
-		success : function(data) {
-			addRegisterForm();
-			console.log("SUCCESS : ", data)
-		},
-		error : function(e) {
-			error(url);
-		}
-	})
+    var apiURL =  "http://localhost:8080/start/register";
+	sendGetAjax(apiURL,
+	   function(data) {
+	      addRegisterForm();
+	});
 
 }
 
@@ -349,38 +340,19 @@ function startLogout(session) {
 }
 
 function getTurn(){
-var url="http://localhost:8080/game/" + player + "/getTurn";
- $.ajax({
-		url : url,
-		type : 'GET',
-		processData : false,
-		contentType : "application/json",
-		success : function(data) {
-			console.log("SUCCESS : ", data);
-		},
-		error : function(e) {
-			error(url);
-		}
-	}).done(function( data ) {
-		 setTurn();
+var apiURL="http://localhost:8080/game/" + player + "/getTurn";
+	sendGetAjax(apiURL,
+	   function(data) {
+	      setTurn();
 	});
 }
 
 function getBoard(){
-var url = "http://localhost:8080/game/" + player + "/getStatus";
- $.ajax({
-		url : url ,
-		type : 'GET',
-		processData : false,
-		contentType : "application/json",
-		success : function(data) {
-			console.log("SUCCESS : ", data);
-			updateBoard(data);
-		},
-		error : function(e) {
-			error(url);
-		}
-	})
+	var apiURL = "http://localhost:8080/game/" + player + "/getStatus";
+	sendGetAjax(apiURL,
+	   function(data) { 
+	      updateBoard(data);
+	});
 }
 
 function getGames(typeView){
