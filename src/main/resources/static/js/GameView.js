@@ -1,4 +1,4 @@
-class Board {
+class GameView {
 
     constructor(scoreBoard) {
 

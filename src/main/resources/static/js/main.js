@@ -27,7 +27,7 @@ let scoreBoard = [
 
 let player;
 let gameName = "";
-let board;
+let gameView;
 let numberOfCells;
 
 
@@ -126,7 +126,7 @@ $(document).ready(function () {
 
     $('form').on('click', '#send', function () {
         formCoordSelection.style.display = "none";
-        board.disableAll();
+        gameView.disableAll();
         var movement = { originRow: $('#selectedCoord').attr('data-row'), originCol: $('#selectedCoord').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value') };
         sendMove(movement);
         formCoordSelection.reset();
@@ -698,11 +698,11 @@ function startGame() {
     formContainer.removeAttribute('style');
     optionsGame.removeAttribute('style');
     formCoordSelection.style.display = "none";
-    board = new Board(scoreBoard);
-    board.addTable(containerBoard);
-    board.addPlayer(player);
-    board.addOptionsGame(optionsGame);
-    board.addForm(formCoordSelection);
+    gameView = new GameView(scoreBoard);
+    gameView.addTable(containerBoard);
+    gameView.addPlayer(player);
+    gameView.addOptionsGame(optionsGame);
+    gameView.addForm(formCoordSelection);
     getBoard();
 }
 
@@ -713,9 +713,10 @@ function removeGame() {
 }
 
 function setTurn() {
-    board.ready = true;
-    board.enableAll();
-    board.onMark = cellId => {
+    gameView.ready = true;
+    gameView.enableAll();
+    alert("Click on piece to move");
+    gameView.onMark = cellId => {
         addFormChooseCoordinates(cellId);
     };
 }
@@ -723,10 +724,10 @@ function setTurn() {
 function addFormChooseCoordinates(cellId) {
     let parentCoord = document.getElementById('form_coord');
     let childCoord = document.getElementById('selectedCoord');
-    board.setCoordenada(cellId, childCoord);
+    gameView.setCoordenada(cellId, childCoord);
     formCoordSelection.removeAttribute('style');
 }
 
 function updateBoard(data) {
-    board.updateBoard(data);
+    gameView.updateBoard(data);
 }
