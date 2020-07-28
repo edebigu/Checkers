@@ -43,11 +43,11 @@ public class SessionDaoService {
 	}
 	
 	public boolean isSavedSession(String username) {
-		//return !this.getSessionGame(username).getName().equals("unsavedGame");
-		if (this.getSessionGame(username).getName().equals("unsavedGame")) {
+		return !this.getSessionGame(username).getName().equals("unsavedGame");
+		/*if (this.getSessionGame(username).getName().equals("unsavedGame")) {
 			return false;
 		}
-		return true;
+		return true;*/
 	}
 	
 	public boolean saveSession (Player player) {

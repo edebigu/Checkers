@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
+import es.ericsson.masterCraftmanship.tfm.daos.PlayerDaoService;
 import es.ericsson.masterCraftmanship.tfm.daos.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.views.CreateGameJson;
@@ -16,25 +16,19 @@ import es.ericsson.masterCraftmanship.tfm.views.Message;
 public class CreateGameController {
 	
 	private SessionDaoService sessionDaoService;
-	private PlayerDao playerDao;
+	private PlayerDaoService playerDaoService;
 	
 	Logger logger = LogManager.getLogger(CreateGameController.class);
 	
 	@Autowired
-	public CreateGameController (SessionDaoService sessionDaoService, PlayerDao playerDao) {
+	public CreateGameController (PlayerDaoService playerDaoService, SessionDaoService sessionDaoService) {
+		this.playerDaoService = playerDaoService;
 		this.sessionDaoService = sessionDaoService;
-		this.playerDao = playerDao;
 	}
 	
 	public CreateGameJson createGame (SessionDto sessionDto) {
 		CreateGameJson resultCreateGame = new CreateGameJson();
-		//Session sessionFound = sessionDao.findByPlayer_username(sessionDto.getUsername());
-		if (sessionDaoService.createGameSession(playerDao.findByUsername(sessionDto.getUsername()))) {
-			/*Game game = new Game();
-			game.addPlayer(playerDao.findByUsername(sessionDto.getUsername()));
-			Game gameSaved = gameDao.save(game);
-			sessionFound.setGame(gameSaved);
-		    sessionDao.save(sessionFound);*/
+		if (sessionDaoService.createGameSession(playerDaoService.findPlayerByUsername(sessionDto.getUsername()))){
 			resultCreateGame.setMsg(Message.CREATE_GAME_SUCCESSFULL);
 			resultCreateGame.setError(Error.CREATED);
 			resultCreateGame.setGameName("unsavedGame");

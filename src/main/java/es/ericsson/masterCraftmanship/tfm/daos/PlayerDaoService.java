@@ -13,12 +13,16 @@ public class PlayerDaoService {
 	private PlayerDao playerDao;
 	
 	public Player findPlayer(String username, String password) {
-		Player player = playerDao.findByUsername(username);
+		Player player = findPlayerByUsername(username);
 		if (player == null || !player.getPassword().equals(password)) {
-			LogManager.getLogger(PlayerDaoService.class).info("el player o password no existen");
 			return null;
 		}
 		return player;
+	}
+	
+	public Player findPlayerByUsername(String username) {
+		return playerDao.findByUsername(username);
+
 	}
 	
 	public Player savePlayer(String username, String password) {
