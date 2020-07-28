@@ -1,3 +1,4 @@
+package es.ericcsson.masterCraftmanship.tfm.checkers;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
