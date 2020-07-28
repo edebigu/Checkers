@@ -350,7 +350,7 @@ function sendMove(movement) {
                 }
                 closeGame(session);
                 addCloseGameView();
-                
+
                 containerBoard.style.display = "none";
             }
             else {
@@ -528,8 +528,7 @@ function removeChilds(container) {
 
 
 
-function addButton (container, id, text){
-
+function addButton(container, id, text) {
     let button = document.createElement('button');
     button.setAttribute('class', 'btn btn-primary btn-block');
     button.setAttribute('id', id);
@@ -538,18 +537,16 @@ function addButton (container, id, text){
     button.appendChild(document.createTextNode(text));
 
     container.appendChild(button);
-
 }
 
-function addInput (container, type, id, placeholder, disabled)
-{
+function addInput(container, type, id, placeholder, disabled) {
     let input = document.createElement('input');
     input.classList.add('form-control');
     input.setAttribute('type', type);
     input.setAttribute('id', id);
     input.setAttribute('name', type);
     input.setAttribute('placeholder', placeholder);
-    if (disabled){
+    if (disabled) {
         input.setAttribute('disabled', disabled);
     }
     container.appendChild(input);
@@ -731,5 +728,5 @@ function addFormChooseCoordinates(cellId) {
 }
 
 function updateBoard(data) {
-    board.doUpdate(data);
+    board.updateBoard(data);
 }
