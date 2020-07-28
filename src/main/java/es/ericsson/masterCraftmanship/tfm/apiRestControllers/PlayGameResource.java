@@ -51,10 +51,10 @@ public class PlayGameResource {
 		return new ResponseEntity(this.playGameController.getStatus(username), HttpStatus.OK);
 	}
 	
-	@PostMapping("/{id}/" + PlayGameResource.MOVE + "/{player}")
-	public ResponseEntity<MoveJson> getTurn (@PathVariable(name="id") String gameId, @PathVariable(name="player") String player, @RequestBody MoveDto movementDto ) {
+	@PostMapping(PlayGameResource.MOVE + "/{player}")
+	public ResponseEntity<MoveJson> move (@PathVariable(name="player") String player, @RequestBody MoveDto movementDto ) {
 		logger.info("Recibido move");
-		return  ResponseEntity.ok(this.playGameController.move(gameId, player, movementDto));
+		return  ResponseEntity.ok(this.playGameController.move(player, movementDto));
 		
 	}
 	

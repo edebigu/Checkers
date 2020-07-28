@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.ericsson.masterCraftmanship.tfm.businessControllers.CloseGameController;
-import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
+import es.ericsson.masterCraftmanship.tfm.views.CloseGameDto;
 import es.ericsson.masterCraftmanship.tfm.views.Error;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
@@ -33,16 +33,17 @@ public class CloseGameResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ResponseJson> save (@RequestBody SessionDto sessionDto ) {
+	public ResponseEntity<ResponseJson> save (@RequestBody CloseGameDto operationGameDto ) {
 		logger.info("Recibido close game");
 		try {
-			sessionDto.validate();
-			return  ResponseEntity.ok(this.closeGameController.closeGame(sessionDto));
+			operationGameDto.validate();
+			return  ResponseEntity.ok(this.closeGameController.closeGame(operationGameDto));
 		}
 		catch (BadRequestException e) {
 			ResponseJson response = new ResponseJson();
 			response.setMsg(Message.EMPTY_FIELD);
 			response.setError(Error.BAD_REQUEST);
+			response.setUsername(operationGameDto.getUsername());
 			return new ResponseEntity<ResponseJson>(response,HttpStatus.BAD_REQUEST);
 		}
 		

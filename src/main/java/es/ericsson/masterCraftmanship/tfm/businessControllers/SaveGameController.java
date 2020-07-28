@@ -17,45 +17,38 @@ import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 public class SaveGameController {
 	private GameDaoService gameDaoService;
 	private SessionDaoService sessionDaoService;
-	
+
 	Logger logger = LogManager.getLogger(SaveGameController.class);
-	
+
 	@Autowired
 	public SaveGameController(GameDaoService gameDaoService, SessionDaoService sessionDaoService) {
 
 		this.gameDaoService = gameDaoService;
 		this.sessionDaoService = sessionDaoService;
 	}
-	
+
 	public ResponseJson save(SaveGameDto saveGameDto) {
 		ResponseJson response = new ResponseJson();
-		logger.info("saveGameDto " + saveGameDto.toString());
-		Game game = null;
-			if (sessionDaoService.isSavedSession(saveGameDto.getUsername())) {
-				 game = gameDaoService.saveGame(sessionDaoService.getSessionGame(saveGameDto.getUsername()), saveGameDto.getGameName(),  saveGameDto.getUsername(), true);
+		Boolean overwrite = saveGameDto.isOverwrite();
+		if (sessionDaoService.isSavedSession(saveGameDto.getUsername())) {
+			overwrite = true;
+		}
+		Game game = gameDaoService.saveGame(sessionDaoService.getSessionGame(saveGameDto.getUsername()), saveGameDto.getGameName(), saveGameDto.getUsername(), overwrite);
+		if (game != null) {
+			response.setMsg(Message.SAVE_GAME_SUCCESS);
+			response.setError(Error.CREATED);
+			sessionDaoService.saveSessionGame(saveGameDto.getUsername(), game);
+		} else {
+			response.setMsg(Message.SAVE_GAME_UNSUCCESS);
+			if (saveGameDto.getGameName().equals("")) {
+				response.setError(Error.NOT_FOUND);
+			} else {
+				response.setError(Error.CONFLICT);
 			}
-			else {
-				game = gameDaoService.saveGame(sessionDaoService.getSessionGame(saveGameDto.getUsername()), saveGameDto.getGameName(),  saveGameDto.getUsername(), saveGameDto.isOverwrite());
-			}
-			if (game != null) {
-				response.setMsg(Message.SAVE_GAME_SUCCESS);
-				response.setError(Error.CREATED);
-				sessionDaoService.saveSessionGame(saveGameDto.getUsername(), game);
-			}
-			else {
-				response.setMsg(Message.SAVE_GAME_UNSUCCESS);
-				if (saveGameDto.getGameName().equals(""))
-				{
-					response.setError(Error.NOT_FOUND);
-				}
-				else {
-					response.setError(Error.CONFLICT);
-				}
-			}
+		}
 		response.setUsername(saveGameDto.getUsername());
 		return response;
-		
+
 	}
 
-	
 }

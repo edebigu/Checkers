@@ -120,6 +120,7 @@ $(document).ready(function() {
 		contador ++;
 		if (contador === 2){
 			$('button').prop("disabled", false);
+			contador=0;
 		}
 	});
 	
@@ -134,7 +135,6 @@ $(document).ready(function() {
 	$('form').on('click','#cancelCoord',function() {
 		 formCoordSelection.style.display = "none";
 		 formCoordSelection.reset();
-		 //board.enableAll();
 		 setTurn();
 	});
 	
@@ -152,9 +152,6 @@ $(document).ready(function() {
 		  overwrite: "false"
 	  }
 		saveGame(gameToSave);
-		 //getGames("Save");
-		 //containerBoard.style.display = "none";
-		 //optionForm.removeAttribute('style');
 		 
 		 
 	});
@@ -204,7 +201,8 @@ $(document).ready(function() {
 			optionsGame.style.display = "none";
 		   	var session = {
 				username : player,
-			    gameName : gameName
+			    gameName : gameName,
+			    closeWithoutSave: "false"
 			}
 			console.log("session " + JSON.stringify(session));
 		   closeGame(session);
@@ -412,7 +410,7 @@ function getGames(typeView){
 
 function sendMove(movement){
 	$.ajax({
-		url : "http://localhost:8080/game/" + gameName + "/move/" + player,
+		url : "http://localhost:8080/game/move/" + player,
 		type : 'POST',
 		data : JSON.stringify(movement),
 		processData : false,
@@ -458,7 +456,7 @@ function createGame(session) {
 		success : function(data) {
 		console.log("SUCCESS : ", data)
 		if ( data.error === json_result.CREATED ) {
-		     //gameName = data.gameName;
+		     gameName = "";
 			 startGame();
 		}
 		},
@@ -559,10 +557,10 @@ function closeGame (session) {
 			console.log("SUCCESS : ", data);
 			if (data.error === json_result.NOT_FOUND){
 			 if (!confirm("Do you want close game without saved?")){
-				 getGames("Save");
+			 	  getGames("Save"); 
 			  }
-			else {
-				session.gameName="";
+			  else {
+				session.closeWithoutSave="true";
 				closeGame(session);
 			 }
 			}
@@ -579,7 +577,7 @@ function closeGame (session) {
 		}
 	}).done(function( data ) {
 		containerBoard.style.display = "none";
-		optionForm.removeAttribute('style')
+		optionForm.removeAttribute('style');
 	});
 	
 	;

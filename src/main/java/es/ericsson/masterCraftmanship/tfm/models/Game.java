@@ -15,6 +15,7 @@ import es.ericsson.masterCraftmanship.tfm.businessControllers.PlayGameController
 @Document(collection = "Game")
 public class Game {
 	
+
 	@Id
 	private String id;
 	private String gameName;
@@ -294,6 +295,54 @@ public class Game {
 	}
 	
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((board == null) ? 0 : board.hashCode());
+		result = prime * result + ((gameName == null) ? 0 : gameName.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((player == null) ? 0 : player.hashCode());
+		result = prime * result + ((turn == null) ? 0 : turn.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Game other = (Game) obj;
+		if (board == null) {
+			if (other.board != null)
+				return false;
+		} else if (!board.equals(other.board))
+			return false;
+		if (gameName == null) {
+			if (other.gameName != null)
+				return false;
+		} else if (!gameName.equals(other.gameName))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (player == null) {
+			if (other.player != null)
+				return false;
+		} else if (!player.equals(other.player))
+			return false;
+		if (turn == null) {
+			if (other.turn != null)
+				return false;
+		} else if (!turn.equals(other.turn))
+			return false;
+		return true;
+	}
 
 
 }

@@ -62,7 +62,7 @@ public class PlayGameController {
 		return listSquare;
 	}
 
-	public MoveJson move(String gameId, String playerName, MoveDto movement) {
+	public MoveJson move(String playerName, MoveDto movement) {
 		MoveJson moveResult = new MoveJson();
 		//Session sessionFound = sessionDao.findByPlayer_username(playerName);
 		Game game = sessionDaoService.getSessionGame(playerName);
@@ -85,9 +85,7 @@ public class PlayGameController {
 					moveResult.setUsername("machine");
 				}
 			}
-			//gameDao.save(game);
 			sessionDaoService.saveSessionGame(playerName,game);
-			//sessionDao.save(sessionFound);
 		}
 
 		return moveResult;
