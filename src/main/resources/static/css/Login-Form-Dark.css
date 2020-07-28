@@ -70,6 +70,8 @@
   color: inherit;
 }
 
+.login-dark form .form-control::placeholder { font-weight: bold; }
+
 .login-dark form .btn-primary {
   background: #214a80;
   border: none;

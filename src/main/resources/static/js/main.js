@@ -145,7 +145,6 @@ $(document).ready(function () {
     });
 
     $('form').on('click', '#saveGame', function () {
-        //optionsGame.style.display = "none";
         var gameToSave = {
             username: player,
             gameName: gameName,
@@ -208,91 +207,44 @@ $(document).ready(function () {
         }
 
     });
-
-
-
-
-
 });
-
-function error(url) {
-    var json = "<span class='login100-form-title p-b-21 colorBlue'>Can not get resource " + url + "</span>";
-    $('#checkers').html(json);
-}
-
-function sendGetAjax(apiURL, successCallback, doneCallback) {
-    $.ajax({
-        url: apiURL,
-        type: 'GET',
-        contentType: "application/json",
-        success: function (data) {
-            console.log("SUCCESS : ", data);
-            successCallback(data);
-        },
-        error: function (e) {
-            error(apiURL);
-        }
-    })
-}
-
-function sendPostAjax(dataToSend, apiURL, successCallback, doneCallback) {
-
-    $.ajax({
-        url: apiURL,
-        type: 'POST',
-        data: JSON.stringify(dataToSend),
-        contentType: "application/json",
-        dataType: 'json',
-        success: function (data) {
-            console.log("SUCCESS : ", data);
-            successCallback(data);
-        },
-        error: function (e) {
-            error(apiURL);
-        }
-    }).done(function () {
-        doneCallback();
-    });
-
-}
 
 function startApp() {
     var apiURL = "http://localhost:8080/start";
-    
-     var callbacks = {
+
+    var callbacks = {
         successCallback: function (data) {
-             addInitGameView();
+            addInitGameView();
         },
         doneCallback: function () {
         }
     };
 
-    sendGetAjax(apiURL,callbacks.successCallback, callbacks.doneCallback);
+    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
 }
-
 
 function startLogin() {
     var apiURL = "http://localhost:8080/start/login";
     var callbacks = {
         successCallback: function (data) {
-             addLoginForm();
+            addLoginForm();
         },
         doneCallback: function () {
         }
     };
-    sendGetAjax(apiURL,callbacks.successCallback, callbacks.doneCallback);
+    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
 }
 
 function startRegister() {
     var apiURL = "http://localhost:8080/start/register";
-        var callbacks = {
+    var callbacks = {
         successCallback: function (data) {
             addRegisterForm();
         },
         doneCallback: function () {
         }
     };
-	   sendGetAjax(apiURL,callbacks.successCallback, callbacks.doneCallback);
+    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
 }
 
 function loginUser(user) {
@@ -344,7 +296,6 @@ function startLogout(session) {
             removeUserLogin();
         }
     }
-
     sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
 
 }
@@ -358,7 +309,7 @@ function getTurn() {
         doneCallback: function () {
         }
     };
-	   sendGetAjax(apiURL,callbacks.successCallback, callbacks.doneCallback);
+    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
 }
 
 function getBoard() {
@@ -370,20 +321,19 @@ function getBoard() {
         doneCallback: function () {
         }
     };
-	  sendGetAjax(apiURL,callbacks.successCallback, callbacks.doneCallback);
+    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
 }
 
 function getGames(typeView) {
     var apiURL = "http://localhost:8080/game/getGames/" + player;
-        var callbacks = {
+    var callbacks = {
         successCallback: function (data) {
-        	addSaveGameView(data.listGame, typeView);
+            addSaveGameView(data.listGame, typeView);
         },
         doneCallback: function () {
-          //addSaveGameView(data.listGame, typeView);
         }
     };
-	  sendGetAjax(apiURL,callbacks.successCallback, callbacks.doneCallback);
+    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
 }
 
 function sendMove(movement) {
@@ -397,9 +347,9 @@ function sendMove(movement) {
                 containerBoard.style.display = "none";
             }
             else {
-            	if (data.error !== null){
-            		alert("Error: movement not allowed");
-            	}
+                if (data.error !== null) {
+                    alert("Error: movement not allowed");
+                }
                 getBoard();
                 optionsGame.removeAttribute('style');
 
@@ -437,14 +387,14 @@ function saveGame(gameToSave) {
         successCallback: function (data) {
             switch (data.error) {
                 case json_result.NOT_FOUND:
-                	optionsGame.style.display = "none";
+                    optionsGame.style.display = "none";
                     getGames("Save");
                     containerBoard.style.display = "none";
                     optionForm.removeAttribute('style');
                     break;
 
                 case json_result.CONFLICT:
-                	optionsGame.style.display = "none";
+                    optionsGame.style.display = "none";
                     if (confirm("Do you really want to overwrite the game?")) {
                         gameToSave.overwrite = "true";
                         saveGame(gameToSave);
@@ -457,9 +407,9 @@ function saveGame(gameToSave) {
                     optionForm.style.display = "none";
                     optionsGame.removeAttribute('style');
                     break;
-                    
+
                 default:
-                	
+
             }
         },
         doneCallback: function () {
@@ -522,42 +472,95 @@ function closeGame(session) {
 
 }
 
+function sendGetAjax(apiURL, successCallback, doneCallback) {
+    $.ajax({
+        url: apiURL,
+        type: 'GET',
+        contentType: "application/json",
+        success: function (data) {
+            console.log("SUCCESS : ", data);
+            successCallback(data);
+        },
+        error: function (e) {
+            error(apiURL);
+        }
+    })
+}
+
+function sendPostAjax(dataToSend, apiURL, successCallback, doneCallback) {
+
+    $.ajax({
+        url: apiURL,
+        type: 'POST',
+        data: JSON.stringify(dataToSend),
+        contentType: "application/json",
+        dataType: 'json',
+        success: function (data) {
+            console.log("SUCCESS : ", data);
+            successCallback(data);
+        },
+        error: function (e) {
+            error(apiURL);
+        }
+    }).done(function () {
+        doneCallback();
+    });
+
+}
+
+function error(url) {
+    var json = "<span class='login100-form-title p-b-21 colorBlue'>Can not get resource " + url + "</span>";
+    $('#checkers').html(json);
+}
+
 function removeChilds(container) {
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
 }
 
+
+
+function addButton (container, id, text){
+
+    let button = document.createElement('button');
+    button.setAttribute('class', 'btn btn-primary btn-block');
+    button.setAttribute('id', id);
+    button.setAttribute('name', id);
+    button.setAttribute('type', 'submit');
+    button.appendChild(document.createTextNode(text));
+
+    container.appendChild(button);
+
+}
+
+function addInput (container, type, id, placeholder, disabled)
+{
+    let input = document.createElement('input');
+    input.classList.add('form-control');
+    input.setAttribute('type', type);
+    input.setAttribute('id', id);
+    input.setAttribute('name', type);
+    input.setAttribute('placeholder', placeholder);
+    if (disabled){
+        input.setAttribute('disabled', disabled);
+    }
+    container.appendChild(input);
+}
+
 function addInitGameView() {
 
     let title = document.getElementById("title");
-    title.textContent = "Choose one option";
+    title.textContent = "Click one option";
 
     let options = document.getElementById('options');
-
-    let buttonLogin = document.createElement('button');
-    buttonLogin.setAttribute('class', 'btn btn-primary btn-block');
-    buttonLogin.setAttribute('id', 'btn_login');
-    buttonLogin.setAttribute('name', 'btn_login');
-    buttonLogin.setAttribute('type', 'submit');
-    buttonLogin.appendChild(document.createTextNode('LOGIN'));
-
-    let buttonRegister = document.createElement('button');
-    buttonRegister.setAttribute('class', 'btn btn-primary btn-block');
-    buttonRegister.setAttribute('id', 'btn_register');
-    buttonRegister.setAttribute('name', 'btn_register');
-    buttonRegister.setAttribute('type', 'submit');
-    buttonRegister.appendChild(document.createTextNode('Register'));
-
     removeChilds(options);
 
-    options.appendChild(buttonLogin);
-    options.appendChild(buttonRegister);
+    addButton(options, 'btn_login', 'Login');
+    addButton(options, 'btn_register', 'Register');
+
     optionForm.appendChild(options);
 }
-
-
-
 
 function addLoginForm() {
 
@@ -566,47 +569,18 @@ function addLoginForm() {
 
     let options = document.getElementById('options');
 
-
     let userName = document.createElement('div');
     userName.classList.add('form-group');
-
-    let inputUserName = document.createElement('input');
-    inputUserName.classList.add('form-control');
-    inputUserName.setAttribute('type', 'text');
-    inputUserName.setAttribute('id', 'username');
-    inputUserName.setAttribute('name', 'username');
-    inputUserName.setAttribute('placeholder', 'User name');
-    userName.appendChild(inputUserName);
+    addInput(userName, 'text', 'username', 'User name');
 
     let password = document.createElement('div');
     password.classList.add('form-group');
-
-    let inputPassword = document.createElement('input');
-    inputPassword.classList.add('form-control');
-    inputPassword.setAttribute('type', 'password');
-    inputPassword.setAttribute('id', 'pwd');
-    inputPassword.setAttribute('name', 'pwd');
-    inputPassword.setAttribute('placeholder', 'Password');
-    password.appendChild(inputPassword);
+    addInput(password, 'password', 'pwd', 'Password');
 
     let submit = document.createElement('div');
     submit.classList.add('form-group');
-
-    let buttonSubmit = document.createElement('button');
-    buttonSubmit.setAttribute('type', 'submit');
-    buttonSubmit.setAttribute('class', 'btn btn-primary btn-block');
-    buttonSubmit.setAttribute('id', 'btn_submitLogin');
-    buttonSubmit.setAttribute('name', 'btn_submitLogin');
-    buttonSubmit.appendChild(document.createTextNode('Submit'));
-    submit.appendChild(buttonSubmit);
-
-    let buttonCancelLogint = document.createElement('button');
-    buttonCancelLogint.setAttribute('type', 'submit');
-    buttonCancelLogint.setAttribute('class', 'btn btn-primary btn-block');
-    buttonCancelLogint.setAttribute('id', 'btn_cancelLogin');
-    buttonCancelLogint.setAttribute('name', 'btn_cancelLogin');
-    buttonCancelLogint.appendChild(document.createTextNode('Cancel'));
-    submit.appendChild(buttonCancelLogint);
+    addButton(submit, 'btn_submitLogin', 'Submit');
+    addButton(submit, 'btn_cancelLogin', 'Cancel');
 
     removeChilds(options);
 
@@ -620,62 +594,26 @@ function addLoginForm() {
 function addRegisterForm() {
 
     let title = document.getElementById("title");
-    title.textContent = "Login Form";
+    title.textContent = "Register Form";
 
     let options = document.getElementById('options');
 
-
     let userName = document.createElement('div');
     userName.classList.add('form-group');
-
-    let inputUserName = document.createElement('input');
-    inputUserName.classList.add('form-control');
-    inputUserName.setAttribute('type', 'text');
-    inputUserName.setAttribute('id', 'username');
-    inputUserName.setAttribute('name', 'username');
-    inputUserName.setAttribute('placeholder', 'User name');
-    userName.appendChild(inputUserName);
+    addInput(userName, 'text', 'username', 'User name');
 
     let password = document.createElement('div');
     password.classList.add('form-group');
-
-    let inputPassword = document.createElement('input');
-    inputPassword.classList.add('form-control');
-    inputPassword.setAttribute('type', 'password');
-    inputPassword.setAttribute('id', 'pwd');
-    inputPassword.setAttribute('name', 'pwd');
-    inputPassword.setAttribute('placeholder', 'Password');
-    password.appendChild(inputPassword);
+    addInput(password, 'password', 'pwd', 'Password');
 
     let password2 = document.createElement('div');
     password2.classList.add('form-group');
-
-    let inputPassword2 = document.createElement('input');
-    inputPassword2.classList.add('form-control');
-    inputPassword2.setAttribute('type', 'password');
-    inputPassword2.setAttribute('id', 'pwd2');
-    inputPassword2.setAttribute('name', 'pwd2');
-    inputPassword2.setAttribute('placeholder', 'Password');
-    password2.appendChild(inputPassword2);
+    addInput(password2, 'password', 'pwd2', 'Password');
 
     let submit = document.createElement('div');
     submit.classList.add('form-group');
-
-    let buttonSubmit = document.createElement('button');
-    buttonSubmit.setAttribute('type', 'submit');
-    buttonSubmit.setAttribute('class', 'btn btn-primary btn-block');
-    buttonSubmit.setAttribute('id', 'btn_submitRegister');
-    buttonSubmit.setAttribute('name', 'btn_submitRegister');
-    buttonSubmit.appendChild(document.createTextNode('Submit'));
-    submit.appendChild(buttonSubmit);
-
-    let buttonCancel = document.createElement('button');
-    buttonCancel.setAttribute('type', 'submit');
-    buttonCancel.setAttribute('class', 'btn btn-primary btn-block');
-    buttonCancel.setAttribute('id', 'btn_cancelRegister');
-    buttonCancel.setAttribute('name', 'btn_registerCancel');
-    buttonCancel.appendChild(document.createTextNode('Cancel'));
-    submit.appendChild(buttonCancel);
+    addButton(submit, 'btn_submitRegister', 'Submit');
+    addButton(submit, 'btn_cancelRegister', 'Cancel');
 
     removeChilds(options);
 
@@ -690,36 +628,14 @@ function addRegisterForm() {
 function addCloseGameView() {
 
     let title = document.getElementById("title");
-    title.textContent = "Choose one option";
+    title.textContent = "Click one option";
 
     let options = document.getElementById('options');
-
-    let buttonCreateGame = document.createElement('button');
-    buttonCreateGame.setAttribute('class', 'btn btn-primary btn-block');
-    buttonCreateGame.setAttribute('id', 'btn_createGame');
-    buttonCreateGame.setAttribute('name', 'btn_createGame');
-    buttonCreateGame.setAttribute('type', 'submit');
-    buttonCreateGame.appendChild(document.createTextNode('Create Game'));
-
-    let buttonOpenGame = document.createElement('button');
-    buttonOpenGame.setAttribute('class', 'btn btn-primary btn-block');
-    buttonOpenGame.setAttribute('id', 'btn_openGame');
-    buttonOpenGame.setAttribute('name', 'btn_openGame');
-    buttonOpenGame.setAttribute('type', 'submit');
-    buttonOpenGame.appendChild(document.createTextNode('Open Game'));
-
-    let buttonLogout = document.createElement('button');
-    buttonLogout.setAttribute('class', 'btn btn-primary btn-block');
-    buttonLogout.setAttribute('id', 'btn_logout');
-    buttonLogout.setAttribute('name', 'btn_logout');
-    buttonLogout.setAttribute('type', 'submit');
-    buttonLogout.appendChild(document.createTextNode('Logout'));
-
     removeChilds(options);
 
-    options.appendChild(buttonCreateGame);
-    options.appendChild(buttonOpenGame);
-    options.appendChild(buttonLogout);
+    addButton(options, 'btn_createGame', 'Create Game');
+    addButton(options, 'btn_openGame', 'Open Game');
+    addButton(options, 'btn_logout', 'Logout');
     optionForm.appendChild(options);
 }
 
@@ -749,50 +665,20 @@ function addSaveGameView(listGames, typeView) {
     for (let i = 0; i < listGames.length; i++) {
         let inputGroup = document.createElement('div');
         inputGroup.classList.add('input-group');
-        let input = document.createElement('input');
-        input.setAttribute('class', 'form-control');
-        input.setAttribute('type', 'text');
-        input.setAttribute('name', 'game' + i);
-        input.setAttribute('id', 'game' + i);
-        input.setAttribute('value', listGames[i]);
-        input.setAttribute('disabled', true);
-        inputGroup.appendChild(input);
+        addInput(inputGroup, 'text', 'game' + i, listGames[i], true);
         options.appendChild(inputGroup);
     }
     let gameName = document.createElement('div');
     gameName.classList.add('form-group');
-    let inputName = document.createElement('input');
-    inputName.classList.add('form-control');
-    inputName.setAttribute('type', 'text');
-    inputName.setAttribute('id', 'gameName');
-    inputName.setAttribute('name', 'gameName');
-    inputName.setAttribute('placeholder', 'Enter name');
-    gameName.appendChild(inputName);
+    addInput(gameName, 'text', 'gameName', 'Enter name');
 
     options.appendChild(gameName);
 
     let btnGroup = document.createElement('div');
     btnGroup.classList.add('form-group');
-
-    let buttonSend = document.createElement('button');
-    buttonSend.setAttribute('type', 'submit');
-    buttonSend.setAttribute('class', 'btn btn-primary btn-block');
-    buttonSend.setAttribute('id', 'btn_submit' + typeView + 'Game');
-    buttonSend.setAttribute('name', 'btn_submit' + typeView + 'Game');
-    buttonSend.appendChild(document.createTextNode('Submit'));
-    btnGroup.appendChild(buttonSend);
-
-    let buttonCancel = document.createElement('button');
-    buttonCancel.setAttribute('type', 'submit');
-    buttonCancel.setAttribute('class', 'btn btn-primary btn-block');
-    buttonCancel.setAttribute('id', 'btn_cancel' + typeView + 'Game');
-    buttonCancel.setAttribute('name', 'btn_cancel' + typeView + 'Game');
-    buttonCancel.appendChild(document.createTextNode('Cancel'));
-    btnGroup.appendChild(buttonCancel);
-
+    addButton(btnGroup, 'btn_submit' + typeView + 'Game', 'Submit');
+    addButton(btnGroup, 'btn_cancel' + typeView + 'Game', 'Cancel');
     options.appendChild(btnGroup);
-
-
 }
 
 function removeUserLogin() {

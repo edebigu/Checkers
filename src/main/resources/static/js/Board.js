@@ -128,8 +128,6 @@ class Board {
             for (let j = i; j < i + 8; j++) {
             	this.cells[j].setAttribute('data-col', counterCol);
                 this.cells[j].setAttribute('data-row', counter);
-                this.cells[j].setAttribute('data-y', counter);
-                this.cells[j].setAttribute('data-x', j);
                 if (counter % 2 == 0) {
                     if (j % 2 == 0) {
                         this.cells[j].classList.add('tenue');    
@@ -268,8 +266,6 @@ class Board {
     setCoordenada(cellId,container) {
     	let cell = this.cells[cellId];
     	container.setAttribute('placeholder', cell.getAttribute('data-col') + cell.getAttribute('data-row'));
-    	container.setAttribute('data-x', cell.getAttribute('data-x'));
-    	container.setAttribute('data-y', cell.getAttribute('data-y'));
     	container.setAttribute('data-col', cell.getAttribute('data-col'));
     	container.setAttribute('data-row', cell.getAttribute('data-row'));
     	container.setAttribute('data-cellId', cellId);
@@ -291,7 +287,6 @@ class Board {
      addSelectColum(container) {
     	
     	let newColum = document.createElement('div');
-    	
     	let label = document.createElement('label');
     	label.setAttribute('class', 'description');
     	label.setAttribute('for', 'newColum');
@@ -370,7 +365,6 @@ class Board {
     	
     	let button =  document.createElement('button');
     	button.setAttribute('type', 'button');
-    	//button.setAttribute('value', 'submit');
     	button.setAttribute('value', 'send');
     	button.setAttribute('class', 'btn btn-primary btn-md d-block mx-auto');
     	button.setAttribute('id', 'send');
@@ -379,7 +373,6 @@ class Board {
     	
     	let cancelButton =  document.createElement('button');
     	cancelButton.setAttribute('type', 'button');
-    	//cancelButton.setAttribute('value', 'submit');
     	cancelButton.setAttribute('value', 'cancelCoord');
     	cancelButton.setAttribute('class', 'btn btn-primary btn-md d-block mx-auto');
     	cancelButton.setAttribute('id', 'cancelCoord');
@@ -392,7 +385,6 @@ class Board {
     }
 
     addPlayer(player) {
-    
     	this.players.push(player);
     	this.players.push("machine");
     }
