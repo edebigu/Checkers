@@ -307,6 +307,7 @@ function getTurn() {
             setTurn();
         },
         doneCallback: function () {
+        	
         }
     };
     sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
@@ -711,6 +712,7 @@ function removeGame() {
 function setTurn() {
     board.ready = true;
     board.enableAll();
+    alert("Click in piece to move!!");
     board.onMark = cellId => {
         addFormChooseCoordinates(cellId);
     };
