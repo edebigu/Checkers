@@ -1,5 +1,6 @@
 package es.ericsson.masterCraftmanship.tfm.daos;
 
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class SessionDaoService {
 	}
 	
 	public boolean createGameSession (Player player) {
-		Session sessionFound = sessionDao.findByPlayer_username(player.getUsername());
+		Session sessionFound = getSession(player.getUsername());
 	    if (sessionFound != null){
 	    	Game game = new Game();
 	    	game.addPlayer(player);
@@ -42,11 +43,31 @@ public class SessionDaoService {
 	}
 	
 	public boolean isSavedSession(String username) {
-		//return this.getSessionGame(username).equals("unsavedGame");
+		//return !this.getSessionGame(username).getName().equals("unsavedGame");
 		if (this.getSessionGame(username).getName().equals("unsavedGame")) {
 			return false;
 		}
 		return true;
+	}
+	
+	public boolean saveSession (Player player) {
+		if (sessionDao.findByPlayer(player) == null) {
+			sessionDao.save(new Session(player, null));
+			return true;
+		}
+		return false;
+	}
+	
+	public Session getSession(String username) {
+		return sessionDao.findByPlayer_username(username);
+	}
+	
+	public boolean deleteSession(String username) {
+		if (getSession(username) != null) {
+			sessionDao.delete(getSession(username));
+			return true;
+		}
+		return false;
 	}
 	
 	

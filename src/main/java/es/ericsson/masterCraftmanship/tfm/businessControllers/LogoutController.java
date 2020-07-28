@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
+import es.ericsson.masterCraftmanship.tfm.daos.PlayerDaoService;
 import es.ericsson.masterCraftmanship.tfm.daos.SessionDao;
+import es.ericsson.masterCraftmanship.tfm.daos.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
 import es.ericsson.masterCraftmanship.tfm.models.Session;
+import es.ericsson.masterCraftmanship.tfm.views.Error;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
@@ -18,28 +21,23 @@ public class LogoutController {
 	
 	Logger logger = LogManager.getLogger(LogoutController.class);
 	
-	private SessionDao sessionDao;
-	private PlayerDao playerDao;
+	private SessionDaoService sessionDaoService;
 	
 	@Autowired
-	public LogoutController (PlayerDao playerDao, SessionDao sessionDao) {
-		this.playerDao = playerDao;
-		this.sessionDao = sessionDao;
+	public LogoutController (SessionDaoService sessionDaoService) {
+		this.sessionDaoService = sessionDaoService;
 	}
 	
 	public ResponseJson logout(SessionDto sessionDto) {
 		ResponseJson resultLogout = new ResponseJson();
-		Player playerFound = playerDao.findByUsername(sessionDto.getUsername());
-		Session sessionFound = sessionDao.findByPlayer(playerFound);
-		resultLogout.setUsername(playerFound.getUsername());
-		if (sessionFound != null) {
-			sessionDao.delete(sessionFound);
+		if (sessionDaoService.deleteSession(sessionDto.getUsername())) {
 			resultLogout.setMsg(Message.LOGOUT_SUCCESS);
 		}
 		else {
 			resultLogout.setMsg(Message.LOGOUT_UNSUCCESSFULL);
 		}
-
+		
+		resultLogout.setUsername(sessionDto.getUsername());
 		return resultLogout;
 	}
 
