@@ -16,11 +16,9 @@ import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.models.Piece;
 import es.ericsson.masterCraftmanship.tfm.services.GameDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
-import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
-import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
 
 @Controller
 public class PlayGameController {
@@ -34,14 +32,6 @@ public class PlayGameController {
 	public PlayGameController(SessionDaoService sessionDaoService, GameDaoService gameDaoService) {
 		this.sessionDaoService = sessionDaoService;
 		this.gameDaoService = gameDaoService;
-	}
-
-	public TurnJson getTurn(String username) {
-		TurnJson resultTurn = new TurnJson();
-		Game game = sessionDaoService.getSessionGame(username);
-		resultTurn.setColor(game.getTurnColor().name());
-		return resultTurn;
-
 	}
 
 	public List<SquareJson> getStatus(String username) {

@@ -5,12 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import es.ericsson.masterCraftmanship.tfm.daos.PlayerDao;
-import es.ericsson.masterCraftmanship.tfm.daos.SessionDao;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
-import es.ericsson.masterCraftmanship.tfm.models.Player;
-import es.ericsson.masterCraftmanship.tfm.models.Session;
-import es.ericsson.masterCraftmanship.tfm.services.PlayerDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;

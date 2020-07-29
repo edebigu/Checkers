@@ -1,13 +1,11 @@
 package es.ericsson.masterCraftmanship.tfm.services;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import es.ericsson.masterCraftmanship.tfm.businessControllers.CloseGameController;
 import es.ericsson.masterCraftmanship.tfm.daos.GameDao;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 
@@ -60,7 +58,6 @@ public class GameDaoService {
 	}
 	
 	public List<Game> getGamesByPlayer (String username){
-		List<Game> listGame = new ArrayList();
 		return gameDao.findByPlayer_username(username);
 	}
 

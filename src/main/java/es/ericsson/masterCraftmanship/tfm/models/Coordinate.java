@@ -3,7 +3,6 @@ package es.ericsson.masterCraftmanship.tfm.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
 
 public class Coordinate {
     private int row;

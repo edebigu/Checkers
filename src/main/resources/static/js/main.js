@@ -140,7 +140,7 @@ $(document).ready(function () {
 
     $('form').on('click', '#move', function () {
         optionsGame.style.display = "none";
-        getTurn();
+        setTurn();
 
     });
 
@@ -302,18 +302,6 @@ function startLogout(session) {
     }
     sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
 
-}
-
-function getTurn() {
-    var apiURL = "http://localhost:8080/game/" + player + "/getTurn";
-    var callbacks = {
-        successCallback: function (data) {
-            setTurn();
-        },
-        doneCallback: function () {
-        }
-    };
-    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
 }
 
 function getBoard() {

@@ -17,14 +17,12 @@ import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
-import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
 
 @RestController
 @RequestMapping(PlayGameResource.IN_GAME)
 public class PlayGameResource {
 	
 	static final String IN_GAME = "/game";
-	static final String GET_TURN = "/getTurn";
 	static final String GET_STATUS = "/getStatus";
 	static final String MOVE= "/move";
 	static final String GET_GAMES= "/getGames";
@@ -37,12 +35,6 @@ public class PlayGameResource {
 	@Autowired
 	public PlayGameResource(PlayGameController playGameController) {
 		this.playGameController = playGameController;
-	}
-	
-	@GetMapping("/{username}/" + PlayGameResource.GET_TURN)
-	public ResponseEntity<TurnJson> getTurn (@PathVariable(name="username") String username) {
-		logger.info("Recibido get turn");
-		return  ResponseEntity.ok(this.playGameController.getTurn(username));
 	}
 	
 	@GetMapping("/{username}/" + PlayGameResource.GET_STATUS)

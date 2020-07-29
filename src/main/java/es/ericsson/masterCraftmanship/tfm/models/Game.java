@@ -209,7 +209,7 @@ public class Game {
 	}
 	
 	private Coordinate getAllowedOrigin() {
-		List<Coordinate> listUnblocked = new ArrayList();
+		List<Coordinate> listUnblocked = new ArrayList<Coordinate>();
 		Coordinate allowedOrigin = null;
 		for (Coordinate coordinate : this.getCoordinatesWithActualColor()) {
 			if (!this.isBlocked(coordinate)) {
@@ -224,7 +224,7 @@ public class Game {
 	}
 	
 	private Coordinate getAllowedTarget(Coordinate origin) {
-		List<Coordinate> targets = new ArrayList();
+		List<Coordinate> targets = new ArrayList<Coordinate>();
 		for (int i = 1; i <= 2; i++) {
 			for (Coordinate target : origin.getDiagonalCoordinates(i)) {
 				if (this.isCorrectPairMove(0, origin, target) == null) {
