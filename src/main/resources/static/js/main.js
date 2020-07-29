@@ -29,7 +29,7 @@ let player;
 let gameName = "";
 let boardView;
 let numberOfCells;
-let gameView = new GameView();
+let view = new View();
 
 
 $(document).ready(function () {
@@ -65,7 +65,7 @@ $(document).ready(function () {
     });
 
     $('form').on('click', '#btn_cancelLogin', function (evento) {
-        gameView.addInitGameView();
+        view.addInitGameView();
         evento.preventDefault();
     });
 
@@ -215,7 +215,7 @@ function startApp() {
 
     var callbacks = {
         successCallback: function (data) {
-            gameView.addInitGameView();
+            view.addInitGameView();
         },
         doneCallback: function () {
         }
@@ -228,7 +228,7 @@ function startLogin() {
     var apiURL = "http://localhost:8080/start/login";
     var callbacks = {
         successCallback: function (data) {
-            gameView.addLoginView();
+            view.addLoginView();
         },
         doneCallback: function () {
         }
@@ -240,7 +240,7 @@ function startRegister() {
     var apiURL = "http://localhost:8080/start/register";
     var callbacks = {
         successCallback: function (data) {
-            gameView.addRegisterView();
+            view.addRegisterView();
         },
         doneCallback: function () {
         }
@@ -256,8 +256,8 @@ function loginUser(user) {
             alert(data.msg);
             optionForm.reset();
             if (data.error === json_result.OK) {
-                gameView.addUserLogin(data.username);
-                gameView.addCloseGameView();
+                view.addUserLogin(data.username);
+                view.addCloseGameView();
                 player = data.username;
             }
         },
@@ -276,7 +276,7 @@ function registerUser(user) {
             alert(data.msg);
             optionForm.reset();
             if (data.error === json_result.CREATED) {
-                gameView.addInitGameView();
+                view.addInitGameView();
             }
         },
         doneCallback: function () { }
@@ -293,8 +293,8 @@ function startLogout(session) {
             player = "";
         },
         doneCallback: function () {
-            gameView.addInitGameView();
-            gameView.removeUserLogin();
+            view.addInitGameView();
+            view.removeUserLogin();
         }
     }
     sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
@@ -330,7 +330,7 @@ function getGames(typeView) {
     var apiURL = "http://localhost:8080/game/getGames/" + player;
     var callbacks = {
         successCallback: function (data) {
-            gameView.addSaveGameView(data.listGame, typeView);
+            view.addSaveGameView(data.listGame, typeView);
         },
         doneCallback: function () {
         }
@@ -351,7 +351,7 @@ function sendMove(movement) {
                     closeWithoutSave: "true"
                 }
                 closeGame(session);
-                gameView.addCloseGameView();
+                view.addCloseGameView();
 
                 containerBoard.style.display = "none";
             }
@@ -379,7 +379,7 @@ function createGame(session) {
         successCallback: function (data) {
             if (data.error === json_result.CREATED) {
                 gameName = "";
-                gameView.addStartGameView();
+                view.addStartGameView();
             }
         },
         doneCallback: function () {
@@ -437,7 +437,7 @@ function openGame(session) {
             if (data.error === json_result.OK) {
                 gameName = session.gameName;
                 optionForm.style.display = "none";
-                gameView.addStartGameView();
+                view.addStartGameView();
 
             }
             else {
@@ -467,7 +467,7 @@ function closeGame(session) {
                 }
             }
             else {
-                gameView.addCloseGameView();
+                view.addCloseGameView();
                 removeGame();
             }
         },
@@ -522,196 +522,10 @@ function error(url) {
     $('#checkers').html(json);
 }
 
-/*function removeChilds(container) {
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
-    }
-}
-
-
-
-function addButton(container, id, text) {
-    let button = document.createElement('button');
-    button.setAttribute('class', 'btn btn-primary btn-block');
-    button.setAttribute('id', id);
-    button.setAttribute('name', id);
-    button.setAttribute('type', 'submit');
-    button.appendChild(document.createTextNode(text));
-
-    container.appendChild(button);
-}
-
-function addInput(container, type, id, placeholder, disabled) {
-    let input = document.createElement('input');
-    input.classList.add('form-control');
-    input.setAttribute('type', type);
-    input.setAttribute('id', id);
-    input.setAttribute('name', type);
-    input.setAttribute('placeholder', placeholder);
-    if (disabled) {
-        input.setAttribute('disabled', disabled);
-    }
-    container.appendChild(input);
-}
-
-function addInitGameView() {
-
-    let title = document.getElementById("title");
-    title.textContent = "Click one option";
-
-    let options = document.getElementById('options');
-    removeChilds(options);
-
-    addButton(options, 'btn_login', 'Login');
-    addButton(options, 'btn_register', 'Register');
-
-    optionForm.appendChild(options);
-}
-
-function addLoginForm() {
-
-    let title = document.getElementById("title");
-    title.textContent = "Login Form";
-
-    let options = document.getElementById('options');
-
-    let userName = document.createElement('div');
-    userName.classList.add('form-group');
-    addInput(userName, 'text', 'username', 'User name');
-
-    let password = document.createElement('div');
-    password.classList.add('form-group');
-    addInput(password, 'password', 'pwd', 'Password');
-
-    let submit = document.createElement('div');
-    submit.classList.add('form-group');
-    addButton(submit, 'btn_submitLogin', 'Submit');
-    addButton(submit, 'btn_cancelLogin', 'Cancel');
-
-    removeChilds(options);
-
-    options.appendChild(userName);
-    options.appendChild(password);
-    options.appendChild(submit);
-    optionForm.appendChild(options);
-
-}
-
-function addRegisterForm() {
-
-    let title = document.getElementById("title");
-    title.textContent = "Register Form";
-
-    let options = document.getElementById('options');
-
-    let userName = document.createElement('div');
-    userName.classList.add('form-group');
-    addInput(userName, 'text', 'username', 'User name');
-
-    let password = document.createElement('div');
-    password.classList.add('form-group');
-    addInput(password, 'password', 'pwd', 'Password');
-
-    let password2 = document.createElement('div');
-    password2.classList.add('form-group');
-    addInput(password2, 'password', 'pwd2', 'Password');
-
-    let submit = document.createElement('div');
-    submit.classList.add('form-group');
-    addButton(submit, 'btn_submitRegister', 'Submit');
-    addButton(submit, 'btn_cancelRegister', 'Cancel');
-
-    removeChilds(options);
-
-    options.appendChild(userName);
-    options.appendChild(password);
-    options.appendChild(password2);
-    options.appendChild(submit);
-    optionForm.appendChild(options);
-
-}
-
-function addCloseGameView() {
-
-    let title = document.getElementById("title");
-    title.textContent = "Click one option";
-
-    let options = document.getElementById('options');
-    removeChilds(options);
-
-    addButton(options, 'btn_createGame', 'Create Game');
-    addButton(options, 'btn_openGame', 'Open Game');
-    addButton(options, 'btn_logout', 'Logout');
-    optionForm.appendChild(options);
-}
-
-function addUserLogin(playerName) {
-
-    let player = document.createElement('div');
-    player.setAttribute('id', 'playerContent');
-    player.setAttribute('class', 'col-sm-3 col-sm-offset-3 user');
-
-    let h1 = document.createElement('h1');
-
-    let span = document.createElement('span');
-    span.setAttribute('id', 'player');
-    span.appendChild(document.createTextNode(playerName));
-
-    h1.appendChild(span);
-    player.appendChild(h1);
-
-    checkers.insertBefore(player, optionForm);
-
-}
-
-function addSaveGameView(listGames, typeView) {
-    let options = document.getElementById('options');
-    removeChilds(options);
-
-    for (let i = 0; i < listGames.length; i++) {
-        let inputGroup = document.createElement('div');
-        inputGroup.classList.add('input-group');
-        addInput(inputGroup, 'text', 'game' + i, listGames[i], true);
-        options.appendChild(inputGroup);
-    }
-    let gameName = document.createElement('div');
-    gameName.classList.add('form-group');
-    addInput(gameName, 'text', 'gameName', 'Enter name');
-
-    options.appendChild(gameName);
-
-    let btnGroup = document.createElement('div');
-    btnGroup.classList.add('form-group');
-    addButton(btnGroup, 'btn_submit' + typeView + 'Game', 'Submit');
-    addButton(btnGroup, 'btn_cancel' + typeView + 'Game', 'Cancel');
-    options.appendChild(btnGroup);
-}
-
-function removeUserLogin() {
-    let parent = document.getElementById('checkers');
-    let childPlayer = document.getElementById('playerContent');
-    parent.removeChild(childPlayer);
-}
-
-
-function startGame() {
-    containerForm.removeAttribute('style');
-    containerBoard.removeAttribute('style');
-    formContainer.removeAttribute('style');
-    optionsGame.removeAttribute('style');
-    formCoordSelection.style.display = "none";
-    boardView = new BoardView(scoreBoard);
-    boardView.addTable(containerBoard);
-    boardView.addPlayer(player);
-    boardView.addOptionsGame(optionsGame);
-    boardView.addForm(formCoordSelection);
-    getBoard();
-}*/
-
 function removeGame() {
-    gameView.removeChilds(containerBoard);
-    gameView.removeChilds(optionsGame);
-    gameView.removeChilds(formCoordSelection);
+    view.removeChilds(containerBoard);
+    view.removeChilds(optionsGame);
+    view.removeChilds(formCoordSelection);
 }
 
 function setTurn() {
@@ -719,20 +533,9 @@ function setTurn() {
     boardView.enableAll();
     alert("Click on piece to move");
     boardView.onMark = cellId => {
-        //addFormChooseCoordinates(cellId);
         let childCoord = document.getElementById('selectedCoord');
         boardView.setCoordenada(cellId, childCoord);
         formCoordSelection.removeAttribute('style');
     };
 }
 
-/*function addFormChooseCoordinates(cellId) {
-    //let parentCoord = document.getElementById('form_coord');
-    let childCoord = document.getElementById('selectedCoord');
-    boardView.setCoordenada(cellId, childCoord);
-    formCoordSelection.removeAttribute('style');
-}*/
-
-/*function updateBoard(data) {
-    boardView.updateBoard(data);
-}*/

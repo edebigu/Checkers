@@ -1,4 +1,4 @@
-class GameView {
+class View {
 
     constructor() {
 
@@ -187,6 +187,4 @@ class GameView {
         parent.removeChild(childPlayer);
     }
     
-    
-
 }
