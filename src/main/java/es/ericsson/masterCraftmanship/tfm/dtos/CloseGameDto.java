@@ -1,4 +1,4 @@
-package es.ericsson.masterCraftmanship.tfm.views;
+package es.ericsson.masterCraftmanship.tfm.dtos;
 
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 

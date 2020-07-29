@@ -5,11 +5,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import es.ericsson.masterCraftmanship.tfm.dtos.CloseGameDto;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.services.GameDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
-import es.ericsson.masterCraftmanship.tfm.views.CloseGameDto;
-import es.ericsson.masterCraftmanship.tfm.views.Error;
+import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
@@ -34,7 +34,7 @@ public class CloseGameController {
 		if (!sessionDaoService.isSavedSession(operationGameDto.getUsername()) && !operationGameDto.isCloseWithoutSave())
 		{
 			response.setMsg(Message.CLOSE_GAME_UNSUCCESS);
-			response.setError(Error.NOT_FOUND);
+			response.setError(ErrorView.NOT_FOUND);
 
 		}
 		else {
@@ -44,7 +44,7 @@ public class CloseGameController {
 			}
 			sessionDaoService.saveSessionGame(operationGameDto.getUsername(), null);
 			response.setMsg(Message.CLOSE_GAME_SUCCESS);
-			response.setError(Error.OK);
+			response.setError(ErrorView.OK);
 			
 		}
 

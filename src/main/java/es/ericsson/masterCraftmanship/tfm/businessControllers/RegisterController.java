@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
 import es.ericsson.masterCraftmanship.tfm.services.PlayerDaoService;
-import es.ericsson.masterCraftmanship.tfm.views.Error;
+import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
@@ -28,11 +28,11 @@ public class RegisterController {
     	Player player = new Player (playerDto.getUsername(), playerDto.getPassword());
     	if (playerDaoService.savePlayer(playerDto.getUsername(), playerDto.getPassword()) != null) {
     		resultRegister.setMsg(Message.REGISTER_SUCCESSFULL);
-    		resultRegister.setError(Error.CREATED);
+    		resultRegister.setError(ErrorView.CREATED);
     	}
     	else {
     		resultRegister.setMsg(Message.REGISTER_UNSUCCESSFULL);
-    		resultRegister.setError(Error.CONFLICT);
+    		resultRegister.setError(ErrorView.CONFLICT);
     	}
     	resultRegister.setUsername(player.getUsername());
     	return resultRegister;

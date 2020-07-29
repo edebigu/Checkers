@@ -23,7 +23,7 @@ public class CreateGameJson {
 	public String getError() {
 		return error;
 	}
-	public void setError(Error error) {
+	public void setError(ErrorView error) {
 		this.error = error.getError();
 	}
 	public String getGameName() {

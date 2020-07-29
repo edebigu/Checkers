@@ -1,6 +1,6 @@
 package es.ericsson.masterCraftmanship.tfm.views;
 
-public enum Error {
+public enum ErrorView {
 	    OK("OK"),
 		CREATED("CREATED"),
 		NO_CONTENT ("NO_CONTENT"),
@@ -12,7 +12,7 @@ public enum Error {
 		
 		private String error;
 		
-		private Error(String error) {
+		private ErrorView(String error) {
 			this.error = error;
 		}
 		

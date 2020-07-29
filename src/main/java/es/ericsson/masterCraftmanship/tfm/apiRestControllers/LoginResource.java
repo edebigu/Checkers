@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ericsson.masterCraftmanship.tfm.businessControllers.LoginController;
 import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
-import es.ericsson.masterCraftmanship.tfm.views.Error;
+import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
@@ -43,7 +43,7 @@ public class LoginResource {
 		catch (BadRequestException e) {
 			ResponseJson resultLogin = new ResponseJson();
 			resultLogin.setMsg(Message.EMPTY_FIELD);
-			resultLogin.setError(Error.BAD_REQUEST);
+			resultLogin.setError(ErrorView.BAD_REQUEST);
 			return new ResponseEntity<ResponseJson>(resultLogin,HttpStatus.BAD_REQUEST);
 		}
 		

@@ -16,8 +16,9 @@ import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.models.Piece;
 import es.ericsson.masterCraftmanship.tfm.services.GameDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
+import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
-import es.ericsson.masterCraftmanship.tfm.views.MoveJson;
+import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
 import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
 
@@ -62,9 +63,8 @@ public class PlayGameController {
 		return listSquare;
 	}
 
-	public MoveJson move(String playerName, MoveDto movement) {
-		MoveJson moveResult = new MoveJson();
-		//Session sessionFound = sessionDao.findByPlayer_username(playerName);
+	public ResponseJson move(String playerName, MoveDto movement) {
+		ResponseJson moveResult = new ResponseJson();
 		Game game = sessionDaoService.getSessionGame(playerName);
 		Coordinate coordOrigin = new Coordinate(Integer.parseInt(movement.getOriginRow()),
 				Integer.parseInt(movement.getOriginCol()));
@@ -74,14 +74,14 @@ public class PlayGameController {
 		Error error = game.move(coordinates);
 		moveResult.setUsername(playerName);
 		if (error != null) {
-			moveResult.setError(error.toString());
+			moveResult.setError(error);
 		} else {
 			if (error == null && game.isBlocked()) {
 				if (game.getTurnColor() == Color.WHITE) {
-					moveResult.setError(Error.LOST_MESSAGE.toString());
+					moveResult.setError(Error.LOST_MESSAGE);
 
 				} else {
-					moveResult.setError(Error.LOST_MESSAGE_MACHINE.toString());
+					moveResult.setError(Error.LOST_MESSAGE_MACHINE);
 					moveResult.setUsername("machine");
 				}
 			}
@@ -93,13 +93,8 @@ public class PlayGameController {
 	
 	public GameListJson getGames(String username) {
 		GameListJson result = new GameListJson();
-		//Player player = playerDao.findByUsername(playerName);
 		result.setUsername(username);
-		//List<Game> listGame = gameDao.findByPlayer(player);
 		result.setListGame(gameDaoService.getGamesByPlayer(username));
-		/*for (Game game : gameDaoService.getGamesByPlayer(username)) {
-				result.setListGame(game.getName());
-		}*/
 		return result;
 	}
 }

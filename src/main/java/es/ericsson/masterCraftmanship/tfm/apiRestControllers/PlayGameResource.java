@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ericsson.masterCraftmanship.tfm.businessControllers.PlayGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
-import es.ericsson.masterCraftmanship.tfm.views.MoveJson;
+import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
 import es.ericsson.masterCraftmanship.tfm.views.TurnJson;
 
@@ -52,7 +52,7 @@ public class PlayGameResource {
 	}
 	
 	@PostMapping(PlayGameResource.MOVE + "/{player}")
-	public ResponseEntity<MoveJson> move (@PathVariable(name="player") String player, @RequestBody MoveDto movementDto ) {
+	public ResponseEntity<ResponseJson> move (@PathVariable(name="player") String player, @RequestBody MoveDto movementDto ) {
 		logger.info("Recibido move");
 		return  ResponseEntity.ok(this.playGameController.move(player, movementDto));
 		

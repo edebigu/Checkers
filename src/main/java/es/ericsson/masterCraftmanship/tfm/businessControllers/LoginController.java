@@ -10,7 +10,7 @@ import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
 import es.ericsson.masterCraftmanship.tfm.services.PlayerDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
-import es.ericsson.masterCraftmanship.tfm.views.Error;
+import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
@@ -33,11 +33,11 @@ public class LoginController {
     	Player userFound = playerDaoService.findPlayer(playerDto.getUsername(), playerDto.getPassword());
     	if (userFound != null && sessionDaoService.saveSession(userFound)) {
 			resultLogin.setMsg(Message.LOGIN_SUCCESSFULL);
-			resultLogin.setError(Error.OK);					
+			resultLogin.setError(ErrorView.OK);					
         } 
 	   else {
         	resultLogin.setMsg(Message.LOGIN_UNSUCCESSFULL);
-        	resultLogin.setError(Error.NOT_FOUND);
+        	resultLogin.setError(ErrorView.NOT_FOUND);
         }
     	resultLogin.setUsername(playerDto.getUsername());
     	return resultLogin;

@@ -9,7 +9,7 @@ import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.services.PlayerDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.views.CreateGameJson;
-import es.ericsson.masterCraftmanship.tfm.views.Error;
+import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 
 @Controller
@@ -30,12 +30,12 @@ public class CreateGameController {
 		CreateGameJson resultCreateGame = new CreateGameJson();
 		if (sessionDaoService.createGameSession(playerDaoService.findPlayerByUsername(sessionDto.getUsername()))){
 			resultCreateGame.setMsg(Message.CREATE_GAME_SUCCESSFULL);
-			resultCreateGame.setError(Error.CREATED);
+			resultCreateGame.setError(ErrorView.CREATED);
 			resultCreateGame.setGameName("unsavedGame");
 		}
 		else {
 			resultCreateGame.setMsg(Message.CREATE_GAME_UNSUCCESSFULL);
-			resultCreateGame.setError(Error.NOT_FOUND);
+			resultCreateGame.setError(ErrorView.NOT_FOUND);
 		}
 		resultCreateGame.setUsername(sessionDto.getUsername());
 		return resultCreateGame;	

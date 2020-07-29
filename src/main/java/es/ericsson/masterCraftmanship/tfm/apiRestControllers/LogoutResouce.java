@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ericsson.masterCraftmanship.tfm.businessControllers.LogoutController;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
-import es.ericsson.masterCraftmanship.tfm.views.Error;
+import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
@@ -44,7 +44,7 @@ public class LogoutResouce {
 		catch (BadRequestException e) {
 			ResponseJson resultJson = new ResponseJson();
 			resultJson.setMsg(Message.EMPTY_FIELD);
-			resultJson.setError(Error.BAD_REQUEST);
+			resultJson.setError(ErrorView.BAD_REQUEST);
 			return new ResponseEntity<ResponseJson>(resultJson,HttpStatus.BAD_REQUEST);
 		
 		}
