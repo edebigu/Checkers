@@ -1,349 +1,192 @@
 class GameView {
 
-    constructor(scoreBoard) {
-
-        this.scoreBoard = scoreBoard;
-        this.cells = [];
-        this.players = [];
-        this.ready = false;
-
-        this.createTable();
-    }
-
-    createTable() {
-        this.table = document.createElement('table');
-        this.table.setAttribute('id', 'playerBoard');
-        this.table.addEventListener('click', event => this.markEvent(event));
-        this.table.classList.add('gameBoard');
-
-        let rowCol = document.createElement('td');
-        rowCol.classList.add('boardRow');
-        rowCol.classList.add('bgWhite');
-        rowCol.setAttribute('colspan', 22);
-
-        let row = document.createElement('tr');
-
-        let cell = document.createElement('td');
-        cell.classList.add('gameCell');
-        cell.classList.add('notActive');
-        cell.setAttribute('marked', 'false');
-        cell.setAttribute('data-intent', 'gameCell');
-
-        for (let i = 0; i < 64; i++) {
-            let newCell = cell.cloneNode(true);
-            newCell.setAttribute('id', i);
-            this.cells.push(newCell);
-        }
-
-        this.createTableHeadRow(this.table);
-
-        let counter = 0
-        let letter = 'a';
-        for (let r, i = 0; i < 64; i += 8) {
-            let letterNum = letter.charCodeAt();
-            let counterCol = 0;
-            r = row.cloneNode(false);
-            this.createTableHeadColum(r, counter);
-
-            for (let j = i; j < i + 8; j++) {
-                this.cells[j].setAttribute('data-col', counterCol);
-                this.cells[j].setAttribute('data-row', counter);
-                if (counter % 2 == 0) {
-                    if (j % 2 == 0) {
-                        this.cells[j].classList.add('tenue');
-                    }
-                    else {
-                        this.cells[j].classList.add('opaca');
-                    }
-
-                }
-                else {
-                    if (j % 2 == 0) {
-                        this.cells[j].classList.add('opaca');
-
-                    }
-                    else {
-                        this.cells[j].classList.add('tenue');
-                    }
-
-                }
-                r.appendChild(this.cells[j]);
-                counterCol++;
-            }
-            this.createTableHeadColum(r, counter);
-            this.table.appendChild(r);
-            counter++;
-        }
-        this.createTableHeadRow(this.table);
-    }
-
-    createTableHeadRow() {
-        let row = document.createElement('tr');
-        let rowCol = document.createElement('td');
-        let coordenada = row.cloneNode(false);
-        let cellHead = document.createElement('td');
-        cellHead.classList.add('gameCell');
-        cellHead.classList.add('notActive');
-        cellHead.setAttribute('marked', 'false');
-        coordenada.appendChild(cellHead);
-        let letter = 'a';
-        let letterNum = letter.charCodeAt();
-        for (let i = 1; i < 9; i++) {
-            cellHead = document.createElement('td');
-            cellHead.classList.add('gameCell');
-            cellHead.classList.add('notActive');
-            cellHead.classList.add('headTable');
-            cellHead.setAttribute('marked', 'false');
-            cellHead.appendChild(document.createTextNode(String.fromCharCode(letterNum)));
-            coordenada.appendChild(cellHead);
-            letterNum++;
-        }
-
-        cellHead = document.createElement('td');
-        cellHead.classList.add('gameCell');
-        cellHead.classList.add('notActive');
-        cellHead.setAttribute('marked', 'false');
-        coordenada.appendChild(cellHead);
-
-        this.table.appendChild(coordenada);
+    constructor() {
 
     }
 
-    createTableHeadColum(r, counter) {
-        let cellHead = document.createElement('td');
-        cellHead.classList.add('gameCell');
-        cellHead.classList.add('notActive');
-        cellHead.classList.add('headTable');
-        cellHead.setAttribute('marked', 'false');
-        cellHead.appendChild(document.createTextNode(counter + 1));
-        r.appendChild(cellHead);
-    }
-
-    createPawn(color, cell) {
-        let pawn;
-        if (color === 'WHITE') {
-            pawn = '\u{026C0}';
-            cell.classList.add('whitePiece');
-        }
-        else if (color === 'BLACK') {
-            pawn = '\u{026C2}'
-            cell.classList.add('blackPiece');
-        }
-
-        cell.appendChild(document.createTextNode(pawn));
-    }
-
-    createQueen(color, cell) {
-        let queen;
-        if (color === 'WHITE') {
-            queen = '\u{026C1}';
-            cell.classList.add('whitePiece');
-        }
-        else if (color === 'BLACK') {
-            queen = '\u{026C3}';
-            cell.classList.add('blackPiece');
-        }
-        cell.appendChild(document.createTextNode(queen));
-    }
-
-    addTable(container) {
-        container.appendChild(this.table);
-    }
-
-
-    disableAll() {
-        for (let cell of this.cells) {
-            cell.classList.add('notActive');
-            cell.setAttribute('active', 'false');
+    removeChilds(container) {
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
         }
     }
-
-    enableAll() {
-        for (let cell of this.cells) {
-            cell.classList.remove('notActive');
-            cell.setAttribute('marked', 'false');
-            cell.setAttribute('active', 'true');
-        }
-    }
-
-    onMark(cellId) {
-
-    }
-
-    markEvent(event) {
-        let target = event.target;
-
-        if (this.ready && target.getAttribute('data-intent') === 'gameCell' &&
-            target.getAttribute('active') === 'true') {
-            this.onMark(this.cells.indexOf(target));
-            this.disableAll();
-        }
-    }
-
-
-    updateBoard(data) {
-        for (let i = 0; i < data.length; i++) {
-            let cellId = this.getCellId(data[i].coordX, data[i].coordY);
-            let cell = this.cells[cellId];
-            cell.removeAttribute('data-color');
-            cell.classList.remove('whitePiece');
-            cell.classList.remove('blackPiece');
-            cell.textContent = '';
-            if (data[i].color !== null && data[i].piece !== null) {
-                if (data[i].piece == data[i].piece.toLowerCase()) {
-                    this.createPawn(data[i].color, cell);
-                }
-                else {
-                    this.createQueen(data[i].color, cell);
-                }
-                cell.setAttribute('data-color', data[i].color);
-            }
-        }
-    }
-
-    addOptionsGame(container) {
-        let divButton = document.createElement('div');
-        divButton.setAttribute('class', 'form-group');
-        this.addButton(divButton, 'move', 'Move');
-        this.addButton(divButton, 'saveGame', 'Save Game');
-        this.addButton(divButton, 'closeGame', 'Close Game');
-        container.appendChild(divButton);
-    }
-
+    
     addButton(container, id, text) {
         let button = document.createElement('button');
         button.setAttribute('class', 'btn btn-primary btn-block');
         button.setAttribute('id', id);
         button.setAttribute('name', id);
-        button.setAttribute('type', 'button');
+        button.setAttribute('type', 'submit');
         button.appendChild(document.createTextNode(text));
-
+    
         container.appendChild(button);
     }
-
-
-    addForm(container) {
-        this.addSelectRow(container);
-        this.addSelectColum(container);
-        this.addCoordenada(container);
-        this.addButtonsForm(container);
-    }
-
-    setCoordenada(cellId, container) {
-        let cell = this.cells[cellId];
-        container.setAttribute('placeholder', cell.getAttribute('data-col') + cell.getAttribute('data-row'));
-        container.setAttribute('data-col', cell.getAttribute('data-col'));
-        container.setAttribute('data-row', cell.getAttribute('data-row'));
-        container.setAttribute('data-cellId', cellId);
-    }
-
-    addCoordenada(container) {
+    
+    addInput(container, type, id, placeholder, disabled) {
         let input = document.createElement('input');
-        input.setAttribute('type', 'text');
-        input.setAttribute('name', 'selectedCoord');
-        input.setAttribute('class', 'form-control');
-        input.setAttribute('id', 'selectedCoord');
-        input.setAttribute('aria-describedby', 'basic-addon');
-        input.setAttribute('disabled', true);
-        input.style.display = "none";
+        input.classList.add('form-control');
+        input.setAttribute('type', type);
+        input.setAttribute('id', id);
+        input.setAttribute('name', type);
+        input.setAttribute('placeholder', placeholder);
+        if (disabled) {
+            input.setAttribute('disabled', disabled);
+        }
         container.appendChild(input);
-
     }
 
-    addSelectColum(container) {
+    addStartGameView() {
+        containerForm.removeAttribute('style');
+        containerBoard.removeAttribute('style');
+        formContainer.removeAttribute('style');
+        optionsGame.removeAttribute('style');
+        formCoordSelection.style.display = "none";
+        boardView = new BoardView(scoreBoard);
+        boardView.addTable(containerBoard);
+        boardView.addPlayer(player);
+        boardView.addOptionsGame(optionsGame);
+        boardView.addForm(formCoordSelection);
+        getBoard();
+    }
 
-        let newColum = document.createElement('div');
-        let label = document.createElement('label');
-        label.setAttribute('class', 'description');
-        label.setAttribute('for', 'newColum');
-        label.appendChild(document.createTextNode('Colum '));
+    addInitGameView() {
 
-        newColum.appendChild(label);
-
-        let select = document.createElement('select');
-        select.setAttribute('class', 'element select medium');
-        select.setAttribute('id', 'newColum');
-        select.setAttribute('name', 'newColum');
-
-        this.addSelectOption(select, '', 'Choose one option', true);
-
-        let letter = 'a';
-        let letterNum = letter.charCodeAt();
-        for (let i = 0; i < 8; i++) {
-            this.addSelectOption(select, i, String.fromCharCode(letterNum));
-            letterNum++;
+        let title = document.getElementById("title");
+        title.textContent = "Click one option";
+    
+        let options = document.getElementById('options');
+        this.removeChilds(options);
+    
+        this.addButton(options, 'btn_login', 'Login');
+        this.addButton(options, 'btn_register', 'Register');
+    
+        optionForm.appendChild(options);
+    }
+    
+    addLoginView() {
+    
+        let title = document.getElementById("title");
+        title.textContent = "Login Form";
+    
+        let options = document.getElementById('options');
+    
+        let userName = document.createElement('div');
+        userName.classList.add('form-group');
+        this.addInput(userName, 'text', 'username', 'User name');
+    
+        let password = document.createElement('div');
+        password.classList.add('form-group');
+        this.addInput(password, 'password', 'pwd', 'Password');
+    
+        let submit = document.createElement('div');
+        submit.classList.add('form-group');
+        this.addButton(submit, 'btn_submitLogin', 'Submit');
+        this.addButton(submit, 'btn_cancelLogin', 'Cancel');
+    
+        this.removeChilds(options);
+    
+        options.appendChild(userName);
+        options.appendChild(password);
+        options.appendChild(submit);
+        optionForm.appendChild(options);
+    
+    }
+    
+    addRegisterView() {
+    
+        let title = document.getElementById("title");
+        title.textContent = "Register Form";
+    
+        let options = document.getElementById('options');
+    
+        let userName = document.createElement('div');
+        userName.classList.add('form-group');
+        this.addInput(userName, 'text', 'username', 'User name');
+    
+        let password = document.createElement('div');
+        password.classList.add('form-group');
+        this.addInput(password, 'password', 'pwd', 'Password');
+    
+        let password2 = document.createElement('div');
+        password2.classList.add('form-group');
+        this.addInput(password2, 'password', 'pwd2', 'Password');
+    
+        let submit = document.createElement('div');
+        submit.classList.add('form-group');
+        this.addButton(submit, 'btn_submitRegister', 'Submit');
+        this.addButton(submit, 'btn_cancelRegister', 'Cancel');
+    
+        this.removeChilds(options);
+    
+        options.appendChild(userName);
+        options.appendChild(password);
+        options.appendChild(password2);
+        options.appendChild(submit);
+        optionForm.appendChild(options);
+    
+    }
+    
+    addCloseGameView() {
+    
+        let title = document.getElementById("title");
+        title.textContent = "Click one option";
+    
+        let options = document.getElementById('options');
+        this.removeChilds(options);
+    
+        this.addButton(options, 'btn_createGame', 'Create Game');
+        this.addButton(options, 'btn_openGame', 'Open Game');
+        this.addButton(options, 'btn_logout', 'Logout');
+        optionForm.appendChild(options);
+    }
+    
+    addUserLogin(playerName) {
+    
+        let player = document.createElement('div');
+        player.setAttribute('id', 'playerContent');
+        player.setAttribute('class', 'col-sm-3 col-sm-offset-3 user');
+    
+        let h1 = document.createElement('h1');
+    
+        let span = document.createElement('span');
+        span.setAttribute('id', 'player');
+        span.appendChild(document.createTextNode(playerName));
+    
+        h1.appendChild(span);
+        player.appendChild(h1);
+    
+        checkers.insertBefore(player, optionForm);
+    
+    }
+    
+    addSaveGameView(listGames, typeView) {
+        let options = document.getElementById('options');
+        this.removeChilds(options);
+    
+        for (let i = 0; i < listGames.length; i++) {
+            let inputGroup = document.createElement('div');
+            inputGroup.classList.add('input-group');
+            this.addInput(inputGroup, 'text', 'game' + i, listGames[i], true);
+            options.appendChild(inputGroup);
         }
-
-        newColum.appendChild(select);
-        container.appendChild(newColum);
+        let gameName = document.createElement('div');
+        gameName.classList.add('form-group');
+        this.addInput(gameName, 'text', 'gameName', 'Enter name');
+    
+        options.appendChild(gameName);
+    
+        let btnGroup = document.createElement('div');
+        btnGroup.classList.add('form-group');
+        this.addButton(btnGroup, 'btn_submit' + typeView + 'Game', 'Submit');
+        this.addButton(btnGroup, 'btn_cancel' + typeView + 'Game', 'Cancel');
+        options.appendChild(btnGroup);
     }
-
-    addSelectOption(container, value, text, defaultOption) {
-
-        let option = document.createElement('option');
-        option.setAttribute('value', value);
-        if (defaultOption) {
-            option.setAttribute('selected', true);
-            option.setAttribute('disabled', true);
-            option.setAttribute('hiden', true);
-        }
-        option.appendChild(document.createTextNode(text));
-        container.appendChild(option);
-
+    
+    removeUserLogin() {
+        let parent = document.getElementById('checkers');
+        let childPlayer = document.getElementById('playerContent');
+        parent.removeChild(childPlayer);
     }
+    
+    
 
-    addSelectRow(container) {
-
-        let newRow = document.createElement('div');
-
-        let label = document.createElement('label');
-        label.setAttribute('class', 'description');
-        label.setAttribute('for', 'newRow');
-        label.appendChild(document.createTextNode('Row '));
-
-        newRow.appendChild(label);
-
-        let select = document.createElement('select');
-        select.setAttribute('class', 'element select medium');
-        select.setAttribute('id', 'newRow');
-        select.setAttribute('name', 'newRow');
-
-        this.addSelectOption(select, '', 'Choose one option', true);
-
-        for (let i = 0; i < 8; i++) {
-            this.addSelectOption(select, i, i + 1);
-        }
-
-        newRow.appendChild(select);
-        container.appendChild(newRow);
-
-    }
-
-    addButtonsForm(container) {
-        let divButton = document.createElement('div');
-        divButton.setAttribute('class', 'input-group');
-        this.addButton(divButton, 'send', 'Submit');
-        this.addButton(divButton, 'cancelCoord', 'Cancel');
-        container.appendChild(divButton);
-    }
-
-    addPlayer(player) {
-        this.players.push(player);
-        this.players.push("machine");
-    }
-
-    removePlayer() {
-        this.players.pop();
-        this.players.pop();
-    }
-
-    getCellId(dataRow, dataCol) {
-        for (let cell of this.cells) {
-            if (cell.getAttribute('data-row') == dataRow && cell.getAttribute('data-col') == dataCol) {
-                return cell.getAttribute('id');
-            }
-        }
-
-    }
 }
-

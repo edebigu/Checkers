@@ -27,8 +27,9 @@ let scoreBoard = [
 
 let player;
 let gameName = "";
-let gameView;
+let boardView;
 let numberOfCells;
+let gameView = new GameView();
 
 
 $(document).ready(function () {
@@ -64,7 +65,7 @@ $(document).ready(function () {
     });
 
     $('form').on('click', '#btn_cancelLogin', function (evento) {
-        addInitGameView();
+        gameView.addInitGameView();
         evento.preventDefault();
     });
 
@@ -126,7 +127,7 @@ $(document).ready(function () {
 
     $('form').on('click', '#send', function () {
         formCoordSelection.style.display = "none";
-        gameView.disableAll();
+        boardView.disableAll();
         var movement = { originRow: $('#selectedCoord').attr('data-row'), originCol: $('#selectedCoord').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value') };
         sendMove(movement);
         formCoordSelection.reset();
@@ -214,7 +215,7 @@ function startApp() {
 
     var callbacks = {
         successCallback: function (data) {
-            addInitGameView();
+            gameView.addInitGameView();
         },
         doneCallback: function () {
         }
@@ -227,7 +228,7 @@ function startLogin() {
     var apiURL = "http://localhost:8080/start/login";
     var callbacks = {
         successCallback: function (data) {
-            addLoginForm();
+            gameView.addLoginView();
         },
         doneCallback: function () {
         }
@@ -239,7 +240,7 @@ function startRegister() {
     var apiURL = "http://localhost:8080/start/register";
     var callbacks = {
         successCallback: function (data) {
-            addRegisterForm();
+            gameView.addRegisterView();
         },
         doneCallback: function () {
         }
@@ -255,8 +256,8 @@ function loginUser(user) {
             alert(data.msg);
             optionForm.reset();
             if (data.error === json_result.OK) {
-                addUserLogin(data.username);
-                addCloseGameView();
+                gameView.addUserLogin(data.username);
+                gameView.addCloseGameView();
                 player = data.username;
             }
         },
@@ -275,7 +276,7 @@ function registerUser(user) {
             alert(data.msg);
             optionForm.reset();
             if (data.error === json_result.CREATED) {
-                addInitGameView();
+                gameView.addInitGameView();
             }
         },
         doneCallback: function () { }
@@ -292,8 +293,8 @@ function startLogout(session) {
             player = "";
         },
         doneCallback: function () {
-            addInitGameView();
-            removeUserLogin();
+            gameView.addInitGameView();
+            gameView.removeUserLogin();
         }
     }
     sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
@@ -316,7 +317,8 @@ function getBoard() {
     var apiURL = "http://localhost:8080/game/" + player + "/getStatus";
     var callbacks = {
         successCallback: function (data) {
-            updateBoard(data);
+            //updateBoard(data);
+            boardView.updateBoard(data);
         },
         doneCallback: function () {
         }
@@ -328,7 +330,7 @@ function getGames(typeView) {
     var apiURL = "http://localhost:8080/game/getGames/" + player;
     var callbacks = {
         successCallback: function (data) {
-            addSaveGameView(data.listGame, typeView);
+            gameView.addSaveGameView(data.listGame, typeView);
         },
         doneCallback: function () {
         }
@@ -349,7 +351,7 @@ function sendMove(movement) {
                     closeWithoutSave: "true"
                 }
                 closeGame(session);
-                addCloseGameView();
+                gameView.addCloseGameView();
 
                 containerBoard.style.display = "none";
             }
@@ -377,7 +379,7 @@ function createGame(session) {
         successCallback: function (data) {
             if (data.error === json_result.CREATED) {
                 gameName = "";
-                startGame();
+                gameView.addStartGameView();
             }
         },
         doneCallback: function () {
@@ -435,7 +437,7 @@ function openGame(session) {
             if (data.error === json_result.OK) {
                 gameName = session.gameName;
                 optionForm.style.display = "none";
-                startGame();
+                gameView.addStartGameView();
 
             }
             else {
@@ -465,7 +467,7 @@ function closeGame(session) {
                 }
             }
             else {
-                addCloseGameView();
+                gameView.addCloseGameView();
                 removeGame();
             }
         },
@@ -520,7 +522,7 @@ function error(url) {
     $('#checkers').html(json);
 }
 
-function removeChilds(container) {
+/*function removeChilds(container) {
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
@@ -698,36 +700,39 @@ function startGame() {
     formContainer.removeAttribute('style');
     optionsGame.removeAttribute('style');
     formCoordSelection.style.display = "none";
-    gameView = new GameView(scoreBoard);
-    gameView.addTable(containerBoard);
-    gameView.addPlayer(player);
-    gameView.addOptionsGame(optionsGame);
-    gameView.addForm(formCoordSelection);
+    boardView = new BoardView(scoreBoard);
+    boardView.addTable(containerBoard);
+    boardView.addPlayer(player);
+    boardView.addOptionsGame(optionsGame);
+    boardView.addForm(formCoordSelection);
     getBoard();
-}
+}*/
 
 function removeGame() {
-    removeChilds(containerBoard);
-    removeChilds(optionsGame);
-    removeChilds(formCoordSelection);
+    gameView.removeChilds(containerBoard);
+    gameView.removeChilds(optionsGame);
+    gameView.removeChilds(formCoordSelection);
 }
 
 function setTurn() {
-    gameView.ready = true;
-    gameView.enableAll();
+    boardView.ready = true;
+    boardView.enableAll();
     alert("Click on piece to move");
-    gameView.onMark = cellId => {
-        addFormChooseCoordinates(cellId);
+    boardView.onMark = cellId => {
+        //addFormChooseCoordinates(cellId);
+        let childCoord = document.getElementById('selectedCoord');
+        boardView.setCoordenada(cellId, childCoord);
+        formCoordSelection.removeAttribute('style');
     };
 }
 
-function addFormChooseCoordinates(cellId) {
-    let parentCoord = document.getElementById('form_coord');
+/*function addFormChooseCoordinates(cellId) {
+    //let parentCoord = document.getElementById('form_coord');
     let childCoord = document.getElementById('selectedCoord');
-    gameView.setCoordenada(cellId, childCoord);
+    boardView.setCoordenada(cellId, childCoord);
     formCoordSelection.removeAttribute('style');
-}
+}*/
 
-function updateBoard(data) {
-    gameView.updateBoard(data);
-}
+/*function updateBoard(data) {
+    boardView.updateBoard(data);
+}*/
