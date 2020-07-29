@@ -1,6 +1,5 @@
 package es.ericsson.masterCraftmanship.tfm.services;
 
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,11 +43,8 @@ public class SessionDaoService {
 	}
 	
 	public boolean isSavedSession(String username) {
-		return !this.getSessionGame(username).getName().equals("unsavedGame");
-		/*if (this.getSessionGame(username).getName().equals("unsavedGame")) {
-			return false;
-		}
-		return true;*/
+		return !this.getSessionGame(username).getName().equals("");
+
 	}
 	
 	public boolean saveSession (Player player) {
@@ -69,6 +65,10 @@ public class SessionDaoService {
 			return true;
 		}
 		return false;
+	}
+	
+	public void deleteAllSessions() {
+		sessionDao.deleteAll();
 	}
 	
 	

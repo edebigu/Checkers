@@ -29,7 +29,6 @@ public class CreateGameController {
 		CreateGameJson resultCreateGame = new CreateGameJson();
 		if (sessionDaoService.createGameSession(playerDaoService.findPlayerByUsername(sessionDto.getUsername()))){
 			resultCreateGame.setResult(Result.OK);
-			resultCreateGame.setGameName("unsavedGame");
 		}
 		else {
 			resultCreateGame.setResult(Result.NOT_FOUND);

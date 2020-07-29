@@ -2,14 +2,11 @@ package es.ericsson.masterCraftmanship.tfm.models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import es.ericsson.masterCraftmanship.tfm.businessControllers.PlayGameController;
 
 
 @Document(collection = "Game")
@@ -23,9 +20,6 @@ public class Game {
 	private Turn turn;
 	private Player player;
 	
-	
-	
-
 	Game(Board board) {
 		this.turn = new Turn();
 		this.board = board;
@@ -34,7 +28,7 @@ public class Game {
 	public Game() {
 		this(new Board());
 		this.reset();
-		this.gameName="unsavedGame";
+		this.gameName="";
 	}
 	
 	public Game(Game game) {

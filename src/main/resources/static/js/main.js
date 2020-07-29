@@ -252,12 +252,16 @@ function loginUser(user) {
 
     var callbacks = {
         successCallback: function (data) {
-            alert(data.msg);
+            
             optionForm.reset();
             if (data.result === json_result.OK) {
+                alert("Login success!!");
                 view.addUserLogin(data.username);
                 view.addCloseGameView();
                 player = data.username;
+            }
+            else {
+                alert("Login unsuccess");
             }
         },
         doneCallback: function () {
