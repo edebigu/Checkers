@@ -4,7 +4,7 @@ public class CreateGameJson {
 	
 	String username;
 	String gameName;
-	String error;
+	String result;
 	
 	public String getUsername() {
 		return username;
@@ -13,11 +13,11 @@ public class CreateGameJson {
 		this.username = username;
 	}
 	
-	public String getError() {
-		return error;
+	public String getResult() {
+		return result;
 	}
-	public void setError(ErrorView error) {
-		this.error = error.getError();
+	public void setResult(Result result) {
+		this.result = result.getResult();
 	}
 	public String getGameName() {
 		return gameName;

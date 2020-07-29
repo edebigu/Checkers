@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ericsson.masterCraftmanship.tfm.businessControllers.CloseGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.CloseGameDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
-import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
+import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -40,7 +40,7 @@ public class CloseGameResource {
 		}
 		catch (BadRequestException e) {
 			ResponseJson response = new ResponseJson();
-			response.setError(ErrorView.BAD_REQUEST);
+			response.setResult(Result.BAD_REQUEST);
 			response.setUsername(operationGameDto.getUsername());
 			return new ResponseEntity<ResponseJson>(response,HttpStatus.BAD_REQUEST);
 		}

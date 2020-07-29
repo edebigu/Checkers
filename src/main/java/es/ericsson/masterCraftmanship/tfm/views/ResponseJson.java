@@ -4,7 +4,7 @@ import es.ericsson.masterCraftmanship.tfm.models.Error;
 
 public class ResponseJson {
 	String username;
-	String error;
+	String result;
 	
 	public String getUsername() {
 		return username;
@@ -13,15 +13,15 @@ public class ResponseJson {
 		this.username = username;
 	}
 	
-	public String getError() {
-		return error;
+	public String getResult() {
+		return result;
 	}
-	public void setError (ErrorView error) {
-		this.error = error.getError();
+	public void setResult (Result result) {
+		this.result = result.getResult();
 	}
 	
 	public void setError (Error error) {
-		this.error = this.error.toString();
+		this.result = error.toString();
 	}
 
 }

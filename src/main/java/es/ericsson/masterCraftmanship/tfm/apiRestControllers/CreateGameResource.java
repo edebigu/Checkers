@@ -14,7 +14,7 @@ import es.ericsson.masterCraftmanship.tfm.businessControllers.CreateGameControll
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.CreateGameJson;
-import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
+import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -43,7 +43,7 @@ public class CreateGameResource {
 		}
 		catch (BadRequestException e) {
 			CreateGameJson resultCreateGame = new CreateGameJson();
-			resultCreateGame.setError(ErrorView.BAD_REQUEST);
+			resultCreateGame.setResult(Result.BAD_REQUEST);
 			resultCreateGame.setUsername(sessionDto.getUsername());
 			return new ResponseEntity<CreateGameJson>(resultCreateGame,HttpStatus.BAD_REQUEST);
 		

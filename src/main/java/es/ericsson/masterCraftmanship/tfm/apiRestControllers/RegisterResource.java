@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ericsson.masterCraftmanship.tfm.businessControllers.RegisterController;
 import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
-import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
+import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -40,7 +40,7 @@ public class RegisterResource {
 		}
 		catch (BadRequestException e) {
 			ResponseJson resultRegister = new ResponseJson();
-			resultRegister.setError(ErrorView.BAD_REQUEST);
+			resultRegister.setResult(Result.BAD_REQUEST);
 			return new ResponseEntity<ResponseJson>(resultRegister,HttpStatus.BAD_REQUEST);
 		}
 		

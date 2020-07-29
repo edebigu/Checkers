@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.ericsson.masterCraftmanship.tfm.businessControllers.OpenGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
-import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
+import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -41,7 +41,7 @@ public class OpenGameResource {
 		}
 		catch (BadRequestException e) {
 			ResponseJson resultOpenGame = new ResponseJson();
-			resultOpenGame.setError(ErrorView.BAD_REQUEST);
+			resultOpenGame.setResult(Result.BAD_REQUEST);
 			return new ResponseEntity<ResponseJson>(resultOpenGame,HttpStatus.BAD_REQUEST);
 		
 		}

@@ -1,6 +1,5 @@
 const json_result = {
     OK: 'OK',
-    CREATED: 'CREATED',
     NO_CONTENT: 'NO_CONTENT',
     BAD_REQUEST: 'BAD_REQUEST',
     UNAUTHORIZED: 'UNAUTHORIZED',
@@ -255,7 +254,7 @@ function loginUser(user) {
         successCallback: function (data) {
             alert(data.msg);
             optionForm.reset();
-            if (data.error === json_result.OK) {
+            if (data.result === json_result.OK) {
                 view.addUserLogin(data.username);
                 view.addCloseGameView();
                 player = data.username;
@@ -275,7 +274,7 @@ function registerUser(user) {
         successCallback: function (data) {
             alert(data.msg);
             optionForm.reset();
-            if (data.error === json_result.CREATED) {
+            if (data.result === json_result.OK) {
                 view.addInitGameView();
             }
         },
@@ -343,7 +342,7 @@ function sendMove(movement) {
 
     var callbacks = {
         successCallback: function (data) {
-            if (data.error === "LOST_MESSAGE" || data.error === "LOST_MESSAGE_MACHINE") {
+            if (data.result === "LOST_MESSAGE" || data.result === "LOST_MESSAGE_MACHINE") {
                 alert("Player " + data.username + " lost!!");
                 var session = {
                     username: player,
@@ -356,7 +355,7 @@ function sendMove(movement) {
                 containerBoard.style.display = "none";
             }
             else {
-                if (data.error !== null) {
+                if (data.result !== null) {
                     alert("Error: movement not allowed");
                 }
                 getBoard();
@@ -377,7 +376,7 @@ function createGame(session) {
 
     var callbacks = {
         successCallback: function (data) {
-            if (data.error === json_result.CREATED) {
+            if (data.result === json_result.OK) {
                 gameName = "";
                 view.addStartGameView();
             }
@@ -394,7 +393,7 @@ function saveGame(gameToSave) {
 
     var callbacks = {
         successCallback: function (data) {
-            switch (data.error) {
+            switch (data.result) {
                 case json_result.NOT_FOUND:
                     optionsGame.style.display = "none";
                     getGames("Save");
@@ -410,7 +409,7 @@ function saveGame(gameToSave) {
                     }
                     break;
 
-                case json_result.CREATED:
+                case json_result.OK:
                     gameName = gameToSave.gameName;
                     containerBoard.removeAttribute('style');
                     optionForm.style.display = "none";
@@ -434,7 +433,7 @@ function openGame(session) {
 
     var callbacks = {
         successCallback: function (data) {
-            if (data.error === json_result.OK) {
+            if (data.result === json_result.OK) {
                 gameName = session.gameName;
                 optionForm.style.display = "none";
                 view.addStartGameView();
@@ -457,7 +456,7 @@ function closeGame(session) {
     var apiURL = "http://localhost:8080/closeGame/";
     var callbacks = {
         successCallback: function (data) {
-            if (data.error === json_result.NOT_FOUND) {
+            if (data.result === json_result.NOT_FOUND) {
                 if (!confirm("Do you want close game without saved?")) {
                     getGames("Save");
                 }

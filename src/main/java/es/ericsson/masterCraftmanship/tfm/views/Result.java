@@ -1,8 +1,7 @@
 package es.ericsson.masterCraftmanship.tfm.views;
 
-public enum ErrorView {
+public enum Result {
 	    OK("OK"),
-		CREATED("CREATED"),
 		NO_CONTENT ("NO_CONTENT"),
 		BAD_REQUEST ("BAD_REQUEST"),
 		UNAUTHORIZED("UNAUTHORIZED"),
@@ -10,14 +9,14 @@ public enum ErrorView {
 	    CONFLICT("CONFLICT");
 	    
 		
-		private String error;
+		private String result;
 		
-		private ErrorView(String error) {
-			this.error = error;
+		private Result(String result) {
+			this.result = result;
 		}
 		
-		public String getError() {
-			return this.error;
+		public String getResult() {
+			return this.result;
 		}
 	
 

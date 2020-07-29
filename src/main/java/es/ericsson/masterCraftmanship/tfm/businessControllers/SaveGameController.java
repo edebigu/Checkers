@@ -9,7 +9,7 @@ import es.ericsson.masterCraftmanship.tfm.dtos.SaveGameDto;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.services.GameDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
-import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
+import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @Controller
@@ -34,13 +34,13 @@ public class SaveGameController {
 		}
 		Game game = gameDaoService.saveGame(sessionDaoService.getSessionGame(saveGameDto.getUsername()), saveGameDto.getGameName(), saveGameDto.getUsername(), overwrite);
 		if (game != null) {
-			response.setError(ErrorView.CREATED);
+			response.setResult(Result.OK);
 			sessionDaoService.saveSessionGame(saveGameDto.getUsername(), game);
 		} else {
 			if (saveGameDto.getGameName().equals("")) {
-				response.setError(ErrorView.NOT_FOUND);
+				response.setResult(Result.NOT_FOUND);
 			} else {
-				response.setError(ErrorView.CONFLICT);
+				response.setResult(Result.CONFLICT);
 			}
 		}
 		response.setUsername(saveGameDto.getUsername());

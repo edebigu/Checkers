@@ -9,7 +9,7 @@ import es.ericsson.masterCraftmanship.tfm.dtos.CloseGameDto;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.services.GameDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
-import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
+import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @Controller
@@ -32,7 +32,7 @@ public class CloseGameController {
 		Game sessionGame = sessionDaoService.getSessionGame(operationGameDto.getUsername());
 		if (!sessionDaoService.isSavedSession(operationGameDto.getUsername()) && !operationGameDto.isCloseWithoutSave())
 		{
-			response.setError(ErrorView.NOT_FOUND);
+			response.setResult(Result.NOT_FOUND);
 
 		}
 		else {
@@ -41,7 +41,7 @@ public class CloseGameController {
 				gameDaoService.saveGame(sessionGame, game.getName(), operationGameDto.getUsername(), true);
 			}
 			sessionDaoService.saveSessionGame(operationGameDto.getUsername(), null);
-			response.setError(ErrorView.OK);
+			response.setResult(Result.OK);
 			
 		}
 
