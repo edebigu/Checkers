@@ -14,7 +14,6 @@ import es.ericsson.masterCraftmanship.tfm.businessControllers.CloseGameControlle
 import es.ericsson.masterCraftmanship.tfm.dtos.CloseGameDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
-import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -41,7 +40,6 @@ public class CloseGameResource {
 		}
 		catch (BadRequestException e) {
 			ResponseJson response = new ResponseJson();
-			response.setMsg(Message.EMPTY_FIELD);
 			response.setError(ErrorView.BAD_REQUEST);
 			response.setUsername(operationGameDto.getUsername());
 			return new ResponseEntity<ResponseJson>(response,HttpStatus.BAD_REQUEST);

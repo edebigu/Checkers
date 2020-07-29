@@ -9,7 +9,6 @@ import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.models.Game;
 import es.ericsson.masterCraftmanship.tfm.services.GameDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
-import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
@@ -31,11 +30,9 @@ public class OpenGameController {
 		ResponseJson resultOpenGame = new ResponseJson();
 		Game gameFound = gameDaoService.getGameByPlayer(sessionDto.getUsername(), sessionDto.getGameName());
 		if (gameFound != null && sessionDaoService.saveSessionGame(sessionDto.getUsername(),gameFound)) {
-			resultOpenGame.setMsg(Message.OPEN_GAME_SUCCESS);
 			resultOpenGame.setError(ErrorView.OK);
 		}
 		else {
-			resultOpenGame.setMsg(Message.OPEN_GAME_UNSUCCESS);
 			resultOpenGame.setError(ErrorView.NOT_FOUND);
 		}
 		resultOpenGame.setUsername(sessionDto.getUsername());

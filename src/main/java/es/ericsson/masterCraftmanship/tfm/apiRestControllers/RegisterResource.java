@@ -14,7 +14,6 @@ import es.ericsson.masterCraftmanship.tfm.businessControllers.RegisterController
 import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
-import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -41,7 +40,6 @@ public class RegisterResource {
 		}
 		catch (BadRequestException e) {
 			ResponseJson resultRegister = new ResponseJson();
-			resultRegister.setMsg(Message.EMPTY_FIELD);
 			resultRegister.setError(ErrorView.BAD_REQUEST);
 			return new ResponseEntity<ResponseJson>(resultRegister,HttpStatus.BAD_REQUEST);
 		}

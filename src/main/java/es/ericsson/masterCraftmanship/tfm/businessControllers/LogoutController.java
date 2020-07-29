@@ -13,7 +13,6 @@ import es.ericsson.masterCraftmanship.tfm.models.Session;
 import es.ericsson.masterCraftmanship.tfm.services.PlayerDaoService;
 import es.ericsson.masterCraftmanship.tfm.services.SessionDaoService;
 import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
-import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @Controller
@@ -31,10 +30,10 @@ public class LogoutController {
 	public ResponseJson logout(SessionDto sessionDto) {
 		ResponseJson resultLogout = new ResponseJson();
 		if (sessionDaoService.deleteSession(sessionDto.getUsername())) {
-			resultLogout.setMsg(Message.LOGOUT_SUCCESS);
+			resultLogout.setError(ErrorView.OK);;
 		}
 		else {
-			resultLogout.setMsg(Message.LOGOUT_UNSUCCESSFULL);
+			resultLogout.setError(ErrorView.NOT_FOUND);
 		}
 		
 		resultLogout.setUsername(sessionDto.getUsername());

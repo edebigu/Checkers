@@ -14,7 +14,6 @@ import es.ericsson.masterCraftmanship.tfm.businessControllers.SaveGameController
 import es.ericsson.masterCraftmanship.tfm.dtos.SaveGameDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
-import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -42,7 +41,6 @@ public class SaveGameResource {
 		}
 		catch (BadRequestException e) {
 			ResponseJson responseSave = new ResponseJson();
-			responseSave.setMsg(Message.EMPTY_FIELD);
 			responseSave.setError(ErrorView.BAD_REQUEST);
 			return new ResponseEntity<ResponseJson>(responseSave,HttpStatus.BAD_REQUEST);
 		}

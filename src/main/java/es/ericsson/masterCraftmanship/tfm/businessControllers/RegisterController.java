@@ -9,7 +9,6 @@ import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
 import es.ericsson.masterCraftmanship.tfm.models.Player;
 import es.ericsson.masterCraftmanship.tfm.services.PlayerDaoService;
 import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
-import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @Controller
@@ -27,11 +26,9 @@ public class RegisterController {
     	ResponseJson resultRegister = new ResponseJson();
     	Player player = new Player (playerDto.getUsername(), playerDto.getPassword());
     	if (playerDaoService.savePlayer(playerDto.getUsername(), playerDto.getPassword()) != null) {
-    		resultRegister.setMsg(Message.REGISTER_SUCCESSFULL);
     		resultRegister.setError(ErrorView.CREATED);
     	}
     	else {
-    		resultRegister.setMsg(Message.REGISTER_UNSUCCESSFULL);
     		resultRegister.setError(ErrorView.CONFLICT);
     	}
     	resultRegister.setUsername(player.getUsername());

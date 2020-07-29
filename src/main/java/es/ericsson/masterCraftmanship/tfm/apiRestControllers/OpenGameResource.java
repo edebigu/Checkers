@@ -14,7 +14,6 @@ import es.ericsson.masterCraftmanship.tfm.businessControllers.OpenGameController
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
 import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.ErrorView;
-import es.ericsson.masterCraftmanship.tfm.views.Message;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
@@ -42,7 +41,6 @@ public class OpenGameResource {
 		}
 		catch (BadRequestException e) {
 			ResponseJson resultOpenGame = new ResponseJson();
-			resultOpenGame.setMsg(Message.EMPTY_FIELD);
 			resultOpenGame.setError(ErrorView.BAD_REQUEST);
 			return new ResponseEntity<ResponseJson>(resultOpenGame,HttpStatus.BAD_REQUEST);
 		
