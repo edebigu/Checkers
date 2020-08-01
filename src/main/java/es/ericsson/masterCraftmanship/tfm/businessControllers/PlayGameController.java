@@ -36,20 +36,6 @@ public class PlayGameController {
 
 	public List<SquareJson> getStatus(String username) {
 		Game game = sessionDaoService.getSessionGame(username);
-		/*List<SquareJson> listSquare = new ArrayList<SquareJson>();
-		Piece[][] pieces = game.getBoard().getPieces();
-		for (int i = 0; i < Coordinate.getDimension(); i++) {
-			for (int j = 0; j < Coordinate.getDimension(); j++) {
-				SquareJson square = new SquareJson();
-				square.setCoordX(i);
-				square.setCoordY(j);
-				if (pieces[i][j] != null) {
-					square.setPiece(pieces[i][j].toString());
-					square.setColor(pieces[i][j].getColor().toString());
-				}
-				listSquare.add(square);
-			}
-		}*/
 		return this.getListSquares(game);
 	}
 

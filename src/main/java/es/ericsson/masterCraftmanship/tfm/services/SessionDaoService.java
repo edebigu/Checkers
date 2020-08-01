@@ -38,12 +38,21 @@ public class SessionDaoService {
 	}
 	
 	public Game getSessionGame(String username) {
-		return sessionDao.findByPlayer_username(username).getGame();
+		Session session =  sessionDao.findByPlayer_username(username);
+		if (session != null) {
+			return session.getGame();
+		}
+		return null;
 		
 	}
 	
 	public boolean isSavedGameSession(String username) {
-		return !this.getSessionGame(username).getName().equals("");
+		Game game = this.getSessionGame(username);
+		if (game != null) {
+			return !game.getName().equals("");
+		}
+		return false;
+		
 
 	}
 	

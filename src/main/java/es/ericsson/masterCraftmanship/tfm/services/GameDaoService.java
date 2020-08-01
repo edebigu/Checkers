@@ -45,8 +45,7 @@ public class GameDaoService {
 		
 	}
 	private Game overwriteGame (String gameName, String username, Game game) {
-		Game gameOverwrited = null;
-		gameOverwrited = this.getGameByPlayer(username, gameName);
+		Game gameOverwrited = this.getGameByPlayer(username, gameName);
 		if (gameOverwrited != null) {
 			gameDao.deleteByGameName(game.getName());
 			gameDao.delete(gameOverwrited);
