@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
-public class BlockedGame extends GameTest{
+public class BlockedGameTest extends GameTest{
 	
     @Test
     public void testGivenGameWhenIsBlockedWithWhiteEmptyPiecesThenTrue(){
