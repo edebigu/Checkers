@@ -190,7 +190,7 @@ $(document).ready(function () {
 
 
     $('form').on('click', '#btn_cancelOpenGame', function (evento) {
-        addCloseGameView();
+        view.addCloseGameView();
         evento.preventDefault();
     });
 

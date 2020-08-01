@@ -33,4 +33,8 @@ public class PlayerDaoService {
 		
 	}
 	
+	public void deletePlayer(Player player) {
+		playerDao.delete(player);
+	}
+	
 }

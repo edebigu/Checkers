@@ -36,6 +36,16 @@ public class Session {
 	public void setGame(Game game) {
 		this.game = game;
 	}
+
+	@Override
+	public String toString() {
+		return "Session [id=" + id + ", player=" + player + ", game=" + game.toString() + "]";
+	}
+
+	public void setId(String string) {
+		this.id = string;
+		
+	}
 	
 	
 	

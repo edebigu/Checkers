@@ -26,26 +26,26 @@ public class CloseGameController {
 		this.sessionDaoService = sessionDaoService;
 	}
 	
-	public ResponseJson closeGame (CloseGameDto operationGameDto) {
+	public ResponseJson closeGame (CloseGameDto closeGameDto) {
 		ResponseJson response = new ResponseJson();
-		Game game = gameDaoService.getGameByPlayer(operationGameDto.getUsername(), operationGameDto.getGameName());
-		Game sessionGame = sessionDaoService.getSessionGame(operationGameDto.getUsername());
-		if (!sessionDaoService.isSavedSession(operationGameDto.getUsername()) && !operationGameDto.isCloseWithoutSave())
+		if (!sessionDaoService.isSavedGameSession(closeGameDto.getUsername()) && !closeGameDto.isCloseWithoutSave())
 		{
 			response.setResult(Result.NOT_FOUND);
 
 		}
 		else {
+			Game game = gameDaoService.getGameByPlayer(closeGameDto.getUsername(), closeGameDto.getGameName());
+			Game sessionGame = sessionDaoService.getSessionGame(closeGameDto.getUsername());
 			
-			if (!operationGameDto.isCloseWithoutSave()) {
-				gameDaoService.saveGame(sessionGame, game.getName(), operationGameDto.getUsername(), true);
+			if (!closeGameDto.isCloseWithoutSave()) {
+				gameDaoService.saveGame(sessionGame, game.getName(), closeGameDto.getUsername(), true);
 			}
-			sessionDaoService.saveSessionGame(operationGameDto.getUsername(), null);
+			sessionDaoService.saveSessionGame(closeGameDto.getUsername(), null);
 			response.setResult(Result.OK);
 			
 		}
 
-		response.setUsername(operationGameDto.getUsername());
+		response.setUsername(closeGameDto.getUsername());
 		return response;	
 		
 	}

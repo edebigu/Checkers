@@ -42,7 +42,7 @@ public class SessionDaoService {
 		
 	}
 	
-	public boolean isSavedSession(String username) {
+	public boolean isSavedGameSession(String username) {
 		return !this.getSessionGame(username).getName().equals("");
 
 	}

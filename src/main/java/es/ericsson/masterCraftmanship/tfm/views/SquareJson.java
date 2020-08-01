@@ -31,6 +31,12 @@ public class SquareJson {
 	public void setColor(String color) {
 		this.color = color;
 	}
+	@Override
+	public String toString() {
+		return "SquareJson [coordX=" + coordX + ", coordY=" + coordY + ", piece=" + piece + ", color=" + color + "]";
+	}
+	
+	
 	
 	
 

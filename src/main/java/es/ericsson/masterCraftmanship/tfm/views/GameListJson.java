@@ -20,10 +20,17 @@ public class GameListJson {
 		return listGame;
 	}
 	public void setListGame(List<Game> listGame) {
+		assert listGame != null;
 		for (Game game : listGame) {
 			this.listGame.add(game.getName());
 		}
 	}
+	@Override
+	public String toString() {
+		return "GameListJson [username=" + username + ", listGame=" + listGame + "]";
+	}
+	
+	
 	
 	
 	

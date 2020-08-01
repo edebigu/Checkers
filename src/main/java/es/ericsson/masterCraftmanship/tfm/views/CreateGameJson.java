@@ -25,5 +25,11 @@ public class CreateGameJson {
 	public void setGameName(String gameName) {
 		this.gameName = gameName;
 	}
+	@Override
+	public String toString() {
+		return "CreateGameJson [username=" + username + ", gameName=" + gameName + ", result=" + result + "]";
+	}
+	
+	
 	
 }

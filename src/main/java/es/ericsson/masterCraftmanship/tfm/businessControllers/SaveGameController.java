@@ -29,7 +29,7 @@ public class SaveGameController {
 	public ResponseJson save(SaveGameDto saveGameDto) {
 		ResponseJson response = new ResponseJson();
 		Boolean overwrite = saveGameDto.isOverwrite();
-		if (sessionDaoService.isSavedSession(saveGameDto.getUsername())) {
+		if (sessionDaoService.isSavedGameSession(saveGameDto.getUsername())) {
 			overwrite = true;
 		}
 		Game game = gameDaoService.saveGame(sessionDaoService.getSessionGame(saveGameDto.getUsername()), saveGameDto.getGameName(), saveGameDto.getUsername(), overwrite);

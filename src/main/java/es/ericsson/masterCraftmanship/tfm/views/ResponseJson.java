@@ -23,5 +23,11 @@ public class ResponseJson {
 	public void setError (Error error) {
 		this.result = error.toString();
 	}
+	@Override
+	public String toString() {
+		return "ResponseJson [username=" + username + ", result=" + result + "]";
+	}
+	
+	
 
 }

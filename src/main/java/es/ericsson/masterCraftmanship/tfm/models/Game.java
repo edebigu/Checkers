@@ -23,6 +23,7 @@ public class Game {
 	Game(Board board) {
 		this.turn = new Turn();
 		this.board = board;
+		this.gameName = "";
 	}
 
 	public Game() {
@@ -36,6 +37,7 @@ public class Game {
 		this.board = game.getBoard();
 		this.turn = game.getTurn();
 		this.player = game.getPlayer();
+		this.gameName = game.getName();
 	}
 	
 	public void addPlayer(Player player) {
@@ -57,6 +59,8 @@ public class Game {
 		assert coordinate != null;
 		return this.board.getPiece(coordinate);
 	}
+	
+	
 	
 	public void reset() {
 		for (int i = 0; i < Coordinate.getDimension(); i++)
@@ -337,6 +341,14 @@ public class Game {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Game [id=" + id + ", gameName=" + gameName + ", board=" + board + ", turn=" + turn + ", player="
+				+ player + "]";
+	}
+	
+	
 
 
 }

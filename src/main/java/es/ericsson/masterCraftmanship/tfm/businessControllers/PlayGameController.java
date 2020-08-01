@@ -36,7 +36,7 @@ public class PlayGameController {
 
 	public List<SquareJson> getStatus(String username) {
 		Game game = sessionDaoService.getSessionGame(username);
-		List<SquareJson> listSquare = new ArrayList<SquareJson>();
+		/*List<SquareJson> listSquare = new ArrayList<SquareJson>();
 		Piece[][] pieces = game.getBoard().getPieces();
 		for (int i = 0; i < Coordinate.getDimension(); i++) {
 			for (int j = 0; j < Coordinate.getDimension(); j++) {
@@ -49,8 +49,8 @@ public class PlayGameController {
 				}
 				listSquare.add(square);
 			}
-		}
-		return listSquare;
+		}*/
+		return this.getListSquares(game);
 	}
 
 	public ResponseJson move(String playerName, MoveDto movement) {
@@ -72,7 +72,7 @@ public class PlayGameController {
 
 				} else {
 					moveResult.setError(Error.LOST_MESSAGE_MACHINE);
-					moveResult.setUsername("machine");
+					//moveResult.setUsername("machine");
 				}
 			}
 			sessionDaoService.saveSessionGame(playerName,game);
@@ -87,4 +87,24 @@ public class PlayGameController {
 		result.setListGame(gameDaoService.getGamesByPlayer(username));
 		return result;
 	}
+	
+    private List<SquareJson> getListSquares(Game game) {
+    	assert game!=null;
+    	List<SquareJson> listSquare = new ArrayList<SquareJson>();
+    	Piece[][] pieces = game.getBoard().getPieces();
+		for (int i = 0; i < Coordinate.getDimension(); i++) {
+			for (int j = 0; j < Coordinate.getDimension(); j++) {
+				SquareJson square = new SquareJson();
+				square.setCoordX(i);
+				square.setCoordY(j);
+				if (pieces[i][j] != null) {
+					square.setPiece(pieces[i][j].toString());
+					square.setColor(pieces[i][j].getColor().toString());
+				}
+				listSquare.add(square);
+			}
+		}
+		return listSquare;
+    	
+    }
 }
