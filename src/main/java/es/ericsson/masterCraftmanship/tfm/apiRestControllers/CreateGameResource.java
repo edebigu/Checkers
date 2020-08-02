@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.ericsson.masterCraftmanship.tfm.businessControllers.CreateGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.SessionDto;
-import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.CreateGameJson;
 import es.ericsson.masterCraftmanship.tfm.views.Result;
 

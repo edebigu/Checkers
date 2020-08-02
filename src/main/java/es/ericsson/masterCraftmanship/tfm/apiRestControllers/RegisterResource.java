@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.ericsson.masterCraftmanship.tfm.businessControllers.RegisterController;
 import es.ericsson.masterCraftmanship.tfm.dtos.PlayerDto;
-import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 

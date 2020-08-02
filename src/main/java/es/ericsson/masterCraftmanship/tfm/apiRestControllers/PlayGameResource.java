@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.ericsson.masterCraftmanship.tfm.businessControllers.PlayGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
-import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 import es.ericsson.masterCraftmanship.tfm.views.Result;

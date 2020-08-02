@@ -1,6 +1,6 @@
 package es.ericsson.masterCraftmanship.tfm.dtos;
 
-import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
+import es.ericsson.masterCraftmanship.tfm.apiRestControllers.BadRequestException;
 
 public class CloseGameDto {
 	

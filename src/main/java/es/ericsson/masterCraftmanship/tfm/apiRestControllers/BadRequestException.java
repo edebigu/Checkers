@@ -1,4 +1,4 @@
-package es.ericsson.masterCraftmanship.tfm.exceptions;
+package es.ericsson.masterCraftmanship.tfm.apiRestControllers;
 
 public class BadRequestException extends RuntimeException{
     private static final String DESCRIPTION = "Bad Request Exception (400)";

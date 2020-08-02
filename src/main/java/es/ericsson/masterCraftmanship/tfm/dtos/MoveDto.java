@@ -2,7 +2,7 @@ package es.ericsson.masterCraftmanship.tfm.dtos;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
+import es.ericsson.masterCraftmanship.tfm.apiRestControllers.BadRequestException;
 
 @EntityScan
 public class MoveDto {
