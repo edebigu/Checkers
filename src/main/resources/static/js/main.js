@@ -81,7 +81,7 @@ $(document).ready(function () {
 
         }
         else {
-            alert("Passwords are differents");
+            alert("Please enter user and same passwords!!");
             optionForm.reset();
         }
         evento.preventDefault();
@@ -276,10 +276,13 @@ function registerUser(user) {
     var apiURL = "http://localhost:8080/register";
     var callbacks = {
         successCallback: function (data) {
-            alert(data.msg);
             optionForm.reset();
             if (data.result === json_result.OK) {
                 view.addInitGameView();
+                alert("Register success!!");
+            }
+            else {
+            	alert("Register unsuccess!! User exist");
             }
         },
         doneCallback: function () { }

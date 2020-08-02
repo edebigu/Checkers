@@ -32,7 +32,7 @@ public class CloseGameResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ResponseJson> save (@RequestBody CloseGameDto operationGameDto ) {
+	public ResponseEntity<ResponseJson> close (@RequestBody CloseGameDto operationGameDto ) {
 		logger.info("Recibido close game");
 		try {
 			operationGameDto.validate();

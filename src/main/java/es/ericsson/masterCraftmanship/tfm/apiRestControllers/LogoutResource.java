@@ -17,17 +17,17 @@ import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
 
 @RestController
-@RequestMapping(LogoutResouce.LOGOUT)
-public class LogoutResouce {
+@RequestMapping(LogoutResource.LOGOUT)
+public class LogoutResource {
 	
 	static final String LOGOUT = "/logout";
 	
-	Logger logger = LogManager.getLogger(LogoutResouce.class);
+	Logger logger = LogManager.getLogger(LogoutResource.class);
 	
 	private LogoutController logoutController;
 	
 	@Autowired
-	public LogoutResouce(LogoutController logoutController) {
+	public LogoutResource(LogoutController logoutController) {
 		this.logoutController = logoutController;
 	}
 	
