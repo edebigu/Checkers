@@ -20,41 +20,36 @@ import es.ericsson.masterCraftmanship.tfm.views.Result;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RegisterController.class)
 public class RegisterControllerTest {
-		
-	   @Autowired
-	   private RegisterController registerController;
-	   
-	    @MockBean
-	    private PlayerDaoService playerDaoService;
 
-	    
-	    @Before
-	    public void setup() {
-	    	Mockito.when(playerDaoService.savePlayer("Test", "test")).thenReturn(new Player("Test", "test"));
-	    	Mockito.when(playerDaoService.savePlayer("TestExist", "testExist")).thenReturn(null);
-	    	
-	    }
+	@Autowired
+	private RegisterController registerController;
 
-	    
-	    @Test
-	    public void givenNonExistPlayer_whenRegister_thenResultOk() {
-	    	PlayerDto playerDto = new PlayerDto("Test", "test");
-	    	ResponseJson resultRegister = new ResponseJson();
-	    	resultRegister.setResult(Result.OK);
-	    	resultRegister.setUsername(playerDto.getUsername());
-	    	assertEquals(this.registerController.register(playerDto).toString(), resultRegister.toString());
-	    }
-	    
-	    @Test
-	    public void givenExistPlayer_whenRegister_thenResultConflict() {
-	    	PlayerDto playerDto = new PlayerDto("TestExist", "testExist");
-	    	ResponseJson resultRegister = new ResponseJson();
-	    	resultRegister.setResult(Result.CONFLICT);
-	    	resultRegister.setUsername(playerDto.getUsername());
-	    	assertEquals(this.registerController.register(playerDto).toString(), resultRegister.toString());
-	    }
-	    
-	    
-	    
+	@MockBean
+	private PlayerDaoService playerDaoService;
+
+	@Before
+	public void setup() {
+		Mockito.when(playerDaoService.savePlayer("Test", "test")).thenReturn(new Player("Test", "test"));
+		Mockito.when(playerDaoService.savePlayer("TestExist", "testExist")).thenReturn(null);
+
+	}
+
+	@Test
+	public void givenNonExistPlayer_whenRegister_thenResultOk() {
+		PlayerDto playerDto = new PlayerDto("Test", "test");
+		ResponseJson resultRegister = new ResponseJson();
+		resultRegister.setResult(Result.OK);
+		resultRegister.setUsername(playerDto.getUsername());
+		assertEquals(this.registerController.register(playerDto).toString(), resultRegister.toString());
+	}
+
+	@Test
+	public void givenExistPlayer_whenRegister_thenResultConflict() {
+		PlayerDto playerDto = new PlayerDto("TestExist", "testExist");
+		ResponseJson resultRegister = new ResponseJson();
+		resultRegister.setResult(Result.CONFLICT);
+		resultRegister.setUsername(playerDto.getUsername());
+		assertEquals(this.registerController.register(playerDto).toString(), resultRegister.toString());
+	}
 
 }

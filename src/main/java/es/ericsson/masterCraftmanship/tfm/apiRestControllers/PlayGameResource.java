@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.ericsson.masterCraftmanship.tfm.businessControllers.PlayGameController;
 import es.ericsson.masterCraftmanship.tfm.dtos.MoveDto;
+import es.ericsson.masterCraftmanship.tfm.exceptions.BadRequestException;
 import es.ericsson.masterCraftmanship.tfm.views.GameListJson;
 import es.ericsson.masterCraftmanship.tfm.views.ResponseJson;
+import es.ericsson.masterCraftmanship.tfm.views.Result;
 import es.ericsson.masterCraftmanship.tfm.views.SquareJson;
 
 @RestController
@@ -46,7 +48,16 @@ public class PlayGameResource {
 	@PostMapping(PlayGameResource.MOVE + "/{player}")
 	public ResponseEntity<ResponseJson> move (@PathVariable(name="player") String player, @RequestBody MoveDto movementDto ) {
 		logger.info("Recibido move");
-		return  ResponseEntity.ok(this.playGameController.move(player, movementDto));
+		
+		try {
+			movementDto.validate();
+			return ResponseEntity.ok(this.playGameController.move(player, movementDto));
+		}
+		catch (BadRequestException e) {
+			ResponseJson responseSave = new ResponseJson();
+			responseSave.setResult(Result.BAD_REQUEST);
+			return new ResponseEntity<ResponseJson>(responseSave,HttpStatus.BAD_REQUEST);
+		}
 		
 	}
 	

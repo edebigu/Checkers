@@ -19,36 +19,35 @@ import es.ericsson.masterCraftmanship.tfm.views.Result;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = LogoutController.class)
 public class LogoutControllerTest {
-	
-	
-	   @Autowired
-	   private LogoutController logoutController;
-	     
-	    @MockBean
-		private SessionDaoService sessionDaoService;
-	    
-	    @Before
-	    public void setup() {
-	    	Mockito.when(sessionDaoService.deleteSession("UserTest")).thenReturn(true);	
-	    	Mockito.when(sessionDaoService.deleteSession("UserTestNonExist")).thenReturn(false);	
-	    }
-	    
-	    @Test
-	    public void givenExistSession_whenLogout_thenResultOk() {
-	    	SessionDto sessionDto = new SessionDto("UserTest", "existTestGame");
-	    	ResponseJson result = new ResponseJson();
-	    	result.setResult(Result.OK);
-	    	result.setUsername(sessionDto.getUsername());
-	    	assertEquals(this.logoutController.logout(sessionDto).toString(), result.toString());
-	    }
-	    
-	    @Test
-	    public void givenNonExistSession_whenLogout_thenResultNotFound() {
-	    	SessionDto sessionDto = new SessionDto("UserTestNonExist", "existTestGame");
-	    	ResponseJson result = new ResponseJson();
-	    	result.setResult(Result.NOT_FOUND);
-	    	result.setUsername(sessionDto.getUsername());
-	    	assertEquals(this.logoutController.logout(sessionDto).toString(), result.toString());
-	    }
+
+	@Autowired
+	private LogoutController logoutController;
+
+	@MockBean
+	private SessionDaoService sessionDaoService;
+
+	@Before
+	public void setup() {
+		Mockito.when(sessionDaoService.deleteSession("UserTest")).thenReturn(true);
+		Mockito.when(sessionDaoService.deleteSession("UserTestNonExist")).thenReturn(false);
+	}
+
+	@Test
+	public void givenExistSession_whenLogout_thenResultOk() {
+		SessionDto sessionDto = new SessionDto("UserTest", "existTestGame");
+		ResponseJson result = new ResponseJson();
+		result.setResult(Result.OK);
+		result.setUsername(sessionDto.getUsername());
+		assertEquals(this.logoutController.logout(sessionDto).toString(), result.toString());
+	}
+
+	@Test
+	public void givenNonExistSession_whenLogout_thenResultNotFound() {
+		SessionDto sessionDto = new SessionDto("UserTestNonExist", "existTestGame");
+		ResponseJson result = new ResponseJson();
+		result.setResult(Result.NOT_FOUND);
+		result.setUsername(sessionDto.getUsername());
+		assertEquals(this.logoutController.logout(sessionDto).toString(), result.toString());
+	}
 
 }

@@ -6,84 +6,83 @@ import java.util.regex.Pattern;
 
 public class GameBuilder {
 
-    private Color color;
-    private List<String> strings;
-    private String gameName;
+	private Color color;
+	private List<String> strings;
+	private String gameName;
 
-    public GameBuilder() {
-        this.color = null;
-        this.strings = new ArrayList<String>();
-        this.gameName = "";
-    }
-    
+	public GameBuilder() {
+		this.color = null;
+		this.strings = new ArrayList<String>();
+		this.gameName = "";
+	}
 
-    public GameBuilder color(Color color){
-        this.color = color;
-        return this;
-    }
+	public GameBuilder color(Color color) {
+		this.color = color;
+		return this;
+	}
 
-    public GameBuilder rows(String... strings) {
-        for (String string : strings) {
-            assert Pattern.matches("[bBnN ]{8}", string);
-            this.strings.add(string);
-        }
-        return this;
-    }
-    
-    public GameBuilder gameName(String gameName){
-        this.gameName = gameName;
-        return this;
-    }
+	public GameBuilder rows(String... strings) {
+		for (String string : strings) {
+			assert Pattern.matches("[bBnN ]{8}", string);
+			this.strings.add(string);
+		}
+		return this;
+	}
 
-    public Game build() {
-        if (this.strings.size() == 0)
-            return new Game();
-        Board board = new Board();
-        Game game = new Game(board);
-        assert this.strings.size() == Coordinate.getDimension();
-        this.setColor(game, board);
-        this.setName(game, gameName);
-        for (int i = 0; i < this.strings.size(); i++) {
-            this.setRow(board, i, this.strings.get(i));
-        }
-        return game;
-    }
+	public GameBuilder gameName(String gameName) {
+		this.gameName = gameName;
+		return this;
+	}
 
-    private void setColor(Game game, Board board) {
-        if (this.color == Color.BLACK) {
-            board.put(new Coordinate(7, 0), new Pawn(Color.WHITE));
-            game.move(new Coordinate(7, 0), new Coordinate(6, 1));
-            board.remove(new Coordinate(6, 1));
-        }
-    }
-    
-    private void setName(Game game, String gameName) {
-    	game.setName(gameName);
-    }
+	public Game build() {
+		if (this.strings.size() == 0)
+			return new Game();
+		Board board = new Board();
+		Game game = new Game(board);
+		assert this.strings.size() == Coordinate.getDimension();
+		this.setColor(game, board);
+		this.setName(game, gameName);
+		for (int i = 0; i < this.strings.size(); i++) {
+			this.setRow(board, i, this.strings.get(i));
+		}
+		return game;
+	}
 
-    private void setRow(Board board, int row, String string) {
-        for (int j = 0; j < string.length(); j++) {
-            Color color = this.getColor(string.charAt(j));
-            if (color != null) {
-                Piece piece = new Pawn(color);
-                if (Character.isUpperCase(string.charAt(j)))
-                    piece = new Queen(color);
-                board.put(new Coordinate(row, j), piece);
-            }
-        }
-    }
+	private void setColor(Game game, Board board) {
+		if (this.color == Color.BLACK) {
+			board.put(new Coordinate(7, 0), new Pawn(Color.WHITE));
+			game.move(new Coordinate(7, 0), new Coordinate(6, 1));
+			board.remove(new Coordinate(6, 1));
+		}
+	}
 
-    private Color getColor(char character) {
-        switch (character) {
-        case 'b':
-        case 'B':
-            return Color.WHITE;
-        case 'n':
-        case 'N':
-            return Color.BLACK;
-        default:
-            return null;
-        }
-    }
+	private void setName(Game game, String gameName) {
+		game.setName(gameName);
+	}
+
+	private void setRow(Board board, int row, String string) {
+		for (int j = 0; j < string.length(); j++) {
+			Color color = this.getColor(string.charAt(j));
+			if (color != null) {
+				Piece piece = new Pawn(color);
+				if (Character.isUpperCase(string.charAt(j)))
+					piece = new Queen(color);
+				board.put(new Coordinate(row, j), piece);
+			}
+		}
+	}
+
+	private Color getColor(char character) {
+		switch (character) {
+		case 'b':
+		case 'B':
+			return Color.WHITE;
+		case 'n':
+		case 'N':
+			return Color.BLACK;
+		default:
+			return null;
+		}
+	}
 
 }
