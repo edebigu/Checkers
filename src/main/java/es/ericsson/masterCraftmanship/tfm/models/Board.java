@@ -76,10 +76,12 @@ public class Board {
     }
 
     private String toStringHorizontalNumbers() {
-        String string = " ";
+        String string = "  ";
+        int a = (int) 'a';
         for (int j = 0; j < Coordinate.getDimension(); j++)
-            string += j;
+            string +=  (char) (a + j);
         return string + "\n";
+
     }
 
     private String toStringHorizontalPiecesWithNumbers(int row) {
