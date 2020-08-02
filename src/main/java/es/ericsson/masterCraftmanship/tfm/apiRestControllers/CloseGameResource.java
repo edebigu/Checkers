@@ -1,7 +1,5 @@
 package es.ericsson.masterCraftmanship.tfm.apiRestControllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +22,6 @@ public class CloseGameResource {
 	
 	private CloseGameController closeGameController;
 	
-	Logger logger = LogManager.getLogger(CloseGameResource.class);
-	
 	@Autowired
 	public CloseGameResource(CloseGameController closeGameController) {
 		this.closeGameController = closeGameController;
@@ -33,7 +29,7 @@ public class CloseGameResource {
 	
 	@PostMapping
 	public ResponseEntity<ResponseJson> close (@RequestBody CloseGameDto operationGameDto ) {
-		logger.info("Recibido close game");
+
 		try {
 			operationGameDto.validate();
 			return  ResponseEntity.ok(this.closeGameController.closeGame(operationGameDto));

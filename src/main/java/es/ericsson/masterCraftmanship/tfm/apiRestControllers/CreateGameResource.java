@@ -1,7 +1,5 @@
 package es.ericsson.masterCraftmanship.tfm.apiRestControllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +19,7 @@ import es.ericsson.masterCraftmanship.tfm.views.Result;
 public class CreateGameResource {
 
 	static final String CREATE_GAME = "/createGame";
-	
 
-	Logger logger = LogManager.getLogger(CreateGameResource.class);
 	
 	private CreateGameController createGameController;
 	
@@ -34,7 +30,6 @@ public class CreateGameResource {
 	
 	@PostMapping
 	public ResponseEntity<CreateGameJson> createGame(@RequestBody SessionDto sessionDto) {
-		logger.info("Recibido create game" + sessionDto.toString());
 		try {
 			sessionDto.validate();
 			return  ResponseEntity.ok(this.createGameController.createGame(sessionDto));

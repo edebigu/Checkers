@@ -1,7 +1,6 @@
 package es.ericsson.masterCraftmanship.tfm.businessControllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -16,8 +15,7 @@ public class CreateGameController {
 	
 	private SessionDaoService sessionDaoService;
 	private PlayerDaoService playerDaoService;
-	
-	Logger logger = LogManager.getLogger(CreateGameController.class);
+
 	
 	@Autowired
 	public CreateGameController (PlayerDaoService playerDaoService, SessionDaoService sessionDaoService) {

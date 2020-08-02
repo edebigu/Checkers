@@ -1,7 +1,5 @@
 package es.ericsson.masterCraftmanship.tfm.apiRestControllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +21,7 @@ public class OpenGameResource {
 	static final String OPEN_GAME = "/openGame";
 	
 	private OpenGameController openGameController;
-	
-	Logger logger = LogManager.getLogger(OpenGameResource.class);
+
 	
 	@Autowired
 	public OpenGameResource(OpenGameController openGameController) {
@@ -33,7 +30,6 @@ public class OpenGameResource {
 	
 	@PostMapping
 	public ResponseEntity<ResponseJson> openGame (@RequestBody SessionDto sessionDto) {
-		logger.info("Recibido open game" + sessionDto.toString());
 		try {
 			sessionDto.validate();
 			return  ResponseEntity.ok(this.openGameController.openGame(sessionDto));

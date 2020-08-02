@@ -1,7 +1,5 @@
 package es.ericsson.masterCraftmanship.tfm.apiRestControllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +21,7 @@ public class SaveGameResource {
 	static final String SAVE_GAME = "/saveGame";
 	
 	private SaveGameController saveGameController;
-	
-	Logger logger = LogManager.getLogger(PlayGameResource.class);
+
 	
 	@Autowired
 	public SaveGameResource(SaveGameController saveGameController) {
@@ -34,7 +31,6 @@ public class SaveGameResource {
 	
 	@PostMapping
 	public ResponseEntity<ResponseJson> save (@RequestBody SaveGameDto saveGameDto ) {
-		logger.info("Recibido save game");
 		try {
 			saveGameDto.validate();
 			return ResponseEntity.ok(this.saveGameController.save(saveGameDto));

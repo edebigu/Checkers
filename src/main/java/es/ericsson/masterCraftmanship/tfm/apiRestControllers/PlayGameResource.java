@@ -1,7 +1,5 @@
 package es.ericsson.masterCraftmanship.tfm.apiRestControllers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +28,7 @@ public class PlayGameResource {
 	static final String GET_GAMES= "/getGames";
 	
 	private PlayGameController playGameController;
-	
-	
-	Logger logger = LogManager.getLogger(PlayGameResource.class);
+
 	
 	@Autowired
 	public PlayGameResource(PlayGameController playGameController) {
@@ -41,13 +37,11 @@ public class PlayGameResource {
 	
 	@GetMapping("/{username}/" + PlayGameResource.GET_STATUS)
 	public ResponseEntity<SquareJson> getStatus (@PathVariable(name="username") String username) {
-		logger.info("Recibido get status");
 		return new ResponseEntity(this.playGameController.getStatus(username), HttpStatus.OK);
 	}
 	
 	@PostMapping(PlayGameResource.MOVE + "/{player}")
 	public ResponseEntity<ResponseJson> move (@PathVariable(name="player") String player, @RequestBody MoveDto movementDto ) {
-		logger.info("Recibido move");
 		
 		try {
 			movementDto.validate();
@@ -63,7 +57,6 @@ public class PlayGameResource {
 	
 	@GetMapping(PlayGameResource.GET_GAMES + "/{player}")
 	public ResponseEntity<GameListJson> getGames (@PathVariable(name="player") String player) {
-		logger.info("Recibido get games");
 		return new ResponseEntity(this.playGameController.getGames(player), HttpStatus.OK);
 	}
 
