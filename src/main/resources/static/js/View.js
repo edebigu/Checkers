@@ -158,7 +158,10 @@ class View {
     
     }
     
-    addSaveGameView(listGames, typeView) {
+    addOpenSaveGameView(listGames, typeView) {
+    
+    	let title = document.getElementById("title");
+        title.textContent = "Enter name to " + typeView;
         let options = document.getElementById('options');
         this.removeChilds(options);
     
@@ -180,6 +183,8 @@ class View {
         this.addButton(btnGroup, 'btn_cancel' + typeView + 'Game', 'Cancel');
         options.appendChild(btnGroup);
     }
+    
+    
     
     removeUserLogin() {
         let parent = document.getElementById('checkers');

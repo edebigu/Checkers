@@ -324,7 +324,7 @@ function getGames(typeView) {
     var apiURL = "http://localhost:8080/game/getGames/" + player;
     var callbacks = {
         successCallback: function (data) {
-            view.addSaveGameView(data.listGame, typeView);
+            view.addOpenSaveGameView(data.listGame, typeView);
         },
         doneCallback: function () {
         }
