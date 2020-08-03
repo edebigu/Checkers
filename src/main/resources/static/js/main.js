@@ -88,7 +88,7 @@ $(document).ready(function () {
     });
 
     $('form').on('click', '#btn_cancelRegister', function (evento) {
-        addInitGameView();
+        view.addInitGameView();
         evento.preventDefault();
     });
 
