@@ -204,19 +204,22 @@ class OpenGameView {
     addOptionsGame(container) {
         let divButton = document.createElement('div');
         divButton.setAttribute('class', 'form-group');
-        this.addButton(divButton, 'move', 'Move');
-        this.addButton(divButton, 'saveGame', 'Save Game');
-        this.addButton(divButton, 'closeGame', 'Close Game');
+        this.addButton(divButton, 'move', 'Move', false);
+        this.addButton(divButton, 'saveGame', 'Save Game', false);
+        this.addButton(divButton, 'closeGame', 'Close Game', false);
         container.appendChild(divButton);
     }
 
-    addButton(container, id, text) {
+    addButton(container, id, text, disable) {
         let button = document.createElement('button');
         button.setAttribute('class', 'btn btn-primary btn-block');
         button.setAttribute('id', id);
         button.setAttribute('name', id);
         button.setAttribute('type', 'button');
         button.appendChild(document.createTextNode(text));
+        if (disable){
+        	 button.setAttribute('disabled', disable);
+        }
 
         container.appendChild(button);
     }
@@ -323,8 +326,8 @@ class OpenGameView {
     addButtonsForm(container) {
         let divButton = document.createElement('div');
         divButton.setAttribute('class', 'input-group');
-        this.addButton(divButton, 'send', 'Submit');
-        this.addButton(divButton, 'cancelCoord', 'Cancel');
+        this.addButton(divButton, 'send', 'Submit', true);
+        this.addButton(divButton, 'cancelCoord', 'Cancel', false);
         container.appendChild(divButton);
     }
 

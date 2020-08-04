@@ -30,6 +30,7 @@ let openGameView;
 let numberOfCells;
 let view = new Views();
 let dto = new Dto();
+let service = new Service();
 
 
 $(document).ready(function () {
@@ -42,12 +43,12 @@ $(document).ready(function () {
     });
 
     $('form').on('click', '#btn_login', function (event) {
-        startLogin();
+        view.addLoginView();
         event.preventDefault();
     });
 
     $('form').on('click', '#btn_register', function (event) {
-        startRegister();
+        view.addRegisterView();
         event.preventDefault();
     });
 
@@ -56,7 +57,7 @@ $(document).ready(function () {
         var password = $("#pwd").val().trim();
         if (username != "" && password != "") {
             dto.playerDto(username, password);
-            loginUser(dto.json);
+            login(dto.json);
         }
         event.preventDefault();
     });
@@ -72,7 +73,7 @@ $(document).ready(function () {
         var password2 = $("#pwd2").val().trim();
         if (username != "" && password1 != "" && password1 === password2) {
             dto.playerDto(username, password1);
-            registerUser(dto.json);
+            register(dto.json);
         }
         else {
             alert("Please enter user and same passwords!!");
@@ -177,44 +178,22 @@ $(document).ready(function () {
 });
 
 function startApp() {
-    var apiURL = "http://localhost:8080/start";
-    var callbacks = {
+    //var apiURL = "http://localhost:8080/start";
+   var callbacks = {
         successCallback: function (data) {
             view.addInitGameView();
         },
-        doneCallback: function () {
-        }
-    };
-
-    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
-}
-
-function startLogin() {
-    var apiURL = "http://localhost:8080/start/login";
-    var callbacks = {
-        successCallback: function (data) {
-            view.addLoginView();
+        errorCallback: function (e) {
+        	error(apiUrl);
         },
         doneCallback: function () {
         }
     };
-    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
+    service.start(callbacks.successCallback, callbacks.errorCallback, callbacks.doneCallback);
+
 }
 
-function startRegister() {
-    var apiURL = "http://localhost:8080/start/register";
-    var callbacks = {
-        successCallback: function (data) {
-            view.addRegisterView();
-        },
-        doneCallback: function () {
-        }
-    };
-    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
-}
-
-function loginUser(user) {
-    var apiURL = "http://localhost:8080/login";
+function login(user) {
     var callbacks = {
         successCallback: function (data) {
             console.log ("user login: " + user);
@@ -229,16 +208,18 @@ function loginUser(user) {
                 alert("Login unsuccess");
             }
         },
+        errorCallback: function (e) {
+        	error(apiUrl);
+        },
         doneCallback: function () {
             optionForm.reset();
         }
     }
 
-    sendPostAjax(user, apiURL, callbacks.successCallback, callbacks.doneCallback);
+    service.login(user, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function registerUser(user) {
-    var apiURL = "http://localhost:8080/register";
+function register(user) {
     var callbacks = {
         successCallback: function (data) {
             optionForm.reset();
@@ -250,63 +231,65 @@ function registerUser(user) {
             	alert("Register unsuccess!! User exist");
             }
         },
+        errorCallback: function (e) {
+        	error(apiUrl);
+        },
         doneCallback: function () { }
     }
 
-    sendPostAjax(user, apiURL, callbacks.successCallback, callbacks.doneCallback);
+    service.register(user, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function startLogout(session) {
-    var apiURL = "http://localhost:8080/logout";
     var callbacks = {
         successCallback: function (data) {
             gameName = "";
             player = "";
+        },
+        errorCallback: function (e) {
+        	error(apiUrl);
         },
         doneCallback: function () {
             view.addInitGameView();
             view.removeUserLogin();
         }
     }
-    sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
-
+     service.logout(session, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function getBoard() {
-    var apiURL = "http://localhost:8080/game/" + player + "/getStatus";
     var callbacks = {
         successCallback: function (data) {
             openGameView.updateBoard(data);
         },
-        doneCallback: function () {
-        }
-    };
-    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
-}
-
-function getGames(typeView) {
-    var apiURL = "http://localhost:8080/game/getGames/" + player;
-    var callbacks = {
-        successCallback: function (data) {
-            view.addOpenSaveGameView(data.listGame, typeView);
+        errorCallback: function (e) {
+        	error(apiUrl);
         },
         doneCallback: function () {
         }
     };
-    sendGetAjax(apiURL, callbacks.successCallback, callbacks.doneCallback);
+     service.getBoard(player,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+}
+
+function getGames(typeView) {
+     var callbacks = {
+        successCallback: function (data) {
+            view.addOpenSaveGameView(data.listGame, typeView);
+        },
+        errorCallback: function (e) {
+        	error(apiUrl);
+        },
+        doneCallback: function () {
+        }
+    };
+    service.getGames(player,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function sendMove(movement) {
-    var apiURL = "http://localhost:8080/game/move/" + player
     var callbacks = {
         successCallback: function (data) {
             if (data.result === "LOST_MESSAGE" || data.result === "LOST_MESSAGE_MACHINE") {
                 alert("Player " + data.username + " lost!!");
-                /*var session = {
-                    username: player,
-                    gameName: gameName,
-                    closeWithoutSave: "true"
-                }*/
                 dto.closeGameDto(player,gameName, "true");
                 closeGame(dto.json);
                 view.addCloseGameView();
@@ -322,16 +305,16 @@ function sendMove(movement) {
 
             }
         },
+        errorCallback: function (e) {
+        	error(apiUrl);
+        },
         doneCallback: function () {
         }
     }
-
-    sendPostAjax(movement, apiURL, callbacks.successCallback, callbacks.doneCallback);
-
+     service.move(movement,player,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function createGame(session) {
-    var apiURL = "http://localhost:8080/createGame";
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.OK) {
@@ -339,15 +322,16 @@ function createGame(session) {
                 view.addStartGameView();
             }
         },
+        errorCallback: function (e) {
+        	error(apiUrl);
+        },
         doneCallback: function () {
         }
     }
-
-    sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
+	service.createGame(session,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function saveGame(gameToSave) {
-    var apiURL = "http://localhost:8080/saveGame";
     var callbacks = {
         successCallback: function (data) {
             switch (data.result) {
@@ -374,19 +358,18 @@ function saveGame(gameToSave) {
                     break;
 
                 default:
-
             }
+        },
+        errorCallback: function (e) {
+        	error(apiUrl);
         },
         doneCallback: function () {
         }
     }
-
-    sendPostAjax(gameToSave, apiURL, callbacks.successCallback, callbacks.doneCallback);
-
+    service.saveGame(gameToSave,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function openGame(session) {
-    var apiURL = "http://localhost:8080/openGame/";
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.OK) {
@@ -400,16 +383,16 @@ function openGame(session) {
                 optionForm.reset();
             }
         },
+        errorCallback: function (e) {
+        	error(apiUrl);
+        },
         doneCallback: function () {
         }
     }
-
-    sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
-
+   service.openGame(session,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function closeGame(session) {
-    var apiURL = "http://localhost:8080/closeGame/";
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.NOT_FOUND) {
@@ -426,51 +409,17 @@ function closeGame(session) {
                 removeGame();
             }
         },
+        errorCallback: function (e) {
+        	error(apiUrl);
+        },
         doneCallback: function () {
             containerBoard.style.display = "none";
             optionForm.removeAttribute('style');
         }
     }
-
-    sendPostAjax(session, apiURL, callbacks.successCallback, callbacks.doneCallback);
-
+     service.closeGame(session,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function sendGetAjax(apiURL, successCallback, doneCallback) {
-    $.ajax({
-        url: apiURL,
-        type: 'GET',
-        contentType: "application/json",
-        success: function (data) {
-            console.log("SUCCESS : ", data);
-            successCallback(data);
-        },
-        error: function (e) {
-            error(apiURL);
-        }
-    })
-}
-
-function sendPostAjax(dataToSend, apiURL, successCallback, doneCallback) {
-
-    $.ajax({
-        url: apiURL,
-        type: 'POST',
-        data: JSON.stringify(dataToSend),
-        contentType: "application/json",
-        dataType: 'json',
-        success: function (data) {
-            console.log("SUCCESS : ", data);
-            successCallback(data);
-        },
-        error: function (e) {
-            error(apiURL);
-        }
-    }).done(function () {
-        doneCallback();
-    });
-
-}
 
 function error(url) {
     var json = "<span class='login100-form-title p-b-21 colorBlue'>Can not get resource " + url + "</span>";
