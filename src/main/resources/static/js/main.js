@@ -57,7 +57,7 @@ $(document).ready(function () {
         var password = $("#pwd").val().trim();
         if (username != "" && password != "") {
             dto.playerDto(username, password);
-            login(dto.json);
+            login();
         }
         event.preventDefault();
     });
@@ -73,7 +73,7 @@ $(document).ready(function () {
         var password2 = $("#pwd2").val().trim();
         if (username != "" && password1 != "" && password1 === password2) {
             dto.playerDto(username, password1);
-            register(dto.json);
+            register();
         }
         else {
             alert("Please enter user and same passwords!!");
@@ -89,14 +89,14 @@ $(document).ready(function () {
 
     $('form').on('click', '#btn_createGame', function (event) {
         dto.sessionDto(player, "");
-        createGame(dto.json);
+        createGame();
         event.preventDefault();
     });
 
     $('form').on('click', '#btn_logout', function (event) {
         if (confirm("Do you really want to quit the game?")) {
             dto.sessionDto(player, gameName);
-            startLogout(dto.json);
+            startLogout();
         }
         event.preventDefault();
 
@@ -115,7 +115,7 @@ $(document).ready(function () {
         formCoordSelection.style.display = "none";
         openGameView.disableAll();
         dto.moveDto($('#selectedCoord').attr('data-row'), $('#selectedCoord').attr('data-col'), $('#newRow').prop('value'), $('#newColum').prop('value'));
-        sendMove(dto.json);
+        sendMove();
         formCoordSelection.reset();
     });
 
@@ -133,19 +133,19 @@ $(document).ready(function () {
 
     $('form').on('click', '#saveGame', function () {
         dto.saveGameDto(player, gameName, "false");
-        saveGame(dto.json);
+        saveGame();
     });
 
     $('form').on('click', '#btn_submitSaveGame', function (event) {
         var nameToSave = $("#gameName").val().trim();
         dto.saveGameDto(player, nameToSave, "false");
-        saveGame(dto.json);
+        saveGame();
         event.preventDefault();
     });
 
     $('form').on('click', '#btn_cancelSaveGame', function (event) {
-        containerBoard.removeAttribute('style');
         optionForm.style.display = "none";
+        containerBoard.removeAttribute('style');
         optionsGame.removeAttribute('style');
         event.preventDefault();
     });
@@ -158,7 +158,7 @@ $(document).ready(function () {
     $('form').on('click', '#btn_submitOpenGame', function (event) {
         var nameToOpen = $("#gameName").val().trim();
         dto.sessionDto(player, nameToOpen);
-        openGame(dto.json);
+        openGame();
         event.preventDefault();
     });
 
@@ -172,19 +172,18 @@ $(document).ready(function () {
         if (confirm("Do you really want to exit the game?")) {
             optionsGame.style.display = "none";
             dto.closeGameDto(player, gameName, "false");
-            closeGame(dto.json);
+            closeGame();
         }
     });
 });
 
 function startApp() {
-    //var apiURL = "http://localhost:8080/start";
    var callbacks = {
         successCallback: function (data) {
             view.addInitGameView();
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
         }
@@ -193,10 +192,9 @@ function startApp() {
 
 }
 
-function login(user) {
+function login() {
     var callbacks = {
         successCallback: function (data) {
-            console.log ("user login: " + user);
             optionForm.reset();
             if (data.result === json_result.OK) {
                 alert("Login success!!");
@@ -208,18 +206,18 @@ function login(user) {
                 alert("Login unsuccess");
             }
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
             optionForm.reset();
         }
     }
 
-    service.login(user, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+    service.login(dto.json, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function register(user) {
+function register() {
     var callbacks = {
         successCallback: function (data) {
             optionForm.reset();
@@ -231,30 +229,30 @@ function register(user) {
             	alert("Register unsuccess!! User exist");
             }
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () { }
     }
 
-    service.register(user, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+    service.register(dto.json, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function startLogout(session) {
+function startLogout() {
     var callbacks = {
         successCallback: function (data) {
             gameName = "";
             player = "";
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
             view.addInitGameView();
             view.removeUserLogin();
         }
     }
-     service.logout(session, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+     service.logout(dto.json, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
 function getBoard() {
@@ -262,8 +260,8 @@ function getBoard() {
         successCallback: function (data) {
             openGameView.updateBoard(data);
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
         }
@@ -276,8 +274,8 @@ function getGames(typeView) {
         successCallback: function (data) {
             view.addOpenSaveGameView(data.listGame, typeView);
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
         }
@@ -285,7 +283,7 @@ function getGames(typeView) {
     service.getGames(player,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function sendMove(movement) {
+function sendMove() {
     var callbacks = {
         successCallback: function (data) {
             if (data.result === "LOST_MESSAGE" || data.result === "LOST_MESSAGE_MACHINE") {
@@ -293,7 +291,6 @@ function sendMove(movement) {
                 dto.closeGameDto(player,gameName, "true");
                 closeGame(dto.json);
                 view.addCloseGameView();
-
                 containerBoard.style.display = "none";
             }
             else {
@@ -305,33 +302,34 @@ function sendMove(movement) {
 
             }
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
         }
     }
-     service.move(movement,player,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+     service.move(dto.json,player,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function createGame(session) {
+function createGame() {
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.OK) {
                 gameName = "";
+                optionForm.style.display = "none";
                 view.addStartGameView();
             }
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
         }
     }
-	service.createGame(session,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+	service.createGame(dto.json,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function saveGame(gameToSave) {
+function saveGame() {
     var callbacks = {
         successCallback: function (data) {
             switch (data.result) {
@@ -360,20 +358,20 @@ function saveGame(gameToSave) {
                 default:
             }
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
         }
     }
-    service.saveGame(gameToSave,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+    service.saveGame(dto.json,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function openGame(session) {
+function openGame() {
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.OK) {
-                gameName = session.gameName;
+                gameName = dto.json.gameName;
                 optionForm.style.display = "none";
                 view.addStartGameView();
 
@@ -383,16 +381,16 @@ function openGame(session) {
                 optionForm.reset();
             }
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
         }
     }
-   service.openGame(session,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+   service.openGame(dto.json,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function closeGame(session) {
+function closeGame() {
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.NOT_FOUND) {
@@ -400,8 +398,8 @@ function closeGame(session) {
                     getGames("Save");
                 }
                 else {
-                    session.closeWithoutSave = "true";
-                    closeGame(session);
+                    dto.json.closeWithoutSave = "true";
+                    closeGame();
                 }
             }
             else {
@@ -409,15 +407,16 @@ function closeGame(session) {
                 removeGame();
             }
         },
-        errorCallback: function (e) {
-        	error(apiUrl);
+        errorCallback: function (errorUrl) {
+        	error(errorUrl);
         },
         doneCallback: function () {
-            containerBoard.style.display = "none";
-            optionForm.removeAttribute('style');
+           containerBoard.style.display = "none";
+           optionForm.removeAttribute('style');
         }
     }
-     service.closeGame(session,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+     service.closeGame(dto.json,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
+            
 }
 
 

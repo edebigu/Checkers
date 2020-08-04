@@ -71,7 +71,7 @@ class Service {
             successCallback(data);
         },
         error: function (e) {
-            error(apiURL);
+            errorCallback(this.apiURL);
         }
     })
 }
@@ -89,7 +89,7 @@ class Service {
             successCallback(data);
         },
         error: function (e) {
-            error(apiURL);
+             errorCallback(this.apiURL);
         }
     }).done(function () {
         doneCallback();
