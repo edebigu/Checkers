@@ -1,4 +1,4 @@
-class View {
+class Views {
 
     constructor() {
 
@@ -40,11 +40,11 @@ class View {
         formContainer.removeAttribute('style');
         optionsGame.removeAttribute('style');
         formCoordSelection.style.display = "none";
-        boardView = new BoardView(scoreBoard);
-        boardView.addTable(containerBoard);
-        boardView.addPlayer(player);
-        boardView.addOptionsGame(optionsGame);
-        boardView.addForm(formCoordSelection);
+        openGameView = new OpenGameView(scoreBoard);
+        openGameView.addTable(containerBoard);
+        openGameView.addPlayer(player);
+        openGameView.addOptionsGame(optionsGame);
+        openGameView.addForm(formCoordSelection);
         getBoard();
     }
 

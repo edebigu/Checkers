@@ -26,9 +26,9 @@ let scoreBoard = [
 
 let player;
 let gameName = "";
-let boardView;
+let openGameView;
 let numberOfCells;
-let view = new View();
+let view = new Views();
 
 
 $(document).ready(function () {
@@ -126,7 +126,7 @@ $(document).ready(function () {
 
     $('form').on('click', '#send', function () {
         formCoordSelection.style.display = "none";
-        boardView.disableAll();
+        openGameView.disableAll();
         var movement = { originRow: $('#selectedCoord').attr('data-row'), originCol: $('#selectedCoord').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value') };
         sendMove(movement);
         formCoordSelection.reset();
@@ -311,8 +311,7 @@ function getBoard() {
     var apiURL = "http://localhost:8080/game/" + player + "/getStatus";
     var callbacks = {
         successCallback: function (data) {
-            //updateBoard(data);
-            boardView.updateBoard(data);
+            openGameView.updateBoard(data);
         },
         doneCallback: function () {
         }
@@ -523,12 +522,12 @@ function removeGame() {
 }
 
 function setTurn() {
-    boardView.ready = true;
-    boardView.enableAll();
+    openGameView.ready = true;
+    openGameView.enableAll();
     alert("Click on piece to move");
-    boardView.onMark = cellId => {
+    openGameView.onMark = cellId => {
         let childCoord = document.getElementById('selectedCoord');
-        boardView.setCoordenada(cellId, childCoord);
+        openGameView.setCoordenada(cellId, childCoord);
         formCoordSelection.removeAttribute('style');
     };
 }
