@@ -29,106 +29,92 @@ let gameName = "";
 let openGameView;
 let numberOfCells;
 let view = new Views();
+let dto = new Dto();
 
 
 $(document).ready(function () {
     containerBoard.style.display = "none";
     containerForm.style.display = "none";
 
-    $('form').on('click', '#btn-start', function (evento) {
+    $('form').on('click', '#btn-start', function (event) {
         startApp();
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_login', function (evento) {
+    $('form').on('click', '#btn_login', function (event) {
         startLogin();
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_register', function (evento) {
+    $('form').on('click', '#btn_register', function (event) {
         startRegister();
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_submitLogin', function (evento) {
+    $('form').on('click', '#btn_submitLogin', function (event) {
         var username = $("#username").val().trim();
         var password = $("#pwd").val().trim();
         if (username != "" && password != "") {
-            var user = {
-                username: username,
-                password: password
-            }
-            loginUser(user);
+            dto.playerDto(username, password);
+            loginUser(dto.json);
         }
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_cancelLogin', function (evento) {
+    $('form').on('click', '#btn_cancelLogin', function (event) {
         view.addInitGameView();
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_submitRegister', function (evento) {
+    $('form').on('click', '#btn_submitRegister', function (event) {
         var username = $("#username").val().trim();
         var password1 = $("#pwd").val().trim();
         var password2 = $("#pwd2").val().trim();
         if (username != "" && password1 != "" && password1 === password2) {
-            var user = {
-                username: username,
-                password: password1
-            }
-            registerUser(user);
-
+            dto.playerDto(username, password1);
+            registerUser(dto.json);
         }
         else {
             alert("Please enter user and same passwords!!");
             optionForm.reset();
         }
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_cancelRegister', function (evento) {
+    $('form').on('click', '#btn_cancelRegister', function (event) {
         view.addInitGameView();
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_createGame', function (evento) {
-        var session = {
-            username: player,
-            gameName: "",
+    $('form').on('click', '#btn_createGame', function (event) {
+        dto.sessionDto(player, "");
+        createGame(dto.json);
+        event.preventDefault();
+    });
+
+    $('form').on('click', '#btn_logout', function (event) {
+        if (confirm("Do you really want to quit the game?")) {
+            dto.sessionDto(player, gameName);
+            startLogout(dto.json);
         }
-        createGame(session);
-        evento.preventDefault();
-    });
-
-    $('form').on('click', '#btn_logout', function (evento) {
-        if (!confirm("Do you really want to quit the game?")) {
-            event.preventDefault();
-        } else {
-            var session = {
-                username: player,
-                gameName: gameName
-            }
-            startLogout(session);
-            evento.preventDefault();
-        }
+        event.preventDefault();
 
     });
 
-    var contador = 0;
+    var counter = 0;
     $('form').on('change', 'select', function () {
-        contador++;
-        if (contador === 2) {
+        counter++;
+        if (counter === 2) {
             $('button').prop("disabled", false);
-            contador = 0;
+            counter = 0;
         }
     });
 
     $('form').on('click', '#send', function () {
         formCoordSelection.style.display = "none";
         openGameView.disableAll();
-        var movement = { originRow: $('#selectedCoord').attr('data-row'), originCol: $('#selectedCoord').attr('data-col'), targetRow: $('#newRow').prop('value'), targetCol: $('#newColum').prop('value') };
-        sendMove(movement);
+        dto.moveDto($('#selectedCoord').attr('data-row'), $('#selectedCoord').attr('data-col'), $('#newRow').prop('value'), $('#newColum').prop('value'));
+        sendMove(dto.json);
         formCoordSelection.reset();
     });
 
@@ -145,73 +131,53 @@ $(document).ready(function () {
     });
 
     $('form').on('click', '#saveGame', function () {
-        var gameToSave = {
-            username: player,
-            gameName: gameName,
-            overwrite: "false"
-        }
-        saveGame(gameToSave);
-
-
+        dto.saveGameDto(player, gameName, "false");
+        saveGame(dto.json);
     });
 
-    $('form').on('click', '#btn_submitSaveGame', function (evento) {
+    $('form').on('click', '#btn_submitSaveGame', function (event) {
         var nameToSave = $("#gameName").val().trim();
-        var gameToSave = {
-            username: player,
-            gameName: nameToSave,
-            overwrite: "false"
-        }
-        saveGame(gameToSave);
-        evento.preventDefault();
+        dto.saveGameDto(player, nameToSave, "false");
+        saveGame(dto.json);
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_cancelSaveGame', function (evento) {
+    $('form').on('click', '#btn_cancelSaveGame', function (event) {
         containerBoard.removeAttribute('style');
         optionForm.style.display = "none";
         optionsGame.removeAttribute('style');
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_openGame', function (evento) {
+    $('form').on('click', '#btn_openGame', function (event) {
         getGames("Open");
-        evento.preventDefault();
+        event.preventDefault();
     });
 
-    $('form').on('click', '#btn_submitOpenGame', function (evento) {
+    $('form').on('click', '#btn_submitOpenGame', function (event) {
         var nameToOpen = $("#gameName").val().trim();
-        var session = {
-            username: player,
-            gameName: nameToOpen
-        }
-        openGame(session);
-        evento.preventDefault();
+        dto.sessionDto(player, nameToOpen);
+        openGame(dto.json);
+        event.preventDefault();
     });
 
 
-    $('form').on('click', '#btn_cancelOpenGame', function (evento) {
+    $('form').on('click', '#btn_cancelOpenGame', function (event) {
         view.addCloseGameView();
-        evento.preventDefault();
+        event.preventDefault();
     });
 
     $('form').on('click', '#closeGame', function () {
         if (confirm("Do you really want to exit the game?")) {
             optionsGame.style.display = "none";
-            var session = {
-                username: player,
-                gameName: gameName,
-                closeWithoutSave: "false"
-            }
-            console.log("session " + JSON.stringify(session));
-            closeGame(session);
+            dto.closeGameDto(player, gameName, "false");
+            closeGame(dto.json);
         }
-
     });
 });
 
 function startApp() {
     var apiURL = "http://localhost:8080/start";
-
     var callbacks = {
         successCallback: function (data) {
             view.addInitGameView();
@@ -249,10 +215,9 @@ function startRegister() {
 
 function loginUser(user) {
     var apiURL = "http://localhost:8080/login";
-
     var callbacks = {
         successCallback: function (data) {
-            
+            console.log ("user login: " + user);
             optionForm.reset();
             if (data.result === json_result.OK) {
                 alert("Login success!!");
@@ -333,17 +298,17 @@ function getGames(typeView) {
 
 function sendMove(movement) {
     var apiURL = "http://localhost:8080/game/move/" + player
-
     var callbacks = {
         successCallback: function (data) {
             if (data.result === "LOST_MESSAGE" || data.result === "LOST_MESSAGE_MACHINE") {
                 alert("Player " + data.username + " lost!!");
-                var session = {
+                /*var session = {
                     username: player,
                     gameName: gameName,
                     closeWithoutSave: "true"
-                }
-                closeGame(session);
+                }*/
+                dto.closeGameDto(player,gameName, "true");
+                closeGame(dto.json);
                 view.addCloseGameView();
 
                 containerBoard.style.display = "none";
@@ -367,7 +332,6 @@ function sendMove(movement) {
 
 function createGame(session) {
     var apiURL = "http://localhost:8080/createGame";
-
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.OK) {
@@ -384,7 +348,6 @@ function createGame(session) {
 
 function saveGame(gameToSave) {
     var apiURL = "http://localhost:8080/saveGame";
-
     var callbacks = {
         successCallback: function (data) {
             switch (data.result) {
@@ -424,7 +387,6 @@ function saveGame(gameToSave) {
 
 function openGame(session) {
     var apiURL = "http://localhost:8080/openGame/";
-
     var callbacks = {
         successCallback: function (data) {
             if (data.result === json_result.OK) {
