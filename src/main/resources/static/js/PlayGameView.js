@@ -220,7 +220,6 @@ class PlayGameView {
         if (disable){
         	 button.setAttribute('disabled', disable);
         }
-
         container.appendChild(button);
     }
 

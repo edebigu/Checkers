@@ -105,6 +105,7 @@ $(document).ready(function () {
     var counter = 0;
     $('form').on('change', 'select', function () {
         counter++;
+        console.log("counter " + counter);
         if (counter === 2) {
             $('button').prop("disabled", false);
             counter = 0;
@@ -115,8 +116,9 @@ $(document).ready(function () {
         formCoordSelection.style.display = "none";
         playGameView.disableAll();
         dto.moveDto($('#selectedCoord').attr('data-row'), $('#selectedCoord').attr('data-col'), $('#newRow').prop('value'), $('#newColum').prop('value'));
-        sendMove();
+        move();
         formCoordSelection.reset();
+        document.getElementById('send').setAttribute('disabled', true);
     });
 
     $('form').on('click', '#cancelCoord', function () {
@@ -283,7 +285,7 @@ function getGames(typeView) {
     service.getGames(player,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function sendMove() {
+function move() {
     var callbacks = {
         successCallback: function (data) {
             if (data.result === "LOST_MESSAGE" || data.result === "LOST_MESSAGE_MACHINE") {
