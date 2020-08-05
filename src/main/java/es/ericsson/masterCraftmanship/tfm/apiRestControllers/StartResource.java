@@ -29,16 +29,7 @@ public class StartResource {
 		this.startController.start();
 		return ResponseEntity.ok().build();
 	}
-	
-	@GetMapping(StartResource.START_LOGIN)
-	public ResponseEntity startLogin() {
-		return ResponseEntity.ok().build();
-	}
-	
-	@GetMapping(StartResource.START_REGISTER)
-	public ResponseEntity startRegister() {
-		return ResponseEntity.ok().build();
-	}
+
 	
 	
 	

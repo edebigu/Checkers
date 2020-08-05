@@ -44,26 +44,4 @@ public class StartResourceTest {
 
 	}
 
-	@Test
-	public void givenSystem_whenStartLogin_thenResultOk() throws Exception {
-		mockMvc.perform(get("/start/login").accept("application/json")).andExpect(status().isOk());
-	}
-
-	@Test
-	public void givenSystem_whenStartLoginWithWrongPath_thenResultNotFound() throws Exception {
-		mockMvc.perform(get("/startlogin").accept("application/json")).andExpect(status().isNotFound());
-
-	}
-
-	@Test
-	public void givenSystem_whenStartRegister_thenResultOk() throws Exception {
-		mockMvc.perform(get("/start/register").accept("application/json")).andExpect(status().isOk());
-	}
-
-	@Test
-	public void givenSystem_whenStartRegisterWithWrongPath_thenResultNotFound() throws Exception {
-		mockMvc.perform(get("/startregister").accept("application/json")).andExpect(status().isNotFound());
-
-	}
-
 }
