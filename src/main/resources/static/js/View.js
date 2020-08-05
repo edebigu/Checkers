@@ -168,6 +168,12 @@ class View {
         }
     }
     
+    removeGame(containerBoard, optionsGame, formCoordSelection) {
+    	this.removeChilds(containerBoard);
+    	this.removeChilds(optionsGame);
+    	this.removeChilds(formCoordSelection);
+	}
+    
     addButton(container, id, text) {
         let button = document.createElement('button');
         button.setAttribute('class', 'btn btn-primary btn-block');

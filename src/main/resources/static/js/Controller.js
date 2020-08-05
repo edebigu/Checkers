@@ -38,7 +38,7 @@ $(document).ready(function () {
     containerForm.style.display = "none";
 
     $('form').on('click', '#btn-start', function (event) {
-        startApp();
+        start();
         event.preventDefault();
     });
 
@@ -96,7 +96,7 @@ $(document).ready(function () {
     $('form').on('click', '#btn_logout', function (event) {
         if (confirm("Do you really want to quit the game?")) {
             dto.sessionDto(player, gameName);
-            startLogout();
+            logout();
         }
         event.preventDefault();
 
@@ -179,7 +179,7 @@ $(document).ready(function () {
     });
 });
 
-function startApp() {
+function start() {
    var callbacks = {
         successCallback: function (data) {
             view.addInitGameView();
@@ -240,7 +240,7 @@ function register() {
     service.register(dto.json, callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
 }
 
-function startLogout() {
+function logout() {
     var callbacks = {
         successCallback: function (data) {
             gameName = "";
@@ -406,7 +406,7 @@ function closeGame() {
             }
             else {
                 view.addCloseGameView();
-                removeGame();
+                view.removeGame(containerBoard, optionsGame, formCoordSelection);
             }
         },
         errorCallback: function (errorUrl) {
@@ -419,13 +419,6 @@ function closeGame() {
     }
      service.closeGame(dto.json,callbacks.successCallback,callbacks.errorCallback, callbacks.doneCallback);
             
-}
-
-
-function removeGame() {
-    view.removeChilds(containerBoard);
-    view.removeChilds(optionsGame);
-    view.removeChilds(formCoordSelection);
 }
 
 function setTurn() {
