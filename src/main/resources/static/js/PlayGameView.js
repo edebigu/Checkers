@@ -1,4 +1,4 @@
-class OpenGameView {
+class PlayGameView {
 
     constructor(scoreBoard) {
 

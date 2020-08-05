@@ -4,47 +4,17 @@ class View {
 
     }
 
-    removeChilds(container) {
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
-        }
-    }
-    
-    addButton(container, id, text) {
-        let button = document.createElement('button');
-        button.setAttribute('class', 'btn btn-primary btn-block');
-        button.setAttribute('id', id);
-        button.setAttribute('name', id);
-        button.setAttribute('type', 'submit');
-        button.appendChild(document.createTextNode(text));
-    
-        container.appendChild(button);
-    }
-    
-    addInput(container, type, id, placeholder, disabled) {
-        let input = document.createElement('input');
-        input.classList.add('form-control');
-        input.setAttribute('type', type);
-        input.setAttribute('id', id);
-        input.setAttribute('name', type);
-        input.setAttribute('placeholder', placeholder);
-        if (disabled) {
-            input.setAttribute('disabled', disabled);
-        }
-        container.appendChild(input);
-    }
-
     addStartGameView() {
         containerForm.removeAttribute('style');
         containerBoard.removeAttribute('style');
         formContainer.removeAttribute('style');
         optionsGame.removeAttribute('style');
         formCoordSelection.style.display = "none";
-        openGameView = new OpenGameView(scoreBoard);
-        openGameView.addTable(containerBoard);
-        openGameView.addPlayer(player);
-        openGameView.addOptionsGame(optionsGame);
-        openGameView.addForm(formCoordSelection);
+        playGameView = new PlayGameView(scoreBoard);
+        playGameView.addTable(containerBoard);
+        playGameView.addPlayer(player);
+        playGameView.addOptionsGame(optionsGame);
+        playGameView.addForm(formCoordSelection);
         getBoard();
     }
 
@@ -191,5 +161,41 @@ class View {
         let childPlayer = document.getElementById('playerContent');
         parent.removeChild(childPlayer);
     }
+    
+        removeChilds(container) {
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    }
+    
+    addButton(container, id, text) {
+        let button = document.createElement('button');
+        button.setAttribute('class', 'btn btn-primary btn-block');
+        button.setAttribute('id', id);
+        button.setAttribute('name', id);
+        button.setAttribute('type', 'submit');
+        button.appendChild(document.createTextNode(text));
+    
+        container.appendChild(button);
+    }
+    
+    addInput(container, type, id, placeholder, disabled) {
+        let input = document.createElement('input');
+        input.classList.add('form-control');
+        input.setAttribute('type', type);
+        input.setAttribute('id', id);
+        input.setAttribute('name', type);
+        input.setAttribute('placeholder', placeholder);
+        if (disabled) {
+            input.setAttribute('disabled', disabled);
+        }
+        container.appendChild(input);
+    }
+    
+     addError(url) {
+    	 var json = "<span class='login100-form-title p-b-21 colorBlue'>Can not get resource " + url + "</span>";
+   		 $('#checkers').html(json);
+}
+    
     
 }

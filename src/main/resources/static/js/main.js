@@ -26,7 +26,7 @@ let scoreBoard = [
 
 let player;
 let gameName = "";
-let openGameView;
+let playGameView;
 let numberOfCells;
 let view = new View();
 let dto = new Dto();
@@ -113,7 +113,7 @@ $(document).ready(function () {
 
     $('form').on('click', '#send', function () {
         formCoordSelection.style.display = "none";
-        openGameView.disableAll();
+        playGameView.disableAll();
         dto.moveDto($('#selectedCoord').attr('data-row'), $('#selectedCoord').attr('data-col'), $('#newRow').prop('value'), $('#newColum').prop('value'));
         sendMove();
         formCoordSelection.reset();
@@ -183,7 +183,7 @@ function startApp() {
             view.addInitGameView();
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
         }
@@ -207,7 +207,7 @@ function login() {
             }
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
             optionForm.reset();
@@ -230,7 +230,7 @@ function register() {
             }
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () { }
     }
@@ -245,7 +245,7 @@ function startLogout() {
             player = "";
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
             view.addInitGameView();
@@ -258,10 +258,10 @@ function startLogout() {
 function getBoard() {
     var callbacks = {
         successCallback: function (data) {
-            openGameView.updateBoard(data);
+            playGameView.updateBoard(data);
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
         }
@@ -275,7 +275,7 @@ function getGames(typeView) {
             view.addOpenSaveGameView(data.listGame, typeView);
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
         }
@@ -303,7 +303,7 @@ function sendMove() {
             }
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
         }
@@ -321,7 +321,7 @@ function createGame() {
             }
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
         }
@@ -359,7 +359,7 @@ function saveGame() {
             }
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
         }
@@ -382,7 +382,7 @@ function openGame() {
             }
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
         }
@@ -408,7 +408,7 @@ function closeGame() {
             }
         },
         errorCallback: function (errorUrl) {
-        	error(errorUrl);
+        	view.addError(errorUrl);
         },
         doneCallback: function () {
            containerBoard.style.display = "none";
@@ -420,11 +420,6 @@ function closeGame() {
 }
 
 
-function error(url) {
-    var json = "<span class='login100-form-title p-b-21 colorBlue'>Can not get resource " + url + "</span>";
-    $('#checkers').html(json);
-}
-
 function removeGame() {
     view.removeChilds(containerBoard);
     view.removeChilds(optionsGame);
@@ -432,12 +427,12 @@ function removeGame() {
 }
 
 function setTurn() {
-    openGameView.ready = true;
-    openGameView.enableAll();
+    playGameView.ready = true;
+    playGameView.enableAll();
     alert("Click on piece to move");
-    openGameView.onMark = cellId => {
+    playGameView.onMark = cellId => {
         let childCoord = document.getElementById('selectedCoord');
-        openGameView.setCoordenada(cellId, childCoord);
+        playGameView.setCoordenada(cellId, childCoord);
         formCoordSelection.removeAttribute('style');
     };
 }
