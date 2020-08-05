@@ -1,4 +1,4 @@
-class Views {
+class View {
 
     constructor() {
 

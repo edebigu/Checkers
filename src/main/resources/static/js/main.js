@@ -28,7 +28,7 @@ let player;
 let gameName = "";
 let openGameView;
 let numberOfCells;
-let view = new Views();
+let view = new View();
 let dto = new Dto();
 let service = new Service();
 
@@ -343,13 +343,13 @@ function saveGame() {
                 case json_result.CONFLICT:
                     optionsGame.style.display = "none";
                     if (confirm("Do you really want to overwrite the game?")) {
-                        gameToSave.overwrite = "true";
-                        saveGame(gameToSave);
+                        dto.json.overwrite = "true";
+                        saveGame(dto.json);
                     }
                     break;
 
                 case json_result.OK:
-                    gameName = gameToSave.gameName;
+                    gameName = dto.json.gameName;
                     containerBoard.removeAttribute('style');
                     optionForm.style.display = "none";
                     optionsGame.removeAttribute('style');
